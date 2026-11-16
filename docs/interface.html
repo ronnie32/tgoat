@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Web interface · TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="start.html">Get started</a></li>
+      <li><a href="interface.html" aria-current="page">Web interface</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="commands.html">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html">Every change</a></li>
+      <li><a href="limits.html">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="On this page">
+  <p class="toc-title">On this page</p>
+  <ol>
+    <li><a href="#ui-first-run">First run: adding your account</a></li>
+    <li><a href="#ui-map">Map</a></li>
+    <li><a href="#ui-deck">Command deck</a></li>
+    <li><a href="#ui-autofarm">AutoFarm</a></li>
+    <li><a href="#ui-settings">Settings</a></li>
+    <li><a href="#ui-assistant">Setup assistant</a></li>
+    <li><a href="#ui-logs">Logs</a></li>
+    <li><a href="#ui-reasons">Reason codes</a></li>
+    <li><a href="#ui-instances">Instances</a></li>
+    <li><a href="#ui-ogame">OGame</a></li>
+    <li><a href="#ui-shell">On every page</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<h1 class="sr-only">Web interface</h1>
+
+<section aria-labelledby="tour">
+<h2 id="tour">Tour of the web interface</h2>
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>TGoat serves its interface from your computer, at <code>http://localhost:9090</code>. Every page updates live, so you never need to reload.</li>
+  <li>The <a href="#ui-map">Map</a> is home: your empire, fleets in flight, attacks and the timeline. Click a feature there to see its last pass or turn it on or off.</li>
+  <li>In <a href="#ui-settings">Settings</a>, each feature's switch sits in its section title. Saved changes apply at once, and History restores any earlier version.</li>
+  <li>Every pass of a feature ends with a <a href="#ui-reasons">reason code</a> that says what it did or why not. The <a href="#ui-logs">Logs</a> filter on it.</li>
+  <li>Before you play by hand, turn on <strong>Manual mode</strong> on the <a href="#ui-ogame">OGame</a> page.</li>
+  <li><kbd>Ctrl</kbd> <kbd>K</kbd> opens the command palette on every page.</li>
+</ul>
+</aside>
+<p>The top bar links seven pages: <strong>Map</strong>, <strong>Deck</strong>, <strong>Logs</strong>, <strong>Settings</strong>, <strong>Instances</strong>, <strong>AutoFarm</strong> and <strong>OGame</strong>. What they share is in <a href="#ui-shell">On every page</a>.</p>
+
+<h3 id="ui-first-run">First run: adding your account</h3>
+<p>With no account yet, TGoat opens the <strong>Instances</strong> page at <strong>Add an account</strong>. The other pages link to it.</p>
+<figure>
+  <img src="img/first-run.jpg" width="800" height="500" alt="The Instances page on the first run: a welcome banner, an empty Accounts list, and the Add an account form with Name of the instance set to Main and Community set to en.">
+  <figcaption>The first run. The form starts with the name <em>Main</em> and the English community.</figcaption>
+</figure>
+<ol>
+  <li>In <strong>Name of the instance</strong>, type a name for this account.</li>
+  <li>In <strong>Community</strong>, type the two letters of your game community, such as <code>en</code>.</li>
+  <li>Enter the <strong>E-mail</strong> and <strong>Password</strong> of your Gameforge account.</li>
+  <li>If Gameforge asks for a captcha TGoat can't pass, paste a <strong>Session token</strong> instead of the password (<a href="start.html#token">how</a>).</li>
+  <li>Tick <strong>Pioneers test lobby</strong> only if you play there.</li>
+  <li>For a proxy, tick <strong>Connect through a proxy</strong> and fill in its fields. Tick <strong>Login only</strong> to use it just for signing in.</li>
+  <li>Click <strong>Test the login</strong>. With a captcha, this can take a minute. Nothing is saved yet.</li>
+  <li>Pick the universe this instance plays. A blocked player shows in red and can't be picked.</li>
+  <li>Click <strong>Create the instance</strong>. It connects at once, with every feature off.</li>
+</ol>
+<figure>
+  <img src="img/first-run-test.jpg" width="515" height="170" alt="After Test the login: Gameforge accepted the login, and three universes are listed with their player; the third is blocked for account sharing. Below, the Create the instance button.">
+  <figcaption>The test worked: pick the universe, then create the instance.</figcaption>
+</figure>
+<p>When the test fails, TGoat says why. Fix the details and test again, or click <strong>save it without testing</strong> and type the universe yourself. An account with no player needs one first: create it from your browser.</p>
+<p>A <strong>Telegram (optional)</strong> section then asks for your bot's <strong>Bot token</strong> and your <strong>Chat ID</strong>. Click <strong>Save and connect Telegram</strong>, or <strong>Skip</strong>.</p>
+<p>Next, open <a href="#ui-settings">Settings</a> and turn on features one section at a time. Each feature's switch sits in its section title.</p>
+<p>If you come from TBot 3.6, your accounts are already there, with an <strong>Import report</strong>. If the import was blocked, a red banner shows the report and no instance starts until you fix the old files.</p>
+
+<h3 id="ui-map">Map</h3>
+<p>The Map is the home page: your whole empire at a glance, with fleets in flight, incoming attacks and what comes next.</p>
+<figure>
+  <img src="img/map.jpg" width="800" height="500" alt="The Map: on the left the instance panel of Vega; in the centre four galaxy rings with planets, coloured fleet routes, a red circle around an attacked moon and AutoFarm targets as diamonds; below, the timeline with three lanes; at the top, a red attack banner.">
+  <figcaption>The Map during an attack, with the AutoFarm layer on. Left, the instance panel; centre, the chart; bottom, the timeline.</figcaption>
+</figure>
+<ul>
+  <li><strong>The instance panel</strong> (left): status, commands, and the <strong>Features</strong> and <strong>Key</strong> folds.</li>
+  <li><strong>The chart</strong> (centre): one ring per galaxy, galaxy 1 inside. System 1 is at the top; systems run clockwise.</li>
+  <li><strong>The tools</strong> under the chart: layers, zoom, <strong>Index</strong> and <strong>Bridge view</strong>.</li>
+  <li><strong>The detail panel</strong> (right) opens when you click something. <kbd>Esc</kbd> closes it.</li>
+  <li><strong>The timeline</strong> (bottom): everything due in the coming hours.</li>
+</ul>
+
+<h4>Reading the chart</h4>
+<p>Your planets are gold discs that fill from the bottom as their fullest storage fills: a full disc is losing production. Coloured lines are fleets in flight, with an arrowhead and a countdown where the fleet is now. A blue ring means a build, a red ring an attack. Hover anything to see its name.</p>
+<details>
+<summary>All the marks of the chart (14), build rings and attacks</summary>
+<p>Fleet routes are bright for the part left to fly.</p>
+<p>A blue ring fills around a body while it builds, clockwise from the top. Zoom in and the body gets a third line: what builds, the time left, and +1 for each other busy queue. Hover the body to list them all.</p>
+<p>An attacked body gets a red ring, and a red circle closes on it as impact nears. The game does not say when the hostile fleet left, so the map shows no position for it.</p>
+<div class="table-wrap" role="region" aria-label="What the map shows" tabindex="0">
+<table>
+  <caption class="sr-only">What the marks of the map mean</caption>
+  <thead><tr><th scope="col">You see</th><th scope="col">It means</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Gold disc</th><td>Your planet.</td></tr>
+    <tr><th scope="row">Small disc beside it</th><td>Its moon.</td></tr>
+    <tr><th scope="row">Blue ring</th><td>Building in progress. The faint part is what is left.</td></tr>
+    <tr><th scope="row">Red ring</th><td>Under attack.</td></tr>
+    <tr><th scope="row">Gold line</th><td>Expedition.</td></tr>
+    <tr><th scope="row">Pink line</th><td>AutoFarm raid or attack. Dotted: espionage.</td></tr>
+    <tr><th scope="row">Blue line</th><td>Transport, deployment (dashed), harvest (dotted), colony ship.</td></tr>
+    <tr><th scope="row">White dashed line</th><td>Fleet save.</td></tr>
+    <tr><th scope="row">Grey line</th><td>Any other mission.</td></tr>
+    <tr><th scope="row">Round dot</th><td>Fleet holding at its destination.</td></tr>
+    <tr><th scope="row">Cross, italic coordinates</th><td>A destination that isn't yours.</td></tr>
+    <tr><th scope="row">Red triangle</th><td>The attacker's planet.</td></tr>
+    <tr><th scope="row">Diamonds</th><td>AutoFarm targets, as on the <a href="#ui-autofarm">AutoFarm page</a>.</td></tr>
+    <tr><th scope="row">Ticks inside a ring</th><td>Systems AutoFarm scanned. Pink: targets found.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+
+<h4>The instance panel</h4>
+<p>The status sentence says whether the instance is awake or asleep, and how many fleet and expedition slots are in use. A login problem shows in red.</p>
+<ul>
+  <li><strong>Sleep for…</strong> puts the instance to sleep now, for 30 minutes to 8 hours. <strong>Wake up</strong> ends it.</li>
+  <li><strong>Profile…</strong> loads a profile, or resets to the instance's own settings.</li>
+  <li><strong>Reload settings</strong> reads the settings files now. TGoat already does it when a file changes.</li>
+  <li><strong>Features</strong> lists each feature with its state and the countdown to its next pass. Click one to open its panel, or to <a href="#feature-switch">turn it on or off</a>.</li>
+  <li>When a research runs, a line names it with its countdown. Click the name to see why TGoat chose it.</li>
+</ul>
+<details>
+<summary>A sleep you ask for, and bedtime</summary>
+<p>Bedtime still happens at its time, with its fleet-save, and the instance stays asleep. If the sleep ends during the night, it sleeps on until the wake-up time. A new connection to the game keeps the sleep; disabling the instance or restarting TGoat ends it.</p>
+</details>
+<div class="figs">
+<figure>
+  <img src="img/map-planet.jpg" width="346" height="615" alt="The detail panel of the planet Helion: coordinates, fields and temperature; three resource bars with amount, capacity, production per hour and time until full; works in progress with progress bars; the latest decisions of the Brain.">
+  <figcaption>A planet's panel: storage, works, and the latest decisions about it.</figcaption>
+</figure>
+<div>
+<figure>
+  <img src="img/map-key.jpg" width="262" height="349" alt="The Key fold: your planets fill up as their fullest storage fills; a ring fills around a body while it builds, zoom in to read what and how long, W hides the rings; then the line colours for expeditions, AutoFarm raids and espionage, transports, fleet saves and hostile fleets.">
+  <figcaption>The <strong>Key</strong> fold repeats the main marks.</figcaption>
+</figure>
+<figure>
+  <img src="img/map-feature.jpg" width="250" height="256" alt="The panel of the Expeditions feature: Running, next pass in 00:13; last pass: 5 of 5 expedition slots in flight; reason code slots_full; a Turn off now button with a duration menu set to until I undo it, and Open its settings.">
+  <figcaption>A feature's panel: its last pass and its reason code.</figcaption>
+</figure>
+</div>
+</div>
+
+<h4>The detail panel</h4>
+<p>Click a planet, moon, fleet, attack, feature or AutoFarm target to open its panel on the right.</p>
+<details>
+<summary>What each panel shows (5 kinds)</summary>
+<ul>
+  <li><strong>A planet or moon</strong>:
+    <ul>
+      <li>storage and time until full;</li>
+      <li><strong>Works</strong>: what builds, with its countdown (buildings, lifeform buildings, lifeform research, shipyard), and which queues are idle;</li>
+      <li><strong>Levels</strong>: every building, the one in progress highlighted, and under them TGoat's decision with its reason and next pass. On a planet with a lifeform, <strong>Lifeform</strong> shows its lifeform buildings;</li>
+      <li>the other decisions, flights, docked ships and defences.</li>
+    </ul>
+    A moon shows what the last reading of the empire found on it.</li>
+  <li><strong>A fleet</strong>: its <strong>Schedule</strong>, ships, cargo and the feature that sent it. <strong>Board this fleet</strong> follows it in 3D.</li>
+  <li><strong>An attack</strong>: the countdown, the attacker, the Defender's decision and the attacking fleet.</li>
+  <li><strong>A feature</strong>: its <strong>Last pass</strong> with the reason code, a <strong>Turn on now</strong> or <strong>Turn off now</strong> button, and <strong>Open its settings</strong>.</li>
+  <li><strong>An AutoFarm target</strong>: its state, the reason and its last report.</li>
+</ul>
+</details>
+<figure>
+  <img src="img/map-attack.jpg" width="800" height="500" alt="The map zoomed on an attack: a red circle around the moon Helion Watch, the attacker's red triangle, and the attack panel with the countdown, the Defender's plan, the attacking fleet and the timing.">
+  <figcaption><strong>Show on the map</strong> in the attack banner zooms on the target and opens the attack's panel.</figcaption>
+</figure>
+<h4 id="feature-switch">Turning a feature on or off</h4>
+<p>You can turn a feature on or off while TGoat runs, whatever its <code>Active</code> setting says. The settings files do not change.</p>
+<ol>
+  <li>Click the feature in the instance panel of the Map, or in the list of the Deck.</li>
+  <li>Pick how long in the duration list: <em>until I undo it</em>, <em>for 1 hour</em>, <em>4 hours</em> or <em>24 hours</em>.</li>
+  <li>Click <strong>Turn on now</strong> or <strong>Turn off now</strong>.</li>
+  <li>To go back, click <strong>Follow the setting</strong>.</li>
+</ol>
+<p>The same choice is in the command palette (<kbd>Ctrl</kbd> <kbd>K</kbd>): <em>Turn AutoFarm off now</em>, or type <code>off autofarm 45m</code> or <code>on expeditions 2h</code>. Telegram and Discord have <a href="commands.html#cmd-instance">commands</a> for it.</p>
+<p>With the Defender turned off, nobody watches for attacks. The Deck and the Map say so in red.</p>
+<details>
+<summary>What the states mean, and when your choice ends</summary>
+<p>In the Features list, a feature that isn't running reads <em>off</em> (in the settings), <em>off by you</em> or <em>off until 12:11</em> (turned off by hand) or <em>paused</em> (sleep or manual mode). One you turned on by hand reads <em>on by you</em>. In its panel, the state line shows both the state you chose and the setting: <em>Running, turned on by you (setting: off)</em>, <em>Off until 18:00 (setting: on)</em>.</p>
+<p>The choice ends when you click <strong>Follow the setting</strong>, when the duration ends, or when the feature's <code>Active</code> setting is written (Settings page, <code>/settings set</code>, a text editor). Reloading the settings, sleep, breaks, a reconnection, loading a profile and a restart of TGoat do not end it.</p>
+<p>Sleep, manual mode, breaks and a planned ghost sleep still hold a feature you turned on: it starts when they end. The <strong>Whole Brain</strong> row turns the whole Brain on or off. A Brain feature you turn on while the Brain is off runs alone, without the rest of the Brain.</p>
+</details>
+
+<h4 id="ui-mode">Play mode: Human, RAGE, Custom</h4>
+<p>One switch sets how fast TGoat plays. It sits under the instance name on the Map, on each card of the Instances page and at the top of the instance's Settings. In Telegram or Discord, <code>/mode</code> shows it and <code>/mode rage</code> sets it.</p>
+<ul>
+  <li><strong>Human</strong> (default) plays like a player: reactions of a few minutes, short pauses, expeditions and discoveries in waves, pages 1.5 to 8 seconds apart, and the breaks you set.</li>
+  <li><strong>RAGE</strong> drops every delay kept only for discretion, for the most yield. TGoat reacts within 1 to 3 seconds, fills every free slot at once, checks ten times as often (at most once a minute), loads pages 0.3 to 1.5 seconds apart and takes no break. It is easy to spot.</li>
+  <li><strong>Custom</strong> applies the <code>Pace.*</code> settings one by one. Left at their defaults they play like Human. Under Human and RAGE they are greyed out.</li>
+</ul>
+<p>Switching applies at once: nothing restarts, and features waiting on a long delay move forward. Game rules and safety do not change with the mode: the Defender's pace, the attack guard, fuel reserves, slot ranks, sleep and fleet-save times.</p>
+
+<h4 id="ui-directives">Directives</h4>
+<p>Directives is a feature like the others, off by default (<code>Directives.Active</code>). It collects the rewards of finished missions; its panel in the Features list gives the last pass: how many rewards TGoat collected, or why it collected none.</p>
+<details>
+<summary>Its notices, and how often it collects</summary>
+<p><code>Directives.Notify</code> says when you get a notice: every reward, only when Dark Matter comes in (the default), or never. The notice and the log line name each mission and its chapter. A mission that is not finished is never collected.</p>
+<p>Every game page shows how many rewards wait. TGoat reads that number from the pages it already loads, and when it goes up it collects sooner, but not more than once every 30 to 60 minutes. The reason codes are in the <a href="#ui-reasons">table below</a>.</p>
+</details>
+
+<h4>The timeline</h4>
+<figure>
+  <img src="img/map-timeline.jpg" width="800" height="112" alt="The timeline: three lanes named Fleets, Works and Bot; now on the left; time marks every 15 minutes; events with a coloured mark, a label and a countdown; on the right the scales 20 min, 2 h and 12 h.">
+  <figcaption>The timeline. "now" stays on the left; the scale buttons are on the right.</figcaption>
+</figure>
+<p>Three lanes: <strong>Fleets</strong> (arrivals, returns, attack impacts in red), <strong>Works</strong> (buildings, lifeform buildings and research, shipyard, research) and <strong>Bot</strong> (next passes, sleep and wake-up). Crowded events shrink to their mark: hover to read one, click to show it on the map. <strong>20 min</strong>, <strong>2 h</strong>, <strong>12 h</strong> or the mouse wheel change the scale.</p>
+
+<h4>Moving around</h4>
+<ul>
+  <li>Drag to move. Use the wheel or double-click to zoom. <strong>Fit</strong> (<kbd>0</kbd>) shows the whole universe.</li>
+  <li><strong>Fleets</strong> (<kbd>F</kbd>), <strong>Works</strong> (<kbd>W</kbd>) and <strong>AutoFarm</strong> (<kbd>T</kbd>) show or hide the routes, the construction rings and the AutoFarm layer.</li>
+  <li><strong>Index</strong> (<kbd>I</kbd>) lists attacks, bodies and fleets as text. Click a line to show it.</li>
+  <li>To find a planet, press <kbd>Ctrl</kbd> <kbd>K</kbd> and type its name.</li>
+  <li>Bookmark the page to come back to the same planet or fleet.</li>
+</ul>
+
+<h4>The bridge view</h4>
+<figure>
+  <img src="img/bridge.jpg" width="800" height="500" alt="The bridge view: a 3D scene seen from a transport fleet, with planets and galaxy rings; at the top the mission and the fleet picker, Transport: Brackwater to Helion, with the route below them; at the bottom left the countdown to arrival; at the bottom right the ships and cargo.">
+  <figcaption>The bridge view, aboard a transport about to deliver its cargo.</figcaption>
+</figure>
+<p><strong>Bridge view</strong> (<kbd>B</kbd>) puts you aboard a fleet in flight, in 3D, with its route, countdown, ships and cargo. A list at the top changes fleet. <strong>Back to the map</strong> or <kbd>Esc</kbd> leaves.</p>
+<p>It needs a wide screen and a browser with 3D graphics. While the instance is not connected, the button is greyed out.</p>
+
+<h3 id="ui-deck">Command deck</h3>
+<p>The command deck (<strong>Deck</strong>) shows your empire in 3D from your flagship, framed by instruments. Leave it open on a second screen to watch for attacks.</p>
+<figure>
+  <img src="img/deck.jpg" width="800" height="500" alt="The command deck during an attack: a red frame and a red banner with the countdown Dread Halvard reaches Helion Watch; on the left the instance clock, fleet slot and expedition gauges and the features; in the 3D scene a transport and the estimated position of the hostile fleet; at the bottom the Events feed and the Camera, Time and Sound controls.">
+  <figcaption>The deck during an attack: the frame turns red and the banner counts down to impact.</figcaption>
+</figure>
+<ul>
+  <li><strong>Top left</strong>: the game server clock, the next sleep or wake-up, and the <strong>Fleet slots</strong> and <strong>Expeditions</strong> gauges, gold when full.</li>
+  <li><strong>Left</strong>: <strong>Features</strong> and <strong>Brain</strong>, with countdowns and last results.</li>
+  <li><strong>Centre</strong>: your bodies and fleets. A hostile contact shows in red, labelled "position estimated".</li>
+  <li><strong>Top centre</strong>: the countdown to the next impact, or a sleep or manual-mode notice.</li>
+  <li><strong>Bottom left</strong>: <strong>Events</strong>, the last six things that happened.</li>
+</ul>
+<p>Click anything to lock the camera on it and open its panel, with <strong>Open on the map</strong>. <kbd>Esc</kbd> releases it.</p>
+<ul>
+  <li><strong>Camera</strong>: <strong>Watch</strong> turns to each event by itself; <strong>Free</strong> lets you steer.</li>
+  <li><strong>Time</strong>: <strong>×10</strong> or <strong>×60</strong> previews what comes next, without touching the game. <strong>Back to live</strong> returns.</li>
+  <li><strong>Sound</strong>: <strong>On</strong> plays an alarm tone when an attack is detected.</li>
+  <li><strong>Works</strong> (<kbd>W</kbd>): <strong>On</strong> draws the map's ring around each body that builds. The choice is shared with the Map.</li>
+  <li><strong>Stationed at …</strong> picks the planet the flagship guards.</li>
+</ul>
+<p>The deck needs a screen wider than 760 pixels and a browser with 3D graphics.</p>
+
+<h4 id="ui-proposals">Proposals</h4>
+<p>A feature set to <em>Suggest</em> (Brain.Boosters, the AutoMine production settings, Expeditions.BuildFleet, AutoFarm.BuildBreakers) does not act alone: it sends you what it would do and why, and waits. Each proposal has a number. To accept one:</p>
+<ul>
+  <li>its notification has an <strong>Accept</strong> button;</li>
+  <li>the command deck lists every proposal waiting, each with its button;</li>
+  <li>the command palette (<kbd>Ctrl</kbd> <kbd>K</kbd>) offers "Accept proposal N";</li>
+  <li>on Telegram, send <code>/accept N</code>, or <code>/accept</code> alone for all of them; <code>/proposals</code> lists them;</li>
+  <li>Discord has <code>/proposals list</code>, <code>/proposals accept</code> and an Accept button under the notification.</li>
+</ul>
+<p>TGoat checks that the reason still holds before it acts.</p>
+<details>
+<summary>What happens when you accept, and when a proposal goes away</summary>
+<p>When you accept, TGoat first reads the game again and checks that the reason still holds. If it does, TGoat makes the change and tells you. If it no longer does, for example the storage has filled up or you activated a booster yourself, TGoat refuses and says why. If the game could not be read, the proposal keeps waiting. A proposal disappears when the feature no longer proposes it or when it expires; the same proposal is not sent to you twice in a day. A restart of TGoat drops what is waiting, and the features propose again.</p>
+</details>
+
+<h3 id="ui-autofarm">AutoFarm</h3>
+<p>The AutoFarm page shows what AutoFarm scanned, each target with its state and the reason, and the attacks it sent. It refreshes every 10 seconds.</p>
+<figure>
+  <img src="img/autofarm.jpg" width="800" height="500" alt="The top of the AutoFarm page: a status sentence, the buttons See the targets on the map and AutoFarm settings, and the scanned sector of galaxy 3 with tinted columns, a scan line, the planet Ninefold and coloured diamonds for targets.">
+  <figcaption>The status sentence and the scanned sector: systems run left to right, positions 1 to 15 top to bottom.</figcaption>
+</figure>
+<p>The status sentence gives AutoFarm's last and next pass, and the fleet slots its attacks and probes use. <strong>See the targets on the map</strong> and <strong>AutoFarm settings</strong> lead to the Map and to its settings.</p>
+<p>In the sector, tinted columns are scanned systems, pink where targets were found. The white "scan" line is where the scan is now. Hover a diamond to read its reason; click it to find it in the table.</p>
+<figure>
+  <img src="img/autofarm-targets.jpg" width="800" height="500" alt="The Targets table: each row gives the target's name and coordinates, its state with a coloured diamond, the loot in the report, the reason with a detail naming the deciding setting, and the age of the report.">
+  <figcaption>Each target with its state and the reason, naming the setting that decided.</figcaption>
+</figure>
+<p><strong>Targets</strong> lists every target with its state, <strong>Loot in the report</strong>, <strong>Reason</strong> and the age of the <strong>Report</strong>. The list above it filters the table, for example to <strong>Not suitable, and why</strong>.</p>
+<p>To learn why a target is not attacked, read its <strong>Reason</strong>. The detail names the setting that decided, such as <code>AutoFarm.AttackDefendedTargets</code>.</p>
+<div class="table-wrap" role="region" aria-label="AutoFarm target states" tabindex="0">
+<table>
+  <caption class="sr-only">AutoFarm target states and their diamonds</caption>
+  <thead><tr><th scope="col">Diamond</th><th scope="col">State</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Pink, filled</th><td><strong>Attack in flight</strong></td></tr>
+    <tr><th scope="row">Pink, hollow</th><td><strong>Attack waiting</strong> for a slot, ships or a setting</td></tr>
+    <tr><th scope="row">Blue, filled</th><td><strong>Being probed</strong></td></tr>
+    <tr><th scope="row">Blue, hollow</th><td><strong>Needs probes</strong>: no report, or an expired one</td></tr>
+    <tr><th scope="row">Red, hollow</th><td><strong>Probes failed</strong>: the report lacks details</td></tr>
+    <tr><th scope="row">Grey, hollow</th><td><strong>Not suitable</strong>, or <strong>Idle</strong> (resting after a raid)</td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>Attacks sent</strong> gives each attack's net gain once the fleet is seen coming back, or its expected loot, marked "~", before that. A fleet destroyed in battle shows in red. <strong>What AutoFarm logged</strong> shows its latest log lines.</p>
+
+<h3 id="ui-settings">Settings</h3>
+<p>The Settings page edits every setting of TGoat, of an instance or of a profile, with help for each one.</p>
+<figure>
+  <img src="img/settings.jpg" width="800" height="500" alt="The Settings page of Vega: on the left the file picker, the Form, Advanced and History tabs, the Find a setting field and the list of sections, Defender marked 1 unsaved; on the right the title, a banner about an active profile, the Account section with Test the login and hidden secrets; at the bottom a bar with 1 unsaved change, Discard and Save 1 change.">
+  <figcaption>The settings of an instance, with one change not saved yet (bottom bar).</figcaption>
+</figure>
+<ul>
+  <li><strong>Left</strong>: the file to edit, the <strong>Form</strong>, <strong>Advanced</strong> and <strong>History</strong> tabs, <strong>Find a setting</strong>, and the sections.</li>
+  <li><strong>Top</strong>: banners, such as a profile overriding some settings (<strong>Show them</strong> lists them).</li>
+  <li>A feature's on/off switch sits in its section title, such as <strong>Watch for attacks</strong> for the Defender.</li>
+</ul>
+<figure>
+  <img src="img/settings-row.jpg" width="590" height="275" alt="The Defender section: the switch Watch for attacks in the title; a setting marked Default value; a setting with a pink edge marked Changed, was 22 minutes, with Undo.">
+  <figcaption>Each setting says where its value comes from. The pink edge marks a change not saved yet.</figcaption>
+</figure>
+<p>Under each setting, a note says where its value comes from, such as <em>Default value</em> or <em>Chosen in this file</em>. A pink edge marks a change not saved yet, a red edge a value refused.</p>
+<details>
+<summary>Every note and edge under a setting (6)</summary>
+<div class="table-wrap" role="region" aria-label="Where a value comes from" tabindex="0">
+<table>
+  <caption class="sr-only">The notes under a setting</caption>
+  <thead><tr><th scope="col">You see</th><th scope="col">It means</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">"Default value."</th><td>The file doesn't set it.</td></tr>
+    <tr><th scope="row">"Chosen in this file."</th><td>Set here. <strong>Use the default</strong> removes it.</td></tr>
+    <tr><th scope="row">"From the base profile …"</th><td>From a base profile.</td></tr>
+    <tr><th scope="row">Gold edge</th><td>A loaded profile overrides it for now.</td></tr>
+    <tr><th scope="row">Pink edge, "Changed, was …"</th><td>Not saved yet. <strong>Undo</strong> cancels it.</td></tr>
+    <tr><th scope="row">Red edge</th><td>Value refused, with the reason.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<p>Secrets (e-mail, passwords, tokens, keys) show only "Set, hidden" or "Empty". Type a new value to replace one, or click <strong>Erase</strong>. The stored value never reaches the page.</p>
+
+<h4>Saving</h4>
+<p>Changes wait in the bar at the bottom. Click <strong>Save 1 change</strong> (<kbd>Ctrl</kbd> <kbd>S</kbd>) or <strong>Discard</strong>. If a value is refused, nothing is saved.</p>
+<p>TGoat applies a saved change by itself, restarting only the features concerned. Saving a login setting of a connected instance asks first, because it then logs in again.</p>
+<p>If someone changed the same setting in the file meanwhile, choose <strong>Take the file's</strong> or <strong>Keep mine</strong>.</p>
+<figure>
+  <img src="img/settings-account.jpg" width="590" height="115" alt="The Account section after Test the login: Gameforge accepted the login, the account has 3 players; Andromeda played by this instance, Quasar with a play this one link, Zibal blocked for account sharing.">
+  <figcaption><strong>Test the login</strong> in the Account section. <strong>play this one</strong> switches the universe in the form.</figcaption>
+</figure>
+<p>In <strong>Account</strong>, <strong>Test the login</strong> signs in with the form's values without starting anything, and lists your players.</p>
+
+<h4 id="ui-priorities">Priority lists</h4>
+<p>Slot priority (<code>General.SlotPriorityLevel</code>) and spending priority (<code>Brain.SpendingPriority</code>) are lists, not number fields. The list shows the effective order, first at the top.</p>
+<ol>
+  <li>Drag a feature by its grip or name, or click its up and down arrows.</li>
+  <li>To give two features the same rank, tick <strong>Tied with the one above</strong>. Tick it again to untie them.</li>
+  <li>Read the sentence under the list: it says what the order does, for example "When fleet slots run short: Expeditions first, then Brain, then AutoFarm and Colonize together."</li>
+  <li>Save as usual.</li>
+</ol>
+<details>
+<summary>How the ranks are written: ties, rank 0, hand edits</summary>
+<p>On save, TGoat writes the ranks as 1, 2, 3 and so on, and ties share a number. A file edited by hand keeps its numbers until you change the order. A rank of 0 takes a feature out of the ranking: it is shown apart, with a <strong>Rank it</strong> button. The Advanced tab still shows the numbers.</p>
+</details>
+
+<h4>Finding a setting</h4>
+<p>Type in <strong>Find a setting</strong> to search names and help texts. Type <code>changed:</code> to list your unsaved changes, or <code>profile:</code> for the settings a profile overrides.</p>
+
+<h4>Advanced and History</h4>
+<p><strong>Advanced</strong> shows the file as written and lets you edit it. <strong>Save the file</strong> points to the line and column of any mistake.</p>
+<figure>
+  <img src="img/settings-history.jpg" width="594" height="222" alt="The History tab of instances/vega.json: the current revision saved by this interface, and an older one kept by TGoat at start-up, with View and Restore buttons.">
+  <figcaption>The History tab: each save, who made it, and what it changed.</figcaption>
+</figure>
+<p><strong>History</strong> lists the saves of the last 90 days (100 at most), with the settings each one changed. <strong>Restore</strong> brings a revision back; secrets keep their current values. A restore is itself a revision you can undo.</p>
+<details class="tips">
+<summary class="tips-title">How do I… reset a value, undo a change, edit a profile</summary>
+<ul>
+  <li><strong>…go back to the default value?</strong> Click <strong>Use the default</strong> under the setting, then save.</li>
+  <li><strong>…undo yesterday's change?</strong> Open <strong>History</strong>, then <strong>Restore</strong> the revision before it.</li>
+  <li><strong>…edit a profile?</strong> Pick it at the bottom of the file list.</li>
+</ul>
+</details>
+
+<h3 id="ui-assistant">Setup assistant</h3>
+<p>The default settings are written for a new account. The setup assistant reads where your account stands, asks the few things it cannot read, and proposes settings that fit, with the reason for each. It writes nothing until you click <strong>Apply</strong>.</p>
+<p>It only changes settings. The features keep deciding with their own logic, and the assistant never builds ships for you: when a feature needs ships you do not have, the plan says how many to build first.</p>
+
+<h4>Opening it</h4>
+<p>The first time, a banner on the Map offers it once TGoat has read your account. After that, open it with the <strong>Setup assistant</strong> button at the top of an account's Settings page, or from the command palette (<kbd>Ctrl</kbd> <kbd>K</kbd>).</p>
+<details>
+<summary>When it offers itself, and what it reads first</summary>
+<ul>
+  <li><strong>First run.</strong> Once TGoat has read your account, a banner on the Map says "TGoat read your account. Answer a few questions to get settings that fit it." Click <strong>Start</strong>, or <strong>Not now</strong>. It shows once per account: it does not come back after <strong>Not now</strong> or after you applied a plan. Opened any other way, the assistant has a <strong>Close</strong> button instead of <strong>Not now</strong>.</li>
+  <li><strong>New stage.</strong> When the account grows, one line in the Logs says so, once per stage, for example "Your account reached the Growth stage (5 of 9 planets, mines at level 21): the setup assistant may suggest better settings." No pop-up.</li>
+</ul>
+<p>Opening it may read your Empire view and your inventory once, if TGoat has not read them in the last 10 minutes. If the account is not read yet (TGoat is still logging in, or the game is unreachable), the assistant says so and offers to try again. It never builds a plan on an account it has not read.</p>
+</details>
+
+<h4>The questions</h4>
+<p>At most six, one per screen, about your goal, presence, risk, expeditions, expansion and notifications. Each answer is already filled in from your account, with the reason in small print. A question that does not apply is skipped.</p>
+<details>
+<summary>The six questions and what each one drives (6)</summary>
+<p>Each screen has <strong>Back</strong> and <strong>Next</strong> and the step. The plan counts as the last step: with six questions, the third reads "Step 3 of 7". A choice you made yourself is the answer filled in, for example expeditions you turned off or your notification level ("You chose Attacks only").</p>
+<div class="table-wrap" role="region" aria-label="The assistant's questions" tabindex="0">
+<table>
+  <caption class="sr-only">The questions of the setup assistant</caption>
+  <thead><tr><th scope="col">Question</th><th scope="col">What it drives</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Goal: grow the economy, raid inactive players, or both with the economy first</th><td>Whether AutoFarm is turned on, and the research profile.</td></tr>
+    <tr><th scope="row">Presence: when you are away for long (nights, work hours)</th><td>Sleep mode and its hours, the night fleet-save, breaks.</td></tr>
+    <tr><th scope="row">Risk: careful, balanced or bold</th><td>Which targets AutoFarm attacks, whether expeditions take a combat ship, whether the Defender hides resources in a build.</td></tr>
+    <tr><th scope="row">Expeditions: none, some or a lot</th><td>How much expeditions matter next to the Brain's flights and raids. <em>Some</em>: they use the fleet slots left after the Brain and raids. <em>A lot</em>: first in line, and a night round when you are away. The fleet of each expedition is always calculated, whatever you answer. Asked only when you have astrophysics and a ship that can fly.</td></tr>
+    <tr><th scope="row">Expansion: fill the free planet slots or not</th><td>Colonize on or off. Asked only when slots are free.</td></tr>
+    <tr><th scope="row">Notifications: attacks only, important, or everything</th><td><code>Notifications.Level</code>. Asked only when Telegram, the Discord bot or a Discord webhook is set up: the level only filters those.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>If your answers contradict your account, the assistant says so. For example: "You want to raid, but you have no cargo ships: the plan suggests building some first."</p>
+</details>
+
+<h4>The plan</h4>
+<p>The plan is a short list of themes: Economy, Raids and harvest, Expeditions and discovery, Expansion, Logistics, Safety and Notifications. Only the themes that change something appear. Each one shows:</p>
+<ul>
+  <li>what it changes, in one sentence;</li>
+  <li><strong>Why:</strong> the reason, with the numbers of your account;</li>
+  <li><strong>Show the N settings</strong>: each setting with its current value, the proposed one and a short reason;</li>
+  <li><strong>Apply</strong> and <strong>Skip</strong>.</li>
+</ul>
+<p>At the bottom, <strong>Apply N themes</strong> applies every theme you did not skip. The numbers in the plan come from the same calculations the features use. The assistant does not propose colonisation zones or temperatures: for Expansion it only turns Colonize on or off and says how many slots are free.</p>
+
+<h4>What it never changes</h4>
+<p>A value you set yourself, a setting an active profile decides, or a profile file. You can still tick a value of yours to change it.</p>
+<details>
+<summary>The three cases in detail (3)</summary>
+<ul>
+  <li><strong>Values you set yourself.</strong> A value equal to the default is open to change. One you changed through the web interface, a command or a hand edit is yours, and so is a value whose origin TGoat cannot tell and that differs from the default. A theme says "N settings you set yourself keep their value". Open its list to see them with the proposed value. Tick <strong>Use the proposed value</strong> on a setting to change it, or <strong>Also apply to these N</strong> to tick all of them in that theme. Nothing is ticked for you.</li>
+  <li><strong>Settings decided by an active profile.</strong> The list says "Set by profile X (active until …)" and the assistant leaves them alone. Turn the profile off first if you want to change them.</li>
+  <li><strong>Profile files.</strong> The assistant writes only the account's own settings file. A setting inherited from a base profile can be overridden there: the list says "Overrides profile X for this account".</li>
+</ul>
+</details>
+
+<h4>Undoing it</h4>
+<p>Each Apply is one entry in the settings history, marked "by the setup assistant". Restore the version before it from <a href="#ui-settings">Settings</a>, <strong>History</strong>. Running the assistant again right after applying proposes nothing already applied. Values the assistant wrote stay open to change.</p>
+<details>
+<summary>When a plan can no longer be applied</summary>
+<p>Applying writes only the plan you saw. Nothing is written if one of its settings changed in the file since (you edited it meanwhile), or if the account moved on and the plan would now write other values (a research finished, ships were built): "The plan changed since you saw it (the account moved on): make the plan again." The assistant then offers <strong>Make the plan again</strong>, which keeps your Skip choices and ticks. Going <strong>Back</strong> from the plan to the questions keeps them too. After applying, the assistant says how many settings were written.</p>
+</details>
+
+<h3 id="ui-logs">Logs</h3>
+<p>The Logs page shows everything TGoat writes, live, and narrows it down to the lines that matter.</p>
+<figure>
+  <img src="img/logs.jpg" width="800" height="500" alt="The Logs page, paused: a filter bar with the Colours button, a strip of coloured bars showing the volume of lines over time, then the lines: time, instance › feature in the feature's colour, a ⚠ or ✖ sign for warnings and errors, the message and small chips; below, the detail of a warning with its fields and Filter links.">
+  <figcaption>Live logs, paused, with one warning open in the detail panel.</figcaption>
+</figure>
+<ul>
+  <li><strong>The filter bar</strong>: search, lowest level, instance, sender, <strong>Colours</strong>, <strong>Filter by…</strong>, <strong>Pause</strong> and <strong>Follow</strong>.</li>
+  <li><strong>The volume strip</strong>: lines over time, gold for warnings, red for errors. Click it to jump there.</li>
+  <li><strong>The lines</strong>: time, instance › feature, a ⚠ for a warning or a ✖ for an error, the message and its chips. A pink "×3" means three identical lines in a row.</li>
+</ul>
+<p>The lines look like the console and <code>log/TGoat.log</code>. <code>Logging.Style</code> picks the layout: <strong>Readable</strong> (the default), <strong>Levels</strong> (<code>[Info]</code>, <code>[Warning]</code>) or <strong>TBot</strong> (<code>[17:56:25 INF Main|Directives]</code>). Changes apply at once.</p>
+<p id="log-colours">Each feature's name has its own colour, in the console and on this page. <strong>Colours</strong> changes them.</p>
+<details>
+<summary>Changing a feature's colour, or turning colours off</summary>
+<ol>
+  <li>On the Logs page, click <strong>Colours</strong>. Each feature is listed with its colour.</li>
+  <li>Click the colour swatch next to the feature.</li>
+  <li>Pick a colour, <strong>No colour</strong>, or <strong>Automatic</strong> to give it back the colour TGoat chose.</li>
+</ol>
+<p>The choice is saved in <code>tgoat.json</code> (<code>Logging.FeatureColours</code>) and applies at once; the panel marks it "yours". To colour only the levels, or nothing at all, set <code>Logging.Colours</code> to <strong>Levels only</strong> or <strong>None</strong> (the panel's <strong>Log settings</strong> link opens it). The <code>NO_COLOR</code> environment variable turns the console's colours off.</p>
+</details>
+<p>Chips are what a line is about, such as a planet (<code>1:214:8</code>) or a reason code (<code>no_free_slot</code>). Click one to keep only the lines that have it. Click its <strong>×</strong> under the bar to remove the filter.</p>
+<p>Click a line to open its detail. <strong>Show on the map</strong> or <strong>Open the setting</strong> appear where they apply, and <strong>Copy line</strong> copies it.</p>
+<ul>
+  <li><strong>Pause</strong> freezes the list until you click <strong>Resume</strong>.</li>
+  <li><strong>Follow</strong> keeps the newest line in view; scrolling up turns it off.</li>
+  <li>The page loads the last 2,000 lines (<code>WebUI.MaxLogsToShow</code>).</li>
+  <li>The instance switcher doesn't filter the logs: use <strong>Every instance</strong>.</li>
+</ul>
+<details class="tips">
+<summary class="tips-title">How do I… find why something didn't happen, follow one planet</summary>
+<ul>
+  <li><strong>…find out why something didn't happen?</strong> Pick the feature in <strong>Every sender</strong> and <strong>Warnings and errors</strong>, or click a line's reason chip.</li>
+  <li><strong>…follow one planet?</strong> Click its coordinates chip on any line.</li>
+  <li><strong>…change the setting a warning talks about?</strong> Open the line, then click <strong>Open the setting</strong>.</li>
+</ul>
+</details>
+
+<h3 id="ui-reasons">Reason codes</h3>
+<p>Each pass of a feature ends with a reason code. It shows in the feature's panel and as a chip in the logs, and the detail names the setting that decided.</p>
+<p><code>slots_reserved</code> means fleet slots are free, but kept for higher-priority features (<code>General.SlotPriorityLevel</code>). The detail gives each feature's share. <code>no_fleet_slot</code> means no slot is free at all.</p>
+<details>
+<summary>Reason codes new or changed in the reviews (62)</summary>
+<div class="table-wrap" role="region" aria-label="New reason codes" tabindex="0">
+<table class="wide">
+  <caption class="sr-only">Reason codes new or changed in the November 2026 reviews</caption>
+  <thead><tr><th scope="col">Code</th><th scope="col">Feature</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><code>storage_for_the_next_build</code></th><td>AutoMine</td><td>A storage is raised before a build that would take more than 90&nbsp;% of it, which leaves room for the other spending of the planet. As a refusal: the storage cap blocks it.</td></tr>
+    <tr><th scope="row"><code>build_exceeds_storage</code></th><td>AutoMine</td><td>The build costs more than a storage holds. Only a supply flight or a bigger storage can pay it.</td></tr>
+    <tr><th scope="row"><code>a_build_queue_is_the_bottleneck</code></th><td>AutoMine</td><td>Nanites or robotics, because a build queue is the bottleneck.</td></tr>
+    <tr><th scope="row"><code>energy_for_the_next_mine</code></th><td>AutoMine</td><td>An energy source is built before the next mine, which would otherwise leave too little energy.</td></tr>
+    <tr><th scope="row"><code>needed_by_what_is_built_here</code></th><td>AutoMine</td><td>Shipyard or robotics needed by what TGoat builds there.</td></tr>
+    <tr><th scope="row"><code>stock_spent_under_attack</code></th><td>AutoMine</td><td>A build started with what the fleet-save could not carry (<code>Brain.AutoMine.SpendStockUnderAttack</code>).</td></tr>
+    <tr><th scope="row"><code>supply_not_worth_it</code></th><td>Brain</td><td>No supply flight for a purchase that neither pays back nor unlocks anything.</td></tr>
+    <tr><th scope="row"><code>event_list_unreadable</code></th><td>Brain</td><td>No supply flight while the event list cannot be read. Tried again after the next read, 1 to 2 minutes later.</td></tr>
+    <tr><th scope="row"><code>attack_incoming</code></th><td>Brain</td><td>No supply flight, satellite or crawler while an attack is coming. Tried again after the impact.</td></tr>
+    <tr><th scope="row"><code>reserved_for_builds</code></th><td>Brain</td><td>The stock is kept for the Brain's next builds.</td></tr>
+    <tr><th scope="row"><code>research_lab_waiting</code></th><td>AutoResearch</td><td>A lab level is wanted and the building queue is busy. It is built when the queue frees.</td></tr>
+    <tr><th scope="row"><code>lifeform_energy_needed</code></th><td>Lifeforms</td><td>The next level needs more energy than available, and AutoMine does not supply this planet.</td></tr>
+    <tr><th scope="row"><code>waiting_for_energy</code>, <code>waiting_for_population</code>, <code>waiting_for_research</code></th><td>Lifeforms</td><td>Retried later, not a stop.</td></tr>
+    <tr><th scope="row"><code>waiting_for_tech_building</code></th><td>Lifeforms</td><td>Research waits for the technology building upgrade to end.</td></tr>
+    <tr><th scope="row"><code>yield_to_robotics</code></th><td>Lifeforms</td><td>The queue waits up to 30 minutes for the robotics or nanites AutoMine wants.</td></tr>
+    <tr><th scope="row"><code>no_open_lifeform_slot</code></th><td>Lifeforms</td><td>No lifeform research slot is open yet; the detail says which population opens the first one. It replaces <code>no_lifeform_research_started</code>.</td></tr>
+    <tr><th scope="row"><code>lifeform_slot_chosen</code></th><td>Lifeforms</td><td>The technology of an open slot was chosen (guaranteed or random). One line per slot, and a notification.</td></tr>
+    <tr><th scope="row"><code>lifeform_slot_to_choose</code></th><td>Lifeforms</td><td>An open slot waits for you to choose its technology: <code>SlotChoice</code> is Never, its limit is 0, or its guaranteed technology could never be researched. Checked again at the interval.</td></tr>
+    <tr><th scope="row"><code>lifeform_slot_choice_failed</code></th><td>Lifeforms</td><td>The game refused the choice, or the page still shows the slot empty. A warning; tried again at the interval.</td></tr>
+    <tr><th scope="row"><code>lifeform_research_over_budget</code></th><td>Lifeforms</td><td>A research level without a production bonus costs more than <code>Brain.LifeformAutoResearch.MaxHoursWithoutYield</code> hours of the planet's production. The detail gives its cost in hours.</td></tr>
+    <tr><th scope="row"><code>defence_budget_reached</code>, <code>no_defence_budget</code></th><td>AutoDefence</td><td>Defences match the budget; or a moon, which produces nothing.</td></tr>
+    <tr><th scope="row"><code>repatriated_before_sleep</code></th><td>Repatriation</td><td>At least one celestial made its last flight before bedtime.</td></tr>
+    <tr><th scope="row"><code>offer_already_bought</code>, <code>offer_too_expensive</code>, <code>offer_no_surplus</code></th><td>Offer of the day</td><td>Nothing on offer; price above <code>Brain.BuyOfferOfTheDay.MaxPriceHours</code>; no celestial can pay from its surplus.</td></tr>
+    <tr><th scope="row"><code>jump_gate_recharging</code></th><td>Jump gate</td><td>The gate recharges. The next pass follows the recharge.</td></tr>
+    <tr><th scope="row"><code>jump_target_attacked</code>, <code>jump_attacks_unreadable</code></th><td>Jump gate</td><td>No jump: an attack is heading for the target, or the event list could not be read.</td></tr>
+    <tr><th scope="row"><code>no_usable_fleet</code></th><td>Expeditions</td><td>The origin has no usable main ship.</td></tr>
+    <tr><th scope="row"><code>waiting_for_wave</code></th><td>Expeditions</td><td>Too few slots are free for a wave yet.</td></tr>
+    <tr><th scope="row"><code>waiting_for_night_round</code>, <code>night_round_sent</code></th><td>Expeditions</td><td>The next expedition would return during sleep; the night round left.</td></tr>
+    <tr><th scope="row"><code>harvest_not_worth_fuel</code></th><td>Harvest</td><td>Every field costs more than 10% of its value in fuel.</td></tr>
+    <tr><th scope="row"><code>origin_refused</code>, <code>no_origin_surplus</code>, <code>daily_budget_spent</code></th><td>Discovery</td><td>The game refused the origins (its text is quoted); no origin has the surplus; the day's budget is spent. They replace <code>no_ships</code>.</td></tr>
+    <tr><th scope="row"><code>lifeform_settled</code>, <code>lifeform_refused</code>, <code>lifeforms_unreadable</code>, <code>planets_without_lifeform</code></th><td>Discovery</td><td>A lifeform settled on a planet; refused by the game (tried again 30 to 60 minutes later); the Lifeforms page could not be read; planets left without a lifeform (<code>AutoDiscovery.SettleLifeforms</code>).</td></tr>
+    <tr><th scope="row"><code>colony_ships_for_astrophysics</code></th><td>Colonize</td><td>Colony ships built during an Astrophysics research that opens a planet.</td></tr>
+    <tr><th scope="row"><code>lifeform_research_building_needed</code></th><td>Lifeforms</td><td>The planet's research building (the Research Centre for Humans), or a requirement on the way to its level&nbsp;1. No lifeform research starts without it. Only while lifeform research is on for the planet.</td></tr>
+    <tr><th scope="row"><code>directives_collected</code>, <code>directives_missions_done</code></th><td>Directives</td><td>Rewards collected, each named with its chapter; or a mission done, its reward comes with a next check.</td></tr>
+    <tr><th scope="row"><code>directives_nothing_ready</code>, <code>directives_held</code></th><td>Directives</td><td>Nothing waits; or sleep, a break or manual mode: nothing is read.</td></tr>
+    <tr><th scope="row"><code>directives_unreadable</code>, <code>directives_refused</code></th><td>Directives</td><td>The menu or a chapter could not be read, or the game refused a collect. Tried again within the hour.</td></tr>
+    <tr><th scope="row"><code>directives_disabled</code></th><td>Directives</td><td>The feature was turned off while it ran.</td></tr>
+    <tr><th scope="row"><code>directives_menu_seen</code></th><td>Directives</td><td>A game page showed more rewards waiting: the next collect comes sooner, never less than 30 to 60 minutes after the previous one.</td></tr>
+    <tr><th scope="row"><code>attack_alert_seen</code></th><td>Defender</td><td>A game page showed the attack alert: the Defender checks the event list 5 to 15 seconds later.</td></tr>
+    <tr><th scope="row"><code>galaxy_view_dispatch_failed</code></th><td>AutoFarm</td><td>The galaxy view's spy button was refused; that target's probes went through the fleet page. A warning the first time.</td></tr>
+    <tr><th scope="row"><code>combat_rejected_at_confirmation</code></th><td>AutoFarm</td><td>The last check before sending refused the plan. The detail says why, such as "4 of 773 final battle simulations failed", a report too old, or ships gone.</td></tr>
+    <tr><th scope="row"><code>breaker_fleet_proposed</code>, <code>breaker_fleet_ordered</code>, <code>no_breaker_fleet</code>, <code>breaker_order_failed</code></th><td>AutoFarm</td><td>A combat fleet for turned-down targets was proposed or, in Automatic mode, ordered; none pays back within <code>AutoFarm.BreakerMaxPaybackDays</code> or the Brain's reserves cannot pay it (the detail says which); the game refused the order (a warning).</td></tr>
+    <tr><th scope="row"><code>mode_at_start</code>, <code>mode_changed</code></th><td>Instance</td><td>The play mode at start-up, or its change, with what it does.</td></tr>
+    <tr><th scope="row"><code>break_started</code>, <code>break_ended</code>, <code>break_resumed</code></th><td>Instance</td><td>A break began, ended, or goes on after a new connection (<code>SleepMode.Breaks.Active</code>).</td></tr>
+    <tr><th scope="row"><code>relogin_limit_notified</code></th><td>Instance</td><td>The game session was lost too often: automatic logins wait, and you got one notification with the time of the next try.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Changed meaning: <code>max_level_reached</code> and <code>return_too_slow</code> no longer stop a planet; it is checked again in 11 to 13 hours. For lifeform research, <code>max_level_reached</code> stops it only once all 18 research slots are open. <code>more_expensive_than_mine</code> compares paybacks in days. <code>energy_deficit</code> also covers energy built ahead of a mine.</p>
+</details>
+<p id="ui-results">TGoat also records what expeditions and explorations bring back, read from the game's messages, and the outcome of each colony. The Expedition and Discovery reports end with totals for the last 24 hours, and the last 7 days for expeditions.</p>
+<details>
+<summary>Expedition results, messages and colonisation draws (3)</summary>
+<p><strong>Expedition results.</strong> Each expedition is judged when it comes back: <code>returned</code> (found, lost, net value), <code>lost</code>, <code>recalled</code> or <code>not_observed</code>. A fleet that disappears before its return is "lost", or "probably lost" when you may have recalled it yourself. The log gives each result and a daily total of what the fleets brought home, which resets when TGoat restarts. Dark matter and items come only from the messages, below.</p>
+<p><strong>Results from the messages.</strong> TGoat also reads what expeditions and explorations bring back in the game's messages. It reads only messages it has not seen, usually one page, and never deletes or marks them. It keeps 7 days in <code>data/&lt;id&gt;/missions/log.json</code>.</p>
+<ul>
+  <li>The Expedition report ends with "last 24 h" and "last 7 days": sent and answered, resources, dark matter, ships found, fleets lost.</li>
+  <li>The Discovery report ends with "last 24 h", such as "last 24 h: 10 explorations, 21 artifacts, 2 ships lost, no species".</li>
+  <li>A result TGoat does not recognise yet is kept, and the log names it.</li>
+</ul>
+<p><strong>Colonization draws.</strong> Every colony of a target zone is recorded in <code>data/&lt;id&gt;/colonize/draws.json</code>, with its position, fields and temperatures. Its outcome is <code>pending</code> (the decision comes 3 to 20 minutes after it is seen), <code>kept</code>, <code>abandoned</code>, or <code>held</code>: the zone's try limit is reached and the colony waits for you.</p>
+</details>
+
+<h3 id="ui-instances">Instances</h3>
+<p>The Instances page manages the Gameforge accounts TGoat plays, and the profiles they share.</p>
+<figure>
+  <img src="img/instances.jpg" width="800" height="500" alt="The Accounts list: three cards. Lyra, waiting to retry after a captcha; Quasar, sleeping until 00:16, with a dashed edge; Vega, running with the active profile farm-night, its Base profiles editor open with three profile checkboxes and Save the base profiles. Each card has the buttons Settings, Disable, Base profiles and Remove.">
+  <figcaption>Three accounts. The coloured edge gives the state at a glance.</figcaption>
+</figure>
+<p><strong>Accounts</strong> shows one card per instance, with its state in bold. The left edge is blue when it runs, dashed when it sleeps, red when it needs you, grey when it is idle.</p>
+<details>
+<summary>What each state means (7)</summary>
+<div class="table-wrap" role="region" aria-label="Instance states" tabindex="0">
+<table>
+  <caption class="sr-only">Instance states on the Instances page</caption>
+  <thead><tr><th scope="col">State</th><th scope="col">What it means</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Starting</th><td>Signing in.</td></tr>
+    <tr><th scope="row">Running</th><td>Connected, or "Running, in manual mode".</td></tr>
+    <tr><th scope="row">Sleeping, wakes up at 06:30</th><td>Only the Defender keeps watch.</td></tr>
+    <tr><th scope="row">Waiting to retry</th><td>A passing problem. TGoat retries by itself.</td></tr>
+    <tr><th scope="row">Stopped until its settings are fixed</th><td>Fix its settings; any change restarts it.</td></tr>
+    <tr><th scope="row">Waiting for its account details</th><td>No e-mail, password or token yet.</td></tr>
+    <tr><th scope="row">Disabled, Stopped</th><td>Configured, but idle.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<ul>
+  <li><strong>Settings</strong> opens the instance's file in Settings.</li>
+  <li><strong>Disable</strong> stops the instance and keeps it configured. <strong>Enable</strong> connects it again.</li>
+  <li><strong>Base profiles…</strong> picks the profiles applied under this instance's own settings.</li>
+  <li><strong>Remove…</strong> asks you to confirm. If you also delete its data folder, Gameforge then sees a new device.</li>
+</ul>
+<p>Below come <strong>Add an account</strong> (the <a href="#ui-first-run">first-run form</a>), <strong>Discord bot (optional)</strong> and <strong>Profiles</strong>. Each profile card says where it is used; <strong>Edit</strong> opens it in Settings.</p>
+<p>To share settings between accounts, create a profile under <strong>New profile</strong> and set it in Settings. Then tick it under <strong>Base profiles…</strong> on each card.</p>
+
+<h4 id="ui-discord">The Discord bot section</h4>
+<p><strong>Discord bot (optional)</strong> sets up and watches the <a href="discord.html#discord">Discord bot</a>. The full steps are in <a href="discord.html#discord-setup">Setting it up</a>.</p>
+<figure>
+  <img src="img/discord.jpg" width="780" height="646" alt="The Discord bot section: a card reads Connected, server My server, the owner's user ID, the three channels not set yet, and a red line saying the bot is also in Old alliance server and ignores it; below, the Invite the bot to your server button with the link, the Bot token field with Replace the token, Turn the bot off and Clear the token, then Webhooks that would send everything twice with the instance Vega and a Turn off button.">
+  <figcaption>The Discord bot section in the demo: connected, no channel chosen yet, one other server ignored, and one webhook that would send everything twice.</figcaption>
+</figure>
+<ul>
+  <li><strong>The state card</strong> reads <em>Connected</em>, <em>Not serving</em> or <em>Off</em>. A problem shows in red, with what to do.</li>
+  <li>Paste the <strong>Bot token</strong> and click <strong>Save the token and turn the bot on</strong>. A saved token is never shown again.</li>
+  <li><strong>Invite the bot to your server</strong> appears once Discord has accepted the token.</li>
+  <li><strong>Webhooks that would send everything twice</strong> lists the instances whose Discord webhook is also on. <strong>Turn off</strong> stops one and keeps its address.</li>
+</ul>
+<p>Then choose the channels with <code>/tgoat channel</code> in Discord. For the webhook question, see <a href="discord.html#discord-webhook">Bot or webhook</a>.</p>
+
+<h3 id="ui-ogame">OGame</h3>
+<p>The OGame page shows the game in your browser, through TGoat: the same session, device and connection as the bot, with no second login.</p>
+<figure>
+  <img src="img/ogame-bar.jpg" width="800" height="66" alt="The top of the OGame page: the instance switcher reads Vega (manual mode); below, a gold bar with the Manual mode switch on, the note On: the bot waits while you play. It resumes after 30 seconds without any click in the game., and an Open in a new tab button.">
+  <figcaption>The bar above the game, with manual mode on. The game fills the rest of the page.</figcaption>
+</figure>
+<p>Turn <strong>Manual mode</strong> on before you act in the game, so the bot doesn't act at the same time. The bar turns gold and the bot pauses once it has finished what it was doing. The Defender keeps watching and alerts you.</p>
+<p>Manual mode turns itself off 30 seconds after your last click in the game, and the bot resumes.</p>
+<p><strong>Open in a new tab</strong> opens the game full screen, still through TGoat, by default on port 9091 (<code>WebUI.GameProxyUrls</code>).</p>
+
+<h3 id="ui-shell">On every page</h3>
+<h4>The top bar</h4>
+<ul>
+  <li><strong>TGoat</strong> goes back to the Map. Hover the <strong>alpha</strong> badge to see the full version.</li>
+  <li><strong>Live</strong> means the page gets TGoat's updates. "Reconnecting" or "Offline", in red: check that TGoat still runs.</li>
+  <li><strong>The instance switcher</strong> chooses the instance every page shows.</li>
+  <li>A tag marks an instance that isn't playing normally: (error), (starting), (disabled), (needs setup), (offline), (sleeping) or (manual mode).</li>
+  <li><strong>Commands</strong> (<kbd>Ctrl</kbd> <kbd>K</kbd>) opens the command palette.</li>
+  <li><strong>Day chart</strong> or <strong>Night chart</strong> switches the theme.</li>
+</ul>
+
+<h4>The attack alert</h4>
+<figure>
+  <img src="img/alert.jpg" width="800" height="42" alt="The red attack banner: 12:52, Attack on Helion Watch (Vega) by Dread Halvard from 1:247:4, the attacking fleet and the planned fleet save, with the buttons Show on the map and Hide.">
+  <figcaption>The attack banner, on every page, whatever instance is selected.</figcaption>
+</figure>
+<p>When any instance is attacked, a red banner gives the countdown, the target, the attacker, the attacking fleet and the Defender's plan. The browser tab title shows the countdown too. With several attacks, it shows the soonest.</p>
+<p><strong>Show on the map</strong> zooms on the attack. <strong>Hide</strong> hides this attack's banner.</p>
+
+<h4>Messages</h4>
+<p>A short message at the bottom confirms each action, then disappears after a few seconds. A failure shows in red with its exact cause, and stays longer. TGoat's notifications appear the same way.</p>
+
+<h4>The command palette</h4>
+<figure>
+  <img src="img/palette.jpg" width="620" height="247" alt="The command palette with the text vega typed: Put Vega to sleep for 30 minutes, 1 hour, 2 hours, 8 hours, and Reload the settings of Vega.">
+  <figcaption>The command palette filters as you type.</figcaption>
+</figure>
+<p><kbd>Ctrl</kbd> <kbd>K</kbd> opens it from any page. Type a few words, then pick with the arrow keys and <kbd>Enter</kbd>. Type <code>sleep 45m</code> to sleep for any duration.</p>
+<details>
+<summary>What the palette offers, page by page</summary>
+<ul>
+  <li><strong>Everywhere</strong>: pages, instances, theme, sleep, settings reload, profiles, and starting or stopping a feature.</li>
+  <li><strong>Map</strong>: go to a planet or moon, show or board a fleet, toggle the layers.</li>
+  <li><strong>Deck</strong>: camera, time, alarm sound, lock on a body or fleet.</li>
+  <li><strong>Settings</strong>: open another file, jump to a setting by name.</li>
+  <li><strong>Logs</strong>: pause, warnings and errors only, filter by an attribute.</li>
+</ul>
+</details>
+
+<h4>Themes</h4>
+<figure>
+  <img src="img/theme-day.jpg" width="640" height="400" alt="The Map in the light Day chart theme: cream background, darker gold, pink and blue marks, the red attack banner.">
+  <figcaption>The Day chart theme. Night chart, the dark one, is the default.</figcaption>
+</figure>
+<p>In both themes, gold is your planets and expeditions, pink raids and AutoFarm, blue transports and works, and red anything hostile.</p>
+
+<details>
+<summary>Keyboard shortcuts, page by page (6)</summary>
+<div class="table-wrap" role="region" aria-label="Keyboard shortcuts" tabindex="0">
+<table>
+  <caption class="sr-only">Keyboard shortcuts of the web interface</caption>
+  <thead><tr><th scope="col">Where</th><th scope="col">Keys</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Every page</th><td><kbd>Ctrl</kbd> <kbd>K</kbd> command palette.</td></tr>
+    <tr><th scope="row">Map</th><td><kbd>F</kbd> fleet routes, <kbd>T</kbd> AutoFarm layer, <kbd>I</kbd> index, <kbd>B</kbd> bridge view, <kbd>D</kbd> command deck, <kbd>Esc</kbd> clear the selection or leave the bridge.</td></tr>
+    <tr><th scope="row">Map chart</th><td>Arrows move (further with <kbd>Shift</kbd>), <kbd>+</kbd> and <kbd>−</kbd> zoom, <kbd>0</kbd> fits.</td></tr>
+    <tr><th scope="row">Command deck</th><td><kbd>V</kbd> camera, <kbd>T</kbd> time speed, <kbd>M</kbd> alarm sound, <kbd>P</kbd> back to the Map, <kbd>Esc</kbd> release the lock.</td></tr>
+    <tr><th scope="row">Settings</th><td><kbd>/</kbd> find a setting, <kbd>[</kbd> and <kbd>]</kbd> previous and next section, <kbd>T</kbd> back to top, <kbd>Ctrl</kbd> <kbd>S</kbd> save.</td></tr>
+    <tr><th scope="row">Logs</th><td>Arrows, <kbd>Page Up</kbd>, <kbd>Page Down</kbd>, <kbd>Home</kbd> and <kbd>End</kbd> move between lines. <kbd>Esc</kbd> closes the detail.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Several tabs, small screens (4)</summary>
+<ul>
+  <li>Open as many tabs as you like: they share one live connection to TGoat.</li>
+  <li>Every page works on a phone, except the command deck and the bridge view.</li>
+  <li>On a narrow screen, <strong>Live</strong> shows only when the link is lost. On a phone, it is hidden.</li>
+  <li>On a narrow screen, the theme switch moves to the command palette.</li>
+</ul>
+</details>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/interface.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+<a class="to-top" href="#toc">↑ On this page</a>
+</body>
+</html>

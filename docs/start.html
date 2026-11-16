@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Get started · TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="start.html" aria-current="page">Get started</a></li>
+      <li><a href="interface.html">Web interface</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="commands.html">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html">Every change</a></li>
+      <li><a href="limits.html">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="On this page">
+  <p class="toc-title">On this page</p>
+  <ol>
+    <li><a href="#alpha">Before you start: this is an alpha</a>
+      <ol>
+        <li><a href="#alpha-report">Reporting a problem</a></li>
+      </ol>
+    </li>
+    <li><a href="#install">Install and first run</a>
+      <ol>
+        <li><a href="#cli">Commands and options</a></li>
+        <li><a href="#files">Where files live</a></li>
+      </ol>
+    </li>
+    <li><a href="#account">Add your account</a></li>
+    <li><a href="#login">Log in</a>
+      <ol>
+        <li><a href="#token">Session token</a></li>
+        <li><a href="#captcha">Captcha and two-factor</a></li>
+        <li><a href="#login-fails">When the login fails</a></li>
+      </ol>
+    </li>
+    <li><a href="#alpha-safe">Turn on a first feature</a>
+      <ol><li><a href="#assistant">Let the setup assistant suggest settings</a></li></ol>
+    </li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<h1 class="sr-only">Get started</h1>
+
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>TGoat is an alpha and bots break OGame's rules: try it on a secondary account, and back up <code>config/</code> and <code>data/</code> before each update.</li>
+  <li>Put <code>tgoat</code> in a folder of its own and start it. Coming from TBot 3.6, put it next to your old <code>settings.json</code> first.</li>
+  <li>Open <code>http://localhost:9090</code> and add your account on the Instances page.</li>
+  <li>If Gameforge asks for a captcha TGoat cannot pass, or for two-factor, log in with a <a href="#token">session token</a>.</li>
+  <li>Every feature starts off. Turn them on one at a time, and watch the Logs before the next.</li>
+</ul>
+</aside>
+
+<section aria-labelledby="alpha">
+<h2 id="alpha">Before you start: this is an alpha</h2>
+
+<div class="warn" role="note">
+<p class="note-title">Warnings</p>
+<ul>
+  <li><strong>Expect bugs.</strong> TGoat can crash or do what you did not want. Settings and files may change between builds.</li>
+  <li><strong>Bots break OGame's rules.</strong> Gameforge can ban an account that uses one. Try TGoat on a secondary account first.</li>
+  <li><strong>Its actions in the game are real.</strong> A bug can cost you ships or resources.</li>
+  <li><strong>Back up <code>config/</code> and <code>data/</code> before you update.</strong> Until the first stable release, a new alpha may not convert your old files.</li>
+  <li><strong>The web interface has no password.</strong> By default, only your computer can reach it: keep it that way unless you protect it.</li>
+  <li><strong>Never share <code>secrets.json</code></strong>, not even in a bug report. It holds your passwords and tokens.</li>
+  <li><strong>There is no warranty.</strong> You use TGoat at your own risk.</li>
+  <li><strong>Its decisions follow the author's understanding of the game.</strong> They come from my reading of the rules and of the meta. I did my best, but I cannot promise that every decision is optimal or fits every situation; the settings let you change what does not suit you.</li>
+</ul>
+</div>
+
+<h3 id="alpha-report">Reporting a problem</h3>
+<p>Send your report to whoever gave you this build, without anything private. Include:</p>
+<ul>
+  <li>what you did and expected, step by step;</li>
+  <li>the line printed by <code>tgoat version</code>;</li>
+  <li>the relevant lines from <code>log/</code>, with their time.</li>
+</ul>
+</section>
+
+<section id="start" aria-labelledby="install">
+<h2 id="install">Install and first run</h2>
+<p>TGoat is a single file: <code>tgoat.exe</code> on Windows, <code>tgoat</code> elsewhere.</p>
+<ol>
+  <li>Put it in a folder of its own.</li>
+  <li>Start it. It creates <code>config/</code>, <code>data/</code> and <code>log/</code> next to itself.</li>
+</ol>
+<p><strong>Coming from TBot 3.6?</strong> Before the first start, put <code>tgoat</code> next to your old <code>settings.json</code>. TGoat <a href="from-tbot.html#import">imports it</a>, and features that were on in TBot stay on.</p>
+
+<details id="cli">
+<summary>Commands and options (17)</summary>
+<div class="table-wrap" role="region" aria-label="Commands and options" tabindex="0">
+<table>
+  <caption class="sr-only">TGoat commands and options</caption>
+  <thead><tr><th scope="col">Command or option</th><th scope="col">What it does</th></tr></thead>
+  <tbody>
+    <tr class="sub"><th colspan="2" scope="colgroup">Commands</th></tr>
+    <tr><th scope="row"><code>tgoat</code>, <code>tgoat run</code></th><td>Start TGoat.</td></tr>
+    <tr><th scope="row"><code>tgoat setup</code></th><td>Add an account in the terminal.</td></tr>
+    <tr><th scope="row"><code>tgoat import</code></th><td>Import TBot 3.6 settings.</td></tr>
+    <tr><th scope="row"><code>tgoat version</code>, <code>tgoat --version</code></th><td>Print the build line.</td></tr>
+    <tr><th scope="row"><code>tgoat help</code></th><td>List every option.</td></tr>
+    <tr class="sub"><th colspan="2" scope="colgroup">Options</th></tr>
+    <tr><th scope="row"><code>--config &lt;folder&gt;</code></th><td>Another configuration folder.</td></tr>
+    <tr><th scope="row"><code>--data &lt;folder&gt;</code></th><td>Another runtime data folder.</td></tr>
+    <tr><th scope="row"><code>--log &lt;folder&gt;</code></th><td>Another log folder.</td></tr>
+    <tr><th scope="row"><code>--settings &lt;file&gt;</code></th><td>TBot <code>settings.json</code> to import at the first start.</td></tr>
+    <tr><th scope="row"><code>--console</code></th><td>No web interface, even if <code>WebUI.Enable</code> is on.</td></tr>
+    <tr><th scope="row"><code>--ui</code></th><td>Web interface, even if <code>WebUI.Enable</code> is off.</td></tr>
+    <tr><th scope="row"><code>--verbose</code></th><td>Debug lines in the console, game requests in the log files.</td></tr>
+    <tr class="sub"><th colspan="2" scope="colgroup">Import options</th></tr>
+    <tr><th scope="row"><code>--from &lt;file&gt;</code></th><td>The <code>settings.json</code> to import.</td></tr>
+    <tr><th scope="row"><code>--dry-run</code></th><td>Print the report, write nothing.</td></tr>
+    <tr><th scope="row"><code>--again</code></th><td>Import over an existing <code>config/</code>, kept in its history.</td></tr>
+    <tr class="sub"><th colspan="2" scope="colgroup">Environment</th></tr>
+    <tr><th scope="row"><code>TGOAT_SECRETS</code></th><td>Another path for <code>secrets.json</code>.</td></tr>
+    <tr><th scope="row"><code>NO_COLOR</code></th><td>No colours in the console.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+
+<details id="files">
+<summary>Where files live (9)</summary>
+<div class="table-wrap" role="region" aria-label="Files and folders" tabindex="0">
+<table>
+  <caption class="sr-only">Files and folders</caption>
+  <thead><tr><th scope="col">File or folder</th><th scope="col">What it holds</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><code>config/tgoat.json</code></th><td>Web interface, Telegram, Discord bot.</td></tr>
+    <tr><th scope="row"><code>config/instances/&lt;id&gt;.json</code></th><td>One instance.</td></tr>
+    <tr><th scope="row"><code>config/profiles/&lt;name&gt;.json</code></th><td>One profile, shared by all instances.</td></tr>
+    <tr><th scope="row"><code>config/secrets.json</code></th><td>E-mails, passwords, tokens, keys.</td></tr>
+    <tr><th scope="row"><code>config/history/</code></th><td>Previous versions of the files.</td></tr>
+    <tr><th scope="row"><code>config/history/removed/</code></th><td>Removed instances and profiles.</td></tr>
+    <tr><th scope="row"><code>config/import-report.txt</code></th><td>Report of the TBot import.</td></tr>
+    <tr><th scope="row"><code>data/&lt;id&gt;/</code></th><td>Simulated device, cookies, feature state.</td></tr>
+    <tr><th scope="row"><code>log/TGoat.log</code>, <code>log/TGoat.csv</code></th><td>Logs, as text and CSV.</td></tr>
+  </tbody>
+</table>
+</div>
+<p><code>&lt;id&gt;</code> names the instance's file and data folder.</p>
+</details>
+</section>
+
+<section aria-labelledby="account">
+<h2 id="account">Add your account</h2>
+<p>Imported TBot accounts are already there. Otherwise:</p>
+<ol>
+  <li>Open <code>http://localhost:9090</code>. The first time, it shows <strong>Add an account</strong> on the <strong>Instances</strong> page.</li>
+  <li>Fill in <strong>Name of the instance</strong> and <strong>Community</strong> (<code>en</code>, <code>fr</code>…).</li>
+  <li>Give your Gameforge <strong>E-mail</strong> and <strong>Password</strong>, or a <a href="#token">session token</a>.</li>
+  <li>Click <strong>Test the login</strong>. TGoat lists your players by universe.</li>
+  <li>Pick the universe, then click <strong>Create the instance</strong>. It connects with every feature off.</li>
+</ol>
+<p><a href="interface.html#ui-first-run">First run</a> describes the other fields and the optional Telegram and <a href="discord.html#discord">Discord bot</a>. In a terminal, <code>tgoat setup</code> asks the same questions.</p>
+</section>
+
+<section aria-labelledby="login">
+<h2 id="login">Log in</h2>
+<p>TGoat tries a session token you just gave it, then the session saved at the last login, then your e-mail and password. That session survives restarts.</p>
+<p>TGoat never signs out of the lobby, so your browser stays signed in.</p>
+
+<h3 id="token">Session token</h3>
+<p>Use a session token when Gameforge asks for a check TGoat cannot pass, for two-factor authentication, or to keep your password out of TGoat.</p>
+<ol>
+  <li>In your browser, sign in at <code>lobby.ogame.gameforge.com</code>.</li>
+  <li>Press <kbd>F12</kbd> to open the developer tools.</li>
+  <li>Open the cookies: in Chrome or Edge, tab <strong>Application</strong>, then <strong>Cookies</strong>; in Firefox, tab <strong>Storage</strong>, then <strong>Cookies</strong>.</li>
+  <li>Select <code>https://lobby.ogame.gameforge.com</code>.</li>
+  <li>Copy the value of the cookie <code>gf-token-production</code>, without its name.</li>
+  <li>Paste it in <strong>Session token</strong> (Add an account), <strong>Gameforge session token</strong> (Settings, <strong>Account</strong>), or <code>tgoat setup</code>.</li>
+  <li>Click <strong>Test the login</strong>. It says "Gameforge accepted the session token."</li>
+  <li>Create the instance, or save the settings.</li>
+</ol>
+<p>The setting is <code>Credentials.GameforgeToken</code>. Telegram and Discord refuse it: a chat keeps what you send.</p>
+<p>With a token, the e-mail and password are optional. If Gameforge refuses the token, TGoat asks you for a new one. Meanwhile it uses the e-mail and password, if set, or waits.</p>
+<p><strong>Signing out of the lobby in your browser ends the session TGoat uses.</strong></p>
+
+<h3 id="captcha">Captcha and two-factor</h3>
+<ul>
+  <li><strong>Image puzzle</strong> (<code>gf-image-drop-captcha</code>): TGoat solves it. With <code>General.CaptchaAPIKey</code> set, it asks the obot service first.</li>
+  <li><strong><code>gf-pow-captcha</code></strong>: TGoat will never solve it, so use a session token. It retries after 30 minutes to 2 hours.</li>
+  <li><strong>Two-factor authentication</strong>: no setting yet. Use a session token.</li>
+</ul>
+
+<details id="login-fails">
+<summary>When the login fails</summary>
+<p>After a wrong e-mail or password, refused token, two-factor, unknown universe, blocked player, vacation mode or unusable proxy, the instance waits. Any settings change restarts it at once.</p>
+<p>TGoat retries by itself, with a growing delay, after a network error, Gameforge being down, an unsolved captcha or a refused IP.</p>
+</details>
+</section>
+
+<section aria-labelledby="alpha-safe">
+<h2 id="alpha-safe">Turn on a first feature</h2>
+<p id="webui">Turn features on one at a time, in the web interface (see its <a href="interface.html#tour">tour</a>):</p>
+<ol>
+  <li>Wait until the <strong>Instances</strong> page shows your instance as <strong>Running</strong>.</li>
+  <li>Open <strong>Settings</strong> and pick the instance.</li>
+  <li>Turn on the switch in a feature's section title, such as <strong>Watch for attacks</strong> for the Defender.</li>
+  <li>Click <strong>Save 1 change</strong>.</li>
+  <li>Watch the <a href="interface.html#ui-logs">Logs</a> and the <a href="interface.html#ui-deck">Command deck</a>. Turn on the next feature only when the bot does what you expect.</li>
+</ol>
+<p>Before you play by hand, turn on <strong>Manual mode</strong> in the <a href="interface.html#ui-ogame">OGame</a> page so the bot pauses.</p>
+
+<h3 id="assistant">Let the setup assistant suggest settings</h3>
+<p>Once TGoat has read your account, the Map shows a banner that opens the <a href="interface.html#ui-assistant">setup assistant</a>. It asks a few questions, pre-filled from your account, then proposes settings grouped by theme that you apply or skip. It is most useful when your account has already grown.</p>
+<p>It never changes a value you set yourself unless you ask, and every change it makes can be restored from the settings history. You can open it again at any time from the Settings page or the command palette (Ctrl K).</p>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/start.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+<a class="to-top" href="#toc">↑ On this page</a>
+</body>
+</html>

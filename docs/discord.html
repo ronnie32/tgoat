@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Discord bot · TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="start.html">Get started</a></li>
+      <li><a href="interface.html">Web interface</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="discord.html" aria-current="page">Discord</a></li>
+      <li><a href="commands.html">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html">Every change</a></li>
+      <li><a href="limits.html">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="On this page">
+  <p class="toc-title">On this page</p>
+  <ol>
+    <li><a href="#discord-setup">Setting it up</a></li>
+    <li><a href="#discord-rights">Who may command it</a></li>
+    <li><a href="#discord-channels">Channels</a></li>
+    <li><a href="#discord-answers">Public or private answers</a></li>
+    <li><a href="#discord-confirm">Buttons and confirmation</a></li>
+    <li><a href="#discord-notes">Notifications</a></li>
+    <li><a href="#discord-logs">Logs and auto-ping</a></li>
+    <li><a href="#discord-webhook">Bot or webhook</a></li>
+    <li><a href="#discord-settings">Its settings</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<h1 class="sr-only">Discord bot</h1>
+
+<section aria-labelledby="discord">
+<h2 id="discord">Discord bot</h2>
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>The bot runs inside TGoat: nothing to install or host, no public address needed. One bot serves all your instances, on one server.</li>
+  <li>To set it up, create a Discord application, copy its token, untick Public Bot, paste the token on the Instances page, then invite the bot (<a href="#discord-setup">steps</a>).</li>
+  <li>Pick its channels with <code>/tgoat channel</code>. Without one, it notifies nothing.</li>
+  <li>Only you, your Discord team and the users you list can command it. Seven costly commands ask you to confirm.</li>
+  <li>Attack alerts ring your phone. If an instance also has a Discord webhook, turn it off or you get everything twice.</li>
+</ul>
+</aside>
+<p>Your own Discord bot lets you follow and command TGoat from your server, with slash commands, buttons and a channel per topic.</p>
+
+<h3 id="discord-setup">Setting it up</h3>
+<p>You need a Discord account and a server where you may add a bot, such as a new one made with Discord's <strong>+</strong> button.</p>
+<ol>
+  <li><strong>Create the application.</strong> At <code>discord.com/developers/applications</code>, click <strong>New Application</strong>. Its name, such as TGoat, becomes the bot's name.</li>
+  <li><strong>Get the token.</strong> On the <strong>Bot</strong> page, press <strong>Reset Token</strong> and copy the token, shown only once. <strong>It is the bot's password: never share it.</strong></li>
+  <li><strong>Untick Public Bot</strong> on the same page and save, so nobody else can invite your bot.
+    <p>If Discord refuses over the default authorization link, set the install link to <strong>None</strong> on the <strong>Installation</strong> page, save, and retry.</p></li>
+  <li><strong>Give TGoat the token</strong>, which it checks with Discord:
+    <ul>
+      <li><strong>Web interface:</strong> on the <a href="interface.html#ui-discord">Instances page</a>, section <strong>Discord bot (optional)</strong>, paste it in <strong>Bot token</strong> and click <strong>Save the token and turn the bot on</strong>.</li>
+      <li><strong>Terminal:</strong> at the end of <code>tgoat setup</code>, answer yes to "Follow and command TGoat from a Discord server, with a bot of your own?" and paste it.</li>
+    </ul>
+    <p>The terminal hides the token and prints its application's name. Stored in <code>secrets.json</code>, the token can be replaced or cleared, but never read back or shown in logs, notifications or the web interface.</p></li>
+  <li><strong>Use the invite link</strong>: <strong>Invite the bot to your server</strong> on the Instances page, or the link <code>tgoat setup</code> prints. Pick your server and authorise.
+    <p>The link appears once Discord accepts the token. It gives the bot its slash commands and four permissions: view channels, send messages, embed links, read message history (84992).</p></li>
+  <li><strong>Answer the server ID question</strong> in <code>tgoat setup</code>: press <kbd>Enter</kbd>, and the bot takes the only server it is in. The web interface skips it.</li>
+</ol>
+<p>Once TGoat runs, type <code>/</code> in your server to see the commands, then set the <a href="#discord-channels">channels</a> with <code>/tgoat channel</code>. Without one, the bot notifies nothing.</p>
+<p>Leave Presence Intent, Server Members Intent and Message Content Intent off: the bot never reads your messages.</p>
+
+<details id="discord-server">
+<summary>How the bot keeps to one server</summary>
+<p>The bot serves one server, for commands and notifications.</p>
+<ul>
+  <li>With <code>DiscordBot.GuildID</code> empty, it takes the only server it is in and saves that server's ID there.</li>
+  <li>That server then stays. If the bot is no longer in it, it serves none, and the Instances page says so.</li>
+  <li>To fix that, invite the bot back, or empty <code>DiscordBot.GuildID</code>.</li>
+  <li>Invited elsewhere, it ignores that server and warns you, in the log and on the Instances page, to untick Public Bot.</li>
+  <li>In several servers with none saved, it serves none until you set <code>DiscordBot.GuildID</code>.</li>
+  <li>To copy a server ID, turn on Developer Mode (User Settings, Advanced), right-click the server and choose Copy Server ID.</li>
+</ul>
+</details>
+
+<h3 id="discord-rights">Who may command it</h3>
+<ul>
+  <li><strong>You</strong>, as the application's owner, or the members of its Discord team who accepted the invitation.</li>
+  <li><strong>Users in <code>DiscordBot.AllowedUserIDs</code></strong>. To get an ID, turn on Developer Mode, right-click the user and choose Copy User ID.</li>
+  <li><strong>Anyone else</strong> gets a refusal only they can see, and TGoat logs a warning the first time.</li>
+</ul>
+<p>Button clicks are checked like commands. Both work only in your server, never in direct messages or another server.</p>
+<p>Other members of your server can read the TGoat channels. If you share the server, keep those channels private.</p>
+
+<h3 id="discord-channels">Channels</h3>
+<p>Type <code>/tgoat channel</code> in a channel and pick its topic:</p>
+<ul>
+  <li><code>notifications</code>: every other notification, and the auto-ping;</li>
+  <li><code>alerts</code>: attack and missile attack alerts, or <code>notifications</code> when unset;</li>
+  <li><code>logs</code>: forwarded logs, or <code>notifications</code> when unset.</li>
+</ul>
+<p>Without <code>notifications</code>, only alerts go out. Without any channel, commands still work but nothing is notified.</p>
+<p>The channel must be a text or announcement channel where the bot may view, send messages and embed links. A missing permission is named in the answer.</p>
+<p>You can also paste channel IDs in the <strong>Discord bot</strong> settings. Either way, they are saved in <code>tgoat.json</code> and apply at once.</p>
+
+<h3 id="discord-answers">Public or private answers</h3>
+<p>Answers are public in a TGoat channel and private elsewhere ("Only you can see this"). A button's answer follows the channel of its message.</p>
+<p>For a slow command, Discord first shows the bot thinking. An answer after 15 minutes, or one Discord refuses in the channel, comes by direct message, never in public.</p>
+<p>Each Discord user has their own current instance (<code>/instance main</code>) and celestial (<code>/celestial select</code>). The optional <code>instance</code> option of instance commands, with suggestions, targets another instance once.</p>
+
+<h3 id="discord-confirm">Buttons and confirmation</h3>
+<p>Seven costly or irreversible commands ask first, with <strong>Confirm</strong> and <strong>Cancel</strong> buttons: <code>/build</code>, <code>/auction bid</code>, <code>/resources collect-all</code>, <code>/attacks message</code>, <code>/fleet phalanx</code>, <code>/fleet spycrash</code> and <code>/instance disable</code>, which also stops that instance's Defender.</p>
+<ul>
+  <li>The question shows the command, its options, the instance and, for <code>/fleet spycrash</code>, the starting celestial.</li>
+  <li><strong>Confirm</strong> runs exactly that, even if you switched account or celestial meanwhile. Nothing runs if the instance was removed or renamed.</li>
+  <li>Only the person who ran the command can answer, within 15 minutes.</li>
+  <li><strong>A TGoat restart loses pending confirmations.</strong> The button then says it has expired: run the command again.</li>
+  <li>Defensive fleet moves (deploy, switch, ghost, recall) never ask.</li>
+  <li>A notification button that leads to a costly command, such as <strong>Bid minimum</strong>, asks too.</li>
+</ul>
+<p>Telegram does not ask.</p>
+
+<h3 id="discord-notes">Notifications</h3>
+<p>Each notification is one message, headed by its instance and coloured by kind (red: attack; orange: missile attack or warning; dark red: error; green: success or sleep mode; blue: auction).</p>
+<p>The title says which feature sends it and the kind, such as "Directives · Action completed" or "Defender · Incoming attack". Messages from TGoat itself, such as a settings reload, show the kind alone. The webhook titles its messages the same way.</p>
+<p>With <code>DiscordBot.MentionOnAttack</code> (on by default), attack and missile attack alerts mention the application's owners, so their phones ring. Nothing else pings anyone, not even an "@everyone" written in the game.</p>
+<p>Some notifications carry buttons:</p>
+<ul>
+  <li>an attack: <strong>Attacks</strong> (the list of attacks), plus <strong>Wake up</strong> if the instance sleeps;</li>
+  <li>sleep mode: <strong>Wake up</strong> while it sleeps, <strong>Cancel ghost sleep</strong> while a ghost sleep is planned;</li>
+  <li>an auction: <strong>Bid minimum</strong>.</li>
+</ul>
+<p>A button clicked twice or too late gets a plain answer, such as "The bot is already awake."</p>
+<details>
+<summary>New notifications, and when the session is lost too often (4)</summary>
+<p>Three notifications come from the November 2026 reviews:</p>
+<ul>
+  <li><strong>Expedition lost</strong> (orange): a fleet disappeared before its planned return. "Probably lost" when you may have recalled it yourself in the game.</li>
+  <li><strong>Colonize</strong>, once per pass: a new colony (green; choose its lifeform), a colony abandoned, or a zone's try limit reached (orange, with the draws).</li>
+  <li><strong>Offer of the day bought</strong> (green): the item and its rarity. It waits in your inventory, not activated.</li>
+</ul>
+<p><strong>Session lost too often</strong> (orange, from TGoat itself): after three automatic logins in 30 minutes, TGoat stops logging in until the oldest one is 30 minutes old, and says until when: "The game session was lost 4 times in 30 minutes; TGoat waits until 21:45 before logging in again." It comes once, not for every failed request, and not again for 30 minutes.</p>
+<p>If it repeats, open the account in a browser: someone, or another program, may be using it.</p>
+<p>Colonize has its own switches: <code>AutoColonize.DiscordWebhook.Active</code> (on by default) and <code>AutoColonize.TelegramMessenger.Active</code>.</p>
+</details>
+<p>Each feature's <strong>Notify on Discord</strong> switch (such as <code>Defender.DiscordWebhook.Active</code>, on by default) covers both the bot and the instance's webhook.</p>
+<details>
+<summary>When Discord is unreachable, a channel is gone or the token is reset (3)</summary>
+<p>If Discord is unreachable, notifications queue and go out in order, each retried for up to 6 hours before being dropped with a warning. Telegram and the webhook never wait for it.</p>
+<p>Notifications for a channel that is gone, or where the bot may not write, are dropped with one warning.</p>
+<p>If the token is reset in the Developer Portal while TGoat runs, the bot stops at the first refusal and the Instances page says why. Paste the new token to start it again. A connection lost for more than 5 minutes shows there too, with one warning, and its return is logged.</p>
+</details>
+
+<h3 id="discord-logs">Logs and auto-ping</h3>
+<p><code>DiscordBot.Logging</code> (on by default) forwards warnings and errors to the logs channel, batched every few seconds with repeats grouped, as on Telegram. An attack the Defender logs is skipped when the bot already posts that alert itself, in its alerts or notifications channel.</p>
+<p><code>/logs level</code> shows the Discord level (Warning by default), and <code>/logs set-level</code> changes it until TGoat restarts. Telegram's level is set with <code>/setloglevel</code>.</p>
+<p><code>DiscordBot.AutoPing.Active</code> posts a sign of life in the notifications channel every <code>DiscordBot.AutoPing.EveryHours</code> hours (1 by default), on the hour, like Telegram's: version, uptime and each instance's state. <code>/tgoat autoping</code> and <code>/tgoat autoping-stop</code> start and stop it until the next restart.</p>
+<p><code>/tgoat ping</code> answers "Pong, TGoat 0.1.0-alpha.1", so you see the bot is alive and which build runs.</p>
+
+<h3 id="discord-webhook">Bot or webhook</h3>
+<p>Each instance can still post to its own Discord webhook (<code>DiscordWebhook.Url</code>, in <code>secrets.json</code>), copied from a channel's integration settings. A webhook only posts notifications; the bot covers every instance, with commands, buttons, topic channels and logs.</p>
+<p>The two are independent. The webhook notifies whenever it is on; the bot, when it is on and has a channel for the notification.</p>
+<p>A server that gets both sees everything twice. So setting up the bot, in <code>tgoat setup</code> or on the Instances page, offers to turn off each active webhook; its address stays saved. Keep one that posts elsewhere, such as your alliance's server.</p>
+
+<h3 id="discord-settings">Its settings</h3>
+<p>They are in the <strong>Discord bot</strong> part of the TGoat settings (<code>tgoat.json</code>). A new token or server reconnects the bot, and no notification is lost meanwhile; other changes apply at once.</p>
+<details>
+<summary>All its settings (11)</summary>
+<div class="table-wrap" role="region" aria-label="Discord bot settings" tabindex="0">
+<table class="wide">
+  <caption class="sr-only">Settings of the Discord bot</caption>
+  <thead><tr><th scope="col">Setting</th><th scope="col">Default</th><th scope="col">What it does</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><code>DiscordBot.Active</code></th><td>false</td><td>Use the bot.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.Token</code></th><td>empty</td><td>Its token, in <code>secrets.json</code>.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.GuildID</code></th><td>empty</td><td>Its server.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.AlertChannelID</code></th><td>empty</td><td>Alerts channel.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.NotificationChannelID</code></th><td>empty</td><td>Notifications channel.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.LogChannelID</code></th><td>empty</td><td>Logs channel.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.MentionOnAttack</code></th><td>true</td><td>Ping the owners on attack alerts.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.AllowedUserIDs</code></th><td>empty</td><td>Other users allowed to command.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.Logging</code></th><td>true</td><td>Forward warnings and errors.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.AutoPing.Active</code></th><td>false</td><td>Post a sign of life.</td></tr>
+    <tr><th scope="row"><code>DiscordBot.AutoPing.EveryHours</code></th><td class="num">1</td><td>Hours between pings; 0 takes the default.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/discord.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+<a class="to-top" href="#toc">↑ On this page</a>
+</body>
+</html>

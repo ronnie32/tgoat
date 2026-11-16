@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Settings · TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="start.html">Get started</a></li>
+      <li><a href="interface.html">Web interface</a></li>
+      <li><a href="settings.html" aria-current="page">Settings</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="commands.html">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html">Every change</a></li>
+      <li><a href="limits.html">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="On this page">
+  <p class="toc-title">On this page</p>
+  <ol>
+    <li><a href="#settings-defaults">Defaults</a></li>
+    <li><a href="#settings-new">New settings and options</a></li>
+    <li><a href="#settings-edit">Three ways to edit</a></li>
+    <li><a href="#settings-profiles">Profiles</a></li>
+    <li><a href="#settings-secrets">Secrets</a></li>
+    <li><a href="#settings-device">Simulated device</a></li>
+    <li><a href="#settings-instances">Managing instances</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<h1 class="sr-only">Settings</h1>
+
+<section aria-labelledby="settings">
+<h2 id="settings">Your settings</h2>
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>A setting missing from a file takes its default, and every feature starts off.</li>
+  <li>Edit settings on the Settings page of the web interface, in the files of <code>config/</code>, or with <code>/settings set</code> from Telegram or Discord. Each value is checked before it is saved.</li>
+  <li>A <a href="#settings-profiles">profile</a> shares settings between accounts, or changes them for a few hours.</li>
+  <li><a href="#settings-secrets">Secrets</a> (e-mails, passwords, tokens) are write-only and live in <code>secrets.json</code>.</li>
+  <li>Each account signs in as its own <a href="#settings-device">simulated PC</a>, drawn once and kept.</li>
+</ul>
+</aside>
+
+<h3 id="settings-defaults">Defaults</h3>
+<p>A setting missing from a file takes its default. Every feature and every <code>Active</code> option is off, and lists and coordinates are empty. Other values, such as intervals and thresholds, are the recommended ones.</p>
+<p>"Reset to default" removes the key from the file. The web interface always shows the value the bot really uses.</p>
+<p>Turning a feature on or off from the Map, the Deck or the bots does not change these settings: that choice is kept in <code>data/&lt;instance&gt;/overrides.json</code>. Writing the feature's <code>Active</code> setting ends it. See <a href="interface.html#feature-switch">Turning a feature on or off</a>.</p>
+<p>Three defaults are not what you might expect: <code>Expeditions.PrimaryToKeep</code> and <code>Expeditions.MinPrimaryToSend</code> are 0, <code>General.Proxy.LoginOnly</code> is false, and <code>WebUI.Enable</code> is true.</p>
+<p>Example: this instance file turns one feature on and sets one number. Everything else is default.</p>
+<pre><code>"Settings": {
+  "AutoFarm": { "Active": true, "NumProbes": 12 }
+}</code></pre>
+
+<h3 id="settings-new">New settings and options</h3>
+<p>The November 2026 reviews of the Brain, Expeditions, Harvest, Discovery and Colonize added the settings below, with a few for Directives and the logs. The Settings page shows the help of each one.</p>
+<p>A behaviour that changes how the account plays is an option, off by default, such as the night round of expeditions, breaks, Directives, or settling a lifeform on planets that have none.</p>
+<details>
+<summary>Options off by default (10)</summary>
+<div class="table-wrap" role="region" aria-label="Options off by default" tabindex="0">
+<table>
+  <caption class="sr-only">Options that are off by default</caption>
+  <thead><tr><th scope="col">Option</th><th scope="col">What it does when on</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><code>Expeditions.NightRound</code></th><td>Just before bedtime, every free expedition slot leaves and comes back shortly after the wake-up. Needs sleep mode.</td></tr>
+    <tr><th scope="row"><code>SleepMode.Breaks.Active</code></th><td>1 to 2 breaks a day, 30 to 90 minutes, more than 2 hours from waking up and from bedtime. No fleet leaves and no queue restarts; the Defender keeps watching. Afterwards, the features start again one by one.</td></tr>
+    <tr><th scope="row"><code>SleepMode.Breaks.DefenderAtSleepPace</code></th><td>During a break, the Defender checks at its night pace and, as at night, neither reads your fleets nor shows activity.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoMine.SpendStockUnderAttack</code></th><td>Under attack, what the fleet-save cannot carry goes into the best affordable build. Without the Defender, attacks are seen late.</td></tr>
+    <tr><th scope="row"><code>AutoHarvest.HarvestOtherDF</code></th><td>Also harvests the fields your attacks leave and the other positions of your systems.</td></tr>
+    <tr><th scope="row"><code>Brain.LifeformAutoMine.BuildNonEconomic</code></th><td>Also builds lifeform buildings that produce nothing, after everything else.</td></tr>
+    <tr><th scope="row"><code>Directives.Active</code></th><td>Collects the rewards of the Directives once their missions are done: Dark Matter and resources. TGoat looks at the Directives menu every 2 to 6 hours and opens the chapters only when it shows a reward. <code>Directives.Notify</code> says when you get a notice.</td></tr>
+    <tr><th scope="row"><code>Directives.Missions.MetalMineOutput</code></th><td>When a directive asks for it, the Metal Mine of your first planet goes to 90%, then back to 100%. Only when it is at 100%.</td></tr>
+    <tr><th scope="row"><code>Directives.Missions.TechTree</code></th><td>When a directive asks for it, opens the Small Cargo's technology tree. Nothing changes in the account.</td></tr>
+    <tr><th scope="row"><code>AutoDiscovery.SettleLifeforms.Active</code></th><td>Chooses the lifeform of planets that have none. When no planet has Humans, they go first to the home planet: only Humans discover the other lifeforms. Every other planet takes the best-ranked lifeform available now (<code>Preference</code>) and keeps it. A lifeform already there is never changed, and planets in <code>Exclude</code> are kept for later. Off, the Discovery report and a daily notice list the planets without one.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>All new settings (55)</summary>
+<div class="table-wrap" role="region" aria-label="New settings" tabindex="0">
+<table class="wide">
+  <caption class="sr-only">Settings added by the November 2026 reviews</caption>
+  <thead><tr><th scope="col">Setting</th><th scope="col">Default</th><th scope="col">What it does</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><code>Brain.ReserveHours</code></th><td class="num">6 h</td><td>A celestial keeps the resources of its next Brain build when it pays it within this time. While its queue is busy, the time counts from the end of the running build.</td></tr>
+    <tr><th scope="row"><code>Mode</code></th><td>Human</td><td>How fast TGoat plays: Human, RAGE or Custom. See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
+    <tr><th scope="row"><code>Pace.Reaction</code>, <code>Pace.Pauses</code>, <code>Pace.Waves</code>, <code>Pace.Checks</code>, <code>Pace.Requests</code></th><td>Human, Human, true, Human, Human</td><td>The fine settings of Custom mode: reactions (Human, Quick, Instant), pauses (Human, Short), waves, checks (Human, Frequent), requests (Human, Fast). Used in Custom mode only; the defaults play like Human.</td></tr>
+    <tr><th scope="row"><code>Directives.Active</code>, <code>Directives.Missions.*</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>Directives.CheckIntervalMin</code>, <code>Directives.CheckIntervalMax</code></th><td class="num">120 and 360 min</td><td>Time between two looks at the Directives menu.</td></tr>
+    <tr><th scope="row"><code>Directives.Notify</code></th><td>DarkMatterOnly</td><td>When a Directives collect sends a notice naming the missions: EveryReward, DarkMatterOnly or Never.</td></tr>
+    <tr><th scope="row"><code>Brain.SpendingPriority</code></th><td>1, 1, 2, 2, 3, 3, 4, 5</td><td>Who waits for whose reservation on a celestial: each feature leaves the resources kept for features ranked before it (smaller number); equal ranks do not wait for each other. Defaults: buildings and research, then lifeform buildings and research, then cargo ships and defences, then the offer, then discovery. A list on the Settings page.</td></tr>
+    <tr><th scope="row"><code>Brain.ReserveLetsSmallBuildsThrough</code></th><td class="num">15 min</td><td>A build that waits only for resources kept for a build ranked before it goes at once if it takes at most this much of the planet's production from them. The kept build is delayed by at most this long, all such builds together; 0: they wait.</td></tr>
+    <tr><th scope="row"><code>Brain.Transports.MinHoursSaved</code></th><td class="num">1 h</td><td>A supply flight leaves only if it saves this much, or a quarter of the wait.</td></tr>
+    <tr><th scope="row"><code>Brain.Transports.MultipleOrigins.MinimumShipment</code></th><td class="num">0</td><td>Smallest load of a flight from several origins; 0: none.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoMine.SatelliteRiskFactor</code></th><td class="num">2</td><td>Multiplies the satellite price when energy sources are compared.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoMine.MaxSolarSatellites</code></th><td class="num">0</td><td>Most solar satellites per planet; 0: no limit.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoMine.SpendStockUnderAttack</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>Brain.LifeformAutoMine.BuildNonEconomic</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>Brain.LifeformAutoResearch.MaxShipResearchLevel</code></th><td class="num">0</td><td>Highest level of lifeform ship technologies; 0: never.</td></tr>
+    <tr><th scope="row"><code>Brain.LifeformAutoResearch.SlotChoice</code></th><td>Guaranteed</td><td>Technology of a research slot that opens: Guaranteed (the one the game guarantees), Random (a draw among every lifeform you discovered) or Never (you choose it). The choice is final unless you reset the tier.</td></tr>
+    <tr><th scope="row"><code>Brain.LifeformAutoResearch.MaxHoursWithoutYield</code></th><td class="num">24 h</td><td>Largest cost of a lifeform research level without a production bonus, in hours of the planet's production; 0: never.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoResearch.Profile</code></th><td>Miner</td><td>Miner, Fleet or Explorer: which research goes up.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoDefence.TargetHoursOfProduction</code></th><td class="num">24 h</td><td>Defences worth this many hours of the celestial's production.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoDefence.Ratio.*</code></th><td class="num">25 / 15 / 10 / 25 / 0 / 25%</td><td>Share of that budget per defence type, by cost.</td></tr>
+    <tr><th scope="row"><code>Brain.BuyOfferOfTheDay.MaxPriceHours</code></th><td class="num">6 h</td><td>Highest price, in hours of the account's production; 0: no limit.</td></tr>
+    <tr><th scope="row"><code>Expeditions.CargoShare</code></th><td class="num">75%</td><td>Cargo sized for this share of the largest find.</td></tr>
+    <tr><th scope="row"><code>Expeditions.MinFreeSlotsForWave</code></th><td class="num">0</td><td>Free expedition slots that start a wave; 0: a third of them.</td></tr>
+    <tr><th scope="row"><code>Expeditions.NightRound</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>Expeditions.BuildFleet</code></th><td>Suggest</td><td>Ships expeditions lack. Pathfinders for a Discoverer, one for each expedition an origin sends, valued by the find model alone. More of the main ship for any class, only with every slot in use and once 7 days and 20 results show finds cut by a full hold (measured, or by the find model fitted to those finds), each added ship paying back within the limit below. Off: never. Suggest: sent to you with cost, value per day and payback, built when you accept, never more than you accepted. Automatic: one order per check. Ships are paid from the origin's surplus, never from what the Brain keeps for builds ranked before cargo ships.</td></tr>
+    <tr><th scope="row"><code>Expeditions.BuildFleetMaxPaybackDays</code></th><td class="num">10 days</td><td>Longest payback of a ship build for expeditions; for the main ship, of each added ship. The risk of losing the ships is counted.</td></tr>
+    <tr><th scope="row"><code>Expeditions.Escort</code></th><td>Strongest</td><td>The combat ship that joins large expeditions. Strongest: the strongest one not slower than the main ships, as before. None: no combat ship leaves, so none can be lost to a black hole or a battle.</td></tr>
+    <tr><th scope="row"><code>SleepMode.Breaks.Active</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>SleepMode.Breaks.MinPerDay</code>, <code>SleepMode.Breaks.MaxPerDay</code></th><td class="num">1 and 2</td><td>Breaks per day, drawn between the two.</td></tr>
+    <tr><th scope="row"><code>SleepMode.Breaks.MinMinutes</code>, <code>SleepMode.Breaks.MaxMinutes</code></th><td class="num">30 and 90 min</td><td>Length of a break, drawn between the two.</td></tr>
+    <tr><th scope="row"><code>SleepMode.Breaks.DefenderAtSleepPace</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>AutoHarvest.HarvestOtherDF</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>AutoHarvest.MinimumResourcesOtherDF</code></th><td class="num">100,000</td><td>Smallest of those fields worth a trip.</td></tr>
+    <tr><th scope="row"><code>AutoDiscovery.MaxShareOfProduction</code></th><td class="num">5%</td><td>Daily budget, as a share of the account's production; 0: no budget.</td></tr>
+    <tr><th scope="row"><code>AutoDiscovery.MaxMissionsPerDay</code></th><td class="num">0</td><td>Most missions a day; 0: no limit.</td></tr>
+    <tr><th scope="row"><code>AutoDiscovery.SettleLifeforms.Active</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>AutoDiscovery.SettleLifeforms.Preference.*</code></th><td>1, 2, 3, 4</td><td>Order of the lifeforms for a planet without one: Humans, Rock’tal, Mechas, Kaelesh. A lifeform not discovered yet is skipped. A list on the Settings page.</td></tr>
+    <tr><th scope="row"><code>AutoDiscovery.SettleLifeforms.Exclude</code></th><td>none</td><td>Planets whose lifeform Discovery never chooses, to keep them for later; the report leaves them out.</td></tr>
+    <tr><th scope="row"><code>AutoColonize.Targets[].MinFields</code></th><td class="num">0</td><td>A zone's fields threshold; 0 keeps every colony.</td></tr>
+    <tr><th scope="row"><code>AutoColonize.Abandon.MaxAttempts</code></th><td class="num">10</td><td>Failed colonies in a zone before Colonize stops abandoning there.</td></tr>
+    <tr><th scope="row"><code>AutoColonize.ParallelTries</code></th><td class="num">1</td><td>With abandon, colony ships in flight at once, never more than the free planet slots.</td></tr>
+    <tr><th scope="row"><code>AutoColonize.DiscordWebhook.Active</code>, <code>AutoColonize.TelegramMessenger.Active</code></th><td>true and false</td><td>Colonize notifications.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.BuildBreakers</code></th><td>Suggest</td><td>Combat ships for targets AutoFarm turns down for their defences or ships: Off, Suggest (TGoat proposes the cheapest fleet that pays back, with its cost, loot per day, payback and risk) or Automatic (builds it within the Brain's reserves, one order per pass, only if your AutoFarm settings would raid with it). See <a href="changes.html#breakers">Combat ships for defended targets</a>.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.BreakerMaxPaybackDays</code></th><td class="num">3 days</td><td>Longest payback of a combat fleet; above it, nothing is proposed or built.</td></tr>
+    <tr><th scope="row"><code>Notifications.Level</code></th><td>Everything</td><td>What an instance sends to Telegram and Discord: Attacks (attacks only), Important (attacks, warnings, errors, sleep mode and proposals) or Everything. The web interface still shows everything. The <a href="interface.html#ui-assistant">setup assistant</a> asks this question.</td></tr>
+    <tr><th scope="row"><code>Logging.Style</code> (<code>tgoat.json</code>)</th><td>Readable</td><td>How a log line looks in the console, <code>TGoat.log</code> and the Logs page: Readable (time, instance › feature, the message), Levels (<code>[Warning]</code>) or TBot (<code>[17:56:25 INF Main|Directives]</code>). Applies at once.</td></tr>
+    <tr><th scope="row"><code>Logging.Colours</code> (<code>tgoat.json</code>)</th><td>Levels and features</td><td>Levels and features, Levels only, or None. The <code>NO_COLOR</code> environment variable turns the console colours off.</td></tr>
+    <tr><th scope="row"><code>Logging.FeatureColours</code> (<code>tgoat.json</code>)</th><td>empty</td><td>A feature's colour instead of the one TGoat gives it. Pick it on the Logs page, under <strong>Colours</strong>.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details>
+<summary>A changed meaning, settings that do nothing yet, changed defaults, zone checks (4)</summary>
+<p>One setting changed meaning: <code>AutoFarm.CombatPlanner.MaxFailureProbabilityPercent</code> (1%) is the risk of losing a ship that an attack may carry. It also sets the last check before sending: 773 simulated battles of the fleet that leaves, at most 3 with a ship lost.</p>
+<p>Three settings exist but do nothing yet: <code>Defender.Autofleet.UseJumpGate</code>, <code>Defender.Autofleet.ExpeditionAsLastResort</code> and <code>General.ExchangeRate</code>. TGoat already values resources at 2.5 : 1.5 : 1.</p>
+<p>Some defaults changed too, such as <code>Brain.AutoMine.MaxDaysOfInvestmentReturn</code> (60 days) and <code>Expeditions.MaxExpeditionsPerOrigin</code> (0, no limit). The full list is under <a href="from-tbot.html#defaults">Changed defaults</a>. A value you wrote stays.</p>
+<p>Colonize zones are checked when you save them. Systems or positions in the wrong order, and 0 planets wanted, are refused. A zone cannot cross the end of the galaxy: split it in two.</p>
+</details>
+
+<h3 id="settings-edit">Three ways to edit</h3>
+<ul>
+  <li><strong>The Settings page</strong>: forms, a raw JSON editor and a History tab.</li>
+  <li><strong>A text editor</strong>: edit the files in <code>config/</code>. TGoat notices the change and applies it.</li>
+  <li><strong>Telegram or Discord</strong>: <code>/settings get</code>, <code>/settings set</code> and <code>/settings undo</code>.</li>
+</ul>
+<p>All three go through the same writer. Each value is checked before it is saved, and an unknown key gets a suggestion such as "did you mean Active?". TGoat keeps your comments, layout and key order, and never rewrites your files on its own.</p>
+<p>Example, from Telegram:</p>
+<pre><code>/settings set AutoFarm.NumProbes 12
+/settings undo</code></pre>
+<p>The first command is checked and applied at once, even if the instance is offline. The second puts the old value back.</p>
+<p>If a file changes while you edit it in the web interface, your edits are merged setting by setting. When you both changed the same setting, you choose which value to keep.</p>
+
+<h3 id="settings-profiles">Profiles</h3>
+<p>A profile is a file in <code>config/profiles/</code> that holds settings only, never account data or secrets. Any instance can use it.</p>
+<ul>
+  <li><strong>Base profile</strong> (<code>Profiles.Extends</code>): applied under the instance's own settings, so the instance wins. Use it for what several accounts share.</li>
+  <li><strong>Active profile</strong> (<code>Profiles.Active</code>): applied over the instance's settings.</li>
+</ul>
+<p>Both lists are saved in the instance file, so they survive a restart. Editing a profile reloads the instances that use it.</p>
+<p>Example: <code>config/profiles/night.json</code> turns farming on and sends fewer probes.</p>
+<pre><code>{
+  "Version": 2,
+  "Description": "Quiet night farming",
+  "Settings": {
+    "AutoFarm": { "Active": true, "NumProbes": 6 }
+  }
+}</code></pre>
+<p>To use it for the next 4 hours, send <code>/profile load night 4h</code>. When the time is up, the instance goes back to its own settings. <code>/profile reset</code> ends it earlier.</p>
+
+<h3 id="settings-secrets">Secrets</h3>
+<p>Secrets are write-only. You can set, replace or clear one, but never read it back. The web interface, Telegram and Discord only say whether it is set.</p>
+<p>They live in <code>secrets.json</code>, which the web interface never serves. Example: in <code>secrets.json</code>, the e-mail and password of an instance sit under its id.</p>
+<pre><code>"Instances": {
+  "vega": { "Email": "you@example.com", "Password": "…" }
+}</code></pre>
+
+<h3 id="settings-device">Simulated device</h3>
+<p>Each account signs in as its own PC: a current Windows or macOS computer with Chrome or Edge, your computer's time zone (or the universe's country behind a proxy), and the universe's language. TGoat draws it once, when the instance is created, and keeps it, like one real PC.</p>
+<p>The values are in the instance file, under <code>Credentials.DeviceConf</code>, where you can read them. The browser version moves forward by itself over time.</p>
+<p>To get a new device, remove the device folder, <code>data/&lt;id&gt;/device/tgoat-&lt;id&gt;</code>, while TGoat is stopped. Editing the values alone changes nothing. Gameforge will see a new PC, so keep a <a href="start.html#token">session token</a> at hand for the next login.</p>
+
+<h3 id="settings-instances">Managing instances</h3>
+<p>Each instance is one file in <code>config/instances/</code>. Adding a file adds the instance, and removing it removes the instance, without a restart.</p>
+<ul>
+  <li><strong>Add</strong>: the Instances page, or <code>tgoat setup</code>.</li>
+  <li><strong>Disable</strong>: set <code>"Enabled": false</code> in the instance file, use the Instances page, or send <code>/instance disable vega</code>.</li>
+  <li><strong>Remove</strong>: the file goes to <code>config/history/removed/</code> and its secrets are erased. Its folder in <code>data/</code> stays unless you ask otherwise.</li>
+</ul>
+<p>On a single-planet account, TGoat uses the only celestial as origin without writing it in your file. When a second celestial appears, a warning asks you to set the origins.</p>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/settings.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+<a class="to-top" href="#toc">↑ On this page</a>
+</body>
+</html>

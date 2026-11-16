@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Every change · TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="start.html">Get started</a></li>
+      <li><a href="interface.html">Web interface</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="commands.html">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html" aria-current="page">Every change</a></li>
+      <li><a href="limits.html">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="On this page">
+  <p class="toc-title">On this page</p>
+  <ol>
+    <li><a href="#find">Find a change</a></li>
+    <li><a href="#feature-by-feature">Feature by feature</a>
+      <ol>
+      <li><a href="#defender">Defender</a></li>
+      <li><a href="#sleep">Sleep mode</a></li>
+      <li><a href="#fbf-human-pace">Human pace and play mode</a></li>
+      <li><a href="#requests">Game requests</a></li>
+      <li><a href="#autofarm">AutoFarm</a></li>
+      <li><a href="#brain">Brain: buildings and research</a></li>
+      <li><a href="#fbf-brain-lifeforms">Brain: lifeforms</a></li>
+      <li><a href="#fbf-brain-repatriation-cargo-ships-defences-offer">Brain: repatriation, cargo ships, defences, offer</a></li>
+      <li><a href="#fbf-jump-gate">Jump gate</a></li>
+      <li><a href="#expeditions">Expeditions</a></li>
+      <li><a href="#harvest">Harvest</a></li>
+      <li><a href="#colonize">Colonization</a></li>
+      <li><a href="#fbf-discovery">Discovery</a></li>
+      <li><a href="#fbf-directives">Directives</a></li>
+      <li><a href="#fleet-sends">Fleet sends</a></li>
+      <li><a href="#fbf-fleet-slot-sharing">Fleet slot sharing</a></li>
+      <li><a href="#fbf-fleet-recall">Fleet recall</a></li>
+      <li><a href="#fbf-flight-calculations">Flight calculations</a></li>
+      <li><a href="#calc">Calculation fixes: cargo, production, costs</a></li>
+      <li><a href="#fbf-settings-reload-and-notifications">Settings reload, start and stop, notifications</a></li>
+      <li><a href="#messaging">Telegram, Discord and commands</a></li>
+      <li><a href="#fbf-log-lines">Log lines</a></li>
+      <li><a href="#fbf-setup-assistant">Setup assistant</a></li>
+      <li><a href="#fbf-importing-tbot-settings">Importing TBot settings</a></li>
+      <li><a href="#fbf-simulated-device">Simulated device</a></li>
+      <li><a href="#fbf-network-fingerprint">Network fingerprint</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<h1 class="sr-only">Every change from TBot 3.6</h1>
+
+<section aria-labelledby="every">
+<h2 id="every">Every change from TBot 3.6</h2>
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>Every difference between TBot 3.6 and TGoat that a player can notice: 337 rows in 26 features.</li>
+  <li>Each row gives a topic, what TBot did and what TGoat does now.</li>
+  <li>Type a few words in the filter to keep only the rows that contain them.</li>
+  <li>For the short version, read <a href="from-tbot.html">What changes for you</a>.</li>
+</ul>
+</aside>
+
+<h3 id="find">Find a change</h3>
+<div class="change-filter" role="search" style="margin:1rem 0 1.5rem">
+  <label for="change-filter-input" style="display:block;font-weight:600;margin-bottom:.35rem">Filter the rows</label>
+  <input id="change-filter-input" type="search" autocomplete="off" spellcheck="false" placeholder="for example: deuterium, fleet-save, MinFields" aria-describedby="change-filter-status" style="box-sizing:border-box;width:100%;max-width:30rem;font:inherit;padding:.5rem .7rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)">
+  <button type="button" id="change-filter-all" style="font:inherit;margin:.5rem 0 0;padding:.4rem .8rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer">Open all</button>
+  <p id="change-filter-status" aria-live="polite" style="margin:.5rem 0 0;color:var(--muted)">Showing all 337 rows. Every word you type must appear in a row.</p>
+</div>
+<p>"Before" is what TBot 3.6 did. "Now" is what TGoat does. A dash means the behaviour did not exist.</p>
+
+<h3 id="feature-by-feature">Feature by feature</h3>
+<details class="feature" id="fbf-defender">
+<summary id="defender">Defender (17)</summary>
+<div class="table-wrap" role="region" aria-label="Defender, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Defender: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">During sleep</th><td>Stopped all night: a night attack was neither seen nor countered.</td><td>It keeps watch at its night pace (4 to 8 min, <code>Defender.SleepCheckIntervalMin</code> and <code>Defender.SleepCheckIntervalMax</code>). It fleet-saves if <code>Defender.Autofleet.Active</code> is on, and neither spies on nor writes to the attacker.</td></tr>
+    <tr><th scope="row">Manual mode</th><td>Stopped.</td><td>It only alerts: nothing is sent or built, anti-ballistic missiles included.</td></tr>
+    <tr><th scope="row">Settings reload, exclusive command</th><td>Stopped or suspended it: no watch while features restarted or the command ran.</td><td>No longer stop it: it reads its settings again at the next check.</td></tr>
+    <tr><th scope="row">After a panic</th><td>Resumed after 5 to 10 min.</td><td>Resumes after 30 to 60 s.</td></tr>
+    <tr><th scope="row">On wake-up</th><td>Waited for its next check.</td><td>Checks at once.</td></tr>
+    <tr><th scope="row">Default interval</th><td>1 to 22 min: about 30% of attacks with a 10-minute flight were seen too late.</td><td>1 to 5 min. A value written in the settings file is kept; a file still at TBot's 22 takes 5 at import, unless its minimum is 5 or more.</td></tr>
+    <tr><th scope="row">Order of actions</th><td>Synchronous notification (up to 60 s with two channels), then spying and the message, then the fleet-save.</td><td>Spying, the fleet-save, then the message. The notification is sent in the background.</td></tr>
+    <tr><th scope="row">Alarm (<code>Defender.Alarm.Active</code>) and "ENEMY ACTIVITY!!!"</th><td>On every check while the attack lasted.</td><td>Once per new attack.</td></tr>
+    <tr><th scope="row">Attack composition</th><td>From cached research.</td><td>From the report.</td></tr>
+    <tr><th scope="row">Fleet-save settings</th><td>The sleep mode's (<code>SleepMode.AutoFleetSave</code>).</td><td>Its own: <code>Defender.Autofleet.DeutToLeave</code>, <code>Recall</code> and <code>DefaultMission</code>.</td></tr>
+    <tr><th scope="row">Attack on a brand-new celestial</th><td>With <code>UseCurrentCelestial</code>, the celestial stayed unknown, so there was no fleet-save, until another feature read the celestial list again.</td><td>The list is read again, at most once per check.</td></tr>
+    <tr><th scope="row">All fleet slots in use</th><td>The fleet-save failed ("no fleet slot") and the fleet stayed exposed: nothing was freed.</td><td>Each planned fleet-save gets a slot reserved until impact. The Defender waits for a fleet that is back before then. Otherwise it recalls the bot fleet (AutoFarm, harvest, expedition, discovery) that would be back soonest. Otherwise it warns the player at once to free a slot.</td></tr>
+    <tr><th scope="row">Watch stops and resumes</th><td>Stop on request, turned off, end of session: one Debug line, invisible to the player.</td><td>One Information line at each stop, with its reason, and at each resume. The Defender itself says when sleep and manual mode begin and end, with its pace.</td></tr>
+    <tr><th scope="row">Event list unreadable (lost session, game unreachable)</th><td>One warning, then Debug: hours of blind watch went unnoticed. A retry every 5 to 15 s all night.</td><td>A warning on the first failure, then every 15 min while it lasts, with how long, and when it sees again (Telegram too). Retries every 5 to 15 s for 3 min, then less and less often, down to the normal pace.</td></tr>
+    <tr><th scope="row">Missile attack</th><td>Marked handled before the anti-ballistic missiles were ordered: a failure (busy shipyard, resources) was never retried. Silo capacity wrong (3 places at level 3, not 30).</td><td>Alerted once. Handled once the order is accepted, or when nothing more can be built (silo full of anti-ballistic missiles, below level 2); otherwise retried at the next check. An order that came back with an error is checked before any other: never two orders against the same strike. Silo capacity correct.</td></tr>
+    <tr><th scope="row">Attack alert on game pages</th><td>Ignored: an attack was seen only at the Defender's next check.</td><td>A page that shows the alert brings the Defender's check forward to 5 to 15 s later, once per change of the alert, with no extra request otherwise; the event list still decides.</td></tr>
+    <tr><th scope="row">Fleet-save near the last system of the galaxy</th><td>Could loop.</td><td>Leaves normally.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The slot kept free by <code>General.SlotsToLeaveFree</code> (1 by default) is still the first one the defensive fleet-save takes. No second slot is frozen for good: the reservation exists only during an attack. The bot never recalls:</p>
+<ul>
+  <li>the player's fleets;</li>
+  <li>Brain transports;</li>
+  <li>colonizations;</li>
+  <li>fleet-save flights;</li>
+  <li>a fleet whose origin is under attack.</li>
+</ul>
+<p>The Defender's game requests go first, with no wait: see <a href="#requests">Game requests</a>.</p>
+</details>
+<details class="feature" id="fbf-sleep-mode">
+<summary id="sleep">Sleep mode (14)</summary>
+<div class="table-wrap" role="region" aria-label="Sleep mode, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Sleep mode: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Bedtime and wake-up time</th><td>Fixed, which made the absence pattern easy to spot.</td><td>Shifted each day by up to <code>SleepMode.RandomMinutes</code> (15 min by default).</td></tr>
+    <tr><th scope="row">Waiting for fleets to return (<code>PreventIfThereAreFleets</code>)</th><td>The other features kept sending fleets, and each send pushed sleep back again.</td><td>No new sends while waiting.</td></tr>
+    <tr><th scope="row">Jump gate</th><td>Kept running during ghost sleep and the wait.</td><td>Paused along with the other features that send fleets.</td></tr>
+    <tr><th scope="row"><code>AutoFleetSave.OnlyMoons</code></th><td>True by default: planet fleets stayed in place at night.</td><td>False by default: the bedtime fleet-save also leaves from planets.</td></tr>
+    <tr><th scope="row">Defender</th><td>Stopped.</td><td>Keeps watch (see <a href="#defender">Defender</a>).</td></tr>
+    <tr><th scope="row">Login on wake-up</th><td>Full login, often a captcha.</td><td>Reuses the saved session.</td></tr>
+    <tr><th scope="row">Log messages</th><td>—</td><td>"Asleep until …", "Awake again: …".</td></tr>
+    <tr><th scope="row">Bedtime notice</th><td>Said what was saved.</td><td>Also says whether the Defender keeps watching, at what pace, and what stays exposed: fleets not tried, failed fleet-saves, resources (extended on 2026-11-15, R6).</td></tr>
+    <tr><th scope="row">Breaks during the day (option <code>SleepMode.Breaks.Active</code>, off by default)</th><td>The account stayed active all day.</td><td>1 to 2 breaks a day, 30 to 90 min each, at random times, more than 2 h from waking up and from bedtime. No fleet sent, no queue restarted. The Defender keeps watch, and Harvest still collects a field left by an attack on your celestials. The offer of the day is not bought during a break. Afterwards the features start again one by one. A reconnection does not end a break.</td></tr>
+    <tr><th scope="row">Defender during a break (option <code>SleepMode.Breaks.DefenderAtSleepPace</code>, off by default)</th><td>—</td><td>Its night pace (4 to 8 min) instead of its day pace; as at night, it reads no fleets and shows no activity.</td></tr>
+    <tr><th scope="row">Restart at wake-up</th><td>Every feature started again within 2 min, always in the same order.</td><td>Each starts again after its own reaction delay (about 3 min, sometimes up to 1 h); the Defender checks at once.</td></tr>
+    <tr><th scope="row">Night round (option <code>Expeditions.NightRound</code>, off by default)</th><td>Expedition slots emptied before bedtime, and the cargo ships stayed home at night.</td><td>10 to 40 min before bedtime, every free slot leaves with the shortest holding time (whole hours, at most your Astrophysics level, as the game allows) that brings the fleet back 5 to 30 min after the wake-up. Needs sleep mode.</td></tr>
+    <tr><th scope="row">Expedition that would come back during sleep</th><td>Stopped the worker until it was restarted.</td><td>The worker waits for the wake-up, or for the night round.</td></tr>
+    <tr><th scope="row">Evening repatriation</th><td>Stopped as soon as a return would fall during sleep.</td><td>See <a href="#fbf-brain-repatriation-cargo-ships-defences-offer">Brain: repatriation, cargo ships, defences, offer</a>.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-human-pace">
+<summary>Human pace and play mode (7)</summary>
+<div class="table-wrap" role="region" aria-label="Human pace and play mode, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Human pace and play mode: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Restarting a queue after a build</th><td>5 to 15 s after each build ended, day and night.</td><td>A drawn delay: median 3 min, 90% under 15 min, never more than 5% of the build's length, or one minute for a short build.</td></tr>
+    <tr><th scope="row">After a return, an arrival, enough production</th><td>20 to 50 s, or a fixed delay depending on the feature.</td><td>The same routine delay, 5 s to 1 h.</td></tr>
+    <tr><th scope="row">After an impact on one of your celestials</th><td>The next pass.</td><td>20 to 90 s (Harvest, Brain under attack).</td></tr>
+    <tr><th scope="row">Decision on a colony</th><td>1 to 5 s after the arrival.</td><td>3 to 20 min after the colony is first seen.</td></tr>
+    <tr><th scope="row">Expeditions and Discovery</th><td>Each return re-sent within seconds or minutes.</td><td>Waves: enough free slots, or the first free one waiting 20 to 60 min.</td></tr>
+    <tr><th scope="row">Breaks</th><td>—</td><td>Optional, see <a href="#sleep">Sleep mode</a>.</td></tr>
+    <tr><th scope="row">Play mode</th><td>One imposed human rhythm.</td><td>A switch: Human (default, the same rhythm), Rage (every delay kept only for discretion dropped, no breaks) or Custom (the <code>Pace.*</code> settings one by one). See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-game-request-queue">
+<summary id="requests">Game requests (8)</summary>
+<div class="table-wrap" role="region" aria-label="Game requests, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Game requests: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Request priority</th><td>Everything at normal priority: the Defender waited behind AutoFarm bursts.</td><td>Defence at critical priority, the player's pages through the proxy at high priority, the rest at normal.</td></tr>
+    <tr><th scope="row">Request pacing</th><td>No global pacing: feature pauses added up or interleaved.</td><td>Human gap of 1.5 to 8 s between game requests, and a 15 to 45 s break every 30 to 70 requests; defence and the proxy do not wait.</td></tr>
+    <tr><th scope="row">Fleet action gate</th><td>First come, first served.</td><td>The Defender's fleet-save and recall go ahead of queued sends.</td></tr>
+    <tr><th scope="row">Recall to free a slot</th><td>Two waits of 5 to 15 s.</td><td>Under a second.</td></tr>
+    <tr><th scope="row">Defender activity page</th><td>Before reading the attacks.</td><td>After the defence.</td></tr>
+    <tr><th scope="row">Server time</th><td>Read by opening the overview again: one request per fleet send, two per Defender check. Time zone guessed from the computer's clock.</td><td>Read on every game page, with no request; the overview is read again only after 10 minutes without a page. Exact even if the computer's clock drifts.</td></tr>
+    <tr><th scope="row">AutoMine and LifeformAutoMine startup</th><td>Five pages per planet for AutoMine, three or four for LifeformAutoMine, each reading again what the other had just read.</td><td>The production queue page and the Empire view (two or three requests for the whole empire), plus two pages per planet with a lifeform, read once for both. On a simulated game of 8 planets and 4 moons: 104 reads → 47. Same decisions.</td></tr>
+    <tr><th scope="row">Research levels read by AutoResearch</th><td>Research page opened again at every pass with a free queue.</td><td>Taken from the empire read when it is less than 10 minutes old and no research can have finished since.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>AutoFarm needs far fewer requests too: one per probe through the galaxy view (a 30-probe pass: 309 requests → 40), one per inbox page to delete read reports (15 reports: 47 requests → 19), and every page of espionage messages is read. See <a href="#autofarm">AutoFarm</a>.</p>
+</details>
+<details class="feature" id="fbf-autofarm">
+<summary id="autofarm">AutoFarm (43)</summary>
+<div class="table-wrap" role="region" aria-label="AutoFarm, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">AutoFarm: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr class="sub"><th colspan="3" scope="colgroup">Targets</th></tr>
+    <tr><th scope="row">Player back from inactivity</th><td>Attacked while their planet stayed in the galaxy cache (up to 7 days): the report was not checked for inactivity.</td><td>Never attacked: a report without the "inactive" flag is cross-checked against a fresh galaxy view, and all the player's targets are dropped.</td></tr>
+    <tr><th scope="row">Vacation, newbie protection, administrator, banned, celestial gone</th><td>Vacation, administrator and banned dropped from the cache only; n and s flags ignored.</td><td>Dropped from a fresh galaxy view, each with its own reason.</td></tr>
+    <tr><th scope="row">Report age when attacking</th><td>Up to 24 h (<code>KeepReportFor</code>).</td><td>At most <code>AttackReportMaxAge</code> (2 h), otherwise the target is probed again.</td></tr>
+    <tr><th scope="row">Galaxy cache</th><td>7 days, the only inactivity guarantee.</td><td>2 days, only to save requests.</td></tr>
+    <tr><th scope="row">Attack order</th><td>Gross loot, highest first.</td><td>Profit net of fuel per hour of slot (round trip).</td></tr>
+    <tr><th scope="row">Blacklist</th><td>Compared the total; 1,000,000 threshold (almost everything listed); 20 h, no effect against the 24 h of <code>KeepReportFor</code>.</td><td>Same figure as the verdict; 250,000 threshold; 72 h.</td></tr>
+    <tr><th scope="row">Targets never seen again</th><td>Kept forever.</td><td>Forgotten after 14 days.</td></tr>
+    <tr><th scope="row">Target too far or not profitable from every origin</th><td>Pending, retried every pass.</td><td>Dropped until <code>KeepReportFor</code> has passed.</td></tr>
+    <tr><th scope="row">Position exclusions (<code>AutoFarm.Exclude</code>)</th><td>Excluded the whole system.</td><td>Excludes the position; position 0 excludes the system.</td></tr>
+    <tr><th scope="row">Moon reports with <code>AutoFarm.ProcessAllReports</code></th><td>Always "target gone".</td><td>Read normally.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Espionage</th></tr>
+    <tr><th scope="row">Probes for the first espionage</th><td><code>NumProbes</code> (52) per target.</td><td>The fewest that show research, from the espionage gap: 7 at equal level, 3 two levels ahead, 11 two levels behind; capped by <code>NumProbes</code> (20).</td></tr>
+    <tr><th scope="row">Incomplete report</th><td>3× then 9× <code>NumProbes</code> (156, then 468 probes).</td><td>Recomputed from the hidden sections (for example 7, 16, 23), at most three espionages.</td></tr>
+    <tr><th scope="row">Target's espionage level</th><td>Ignored.</td><td>Read or deduced from reports, kept, and shared across the same player's celestials.</td></tr>
+    <tr><th scope="row">Too many probes needed</th><td>—</td><td>Skipped without sending (<code>probes_above_limit</code>).</td></tr>
+    <tr><th scope="row">Technology at level 0 in a report</th><td>Read as hidden: useless re-probing.</td><td>Read as level 0 when research is visible.</td></tr>
+    <tr><th scope="row">Probe sent just before a stop</th><td>A second probe at the next pass.</td><td>Target marked before the dispatch; fleet and report attached.</td></tr>
+    <tr><th scope="row">Target that triggered probe building</th><td>Never spied.</td><td>Spied.</td></tr>
+    <tr><th scope="row">Probe report after a restart or a long pause</th><td>The target was probed a second time and its report stayed in the inbox.</td><td>Reports that arrived are read first; only a target with no report is probed again.</td></tr>
+    <tr><th scope="row">Reading espionage reports</th><td>Waited for the last probe to return, without limit.</td><td>Waits for its arrival (the report is written on arrival), 5 min at most.</td></tr>
+    <tr><th scope="row">Espionage report pages</th><td>Only the first page was read, because the game ignores the page field TBot sends.</td><td>Every page up to the first known report; if the game ignores the page number, the reading stops and the log says so.</td></tr>
+    <tr><th scope="row">How probes are sent</th><td>Fleet page for each target: about ten requests.</td><td>The galaxy view's spy button, like a player: one request per target. Same checks first (fuel and reserve, sleep, attack guard, slots). A refusal sends that target through the fleet page. On a simulated game, a 30-probe pass goes from 309 requests to 40.</td></tr>
+    <tr><th scope="row">Deleting read reports</th><td>One report at a time, after an inbox read for a token: two requests per report.</td><td>The read reports of a page go in one request, with the token of the page just read, like a player who ticks them and deletes them. A pass that clears 15 reports: 47 requests → 19. If that fails, they are deleted one by one, and the log says so once. Reports it did not use, and those kept for a manual attack (<code>AutoFarm.KeepReportsWithDefense</code>), stay in your inbox.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Is the attack worth it</th></tr>
+    <tr><th scope="row">Solar satellites and crawlers on the target</th><td>Ignored: cargo ships sent alone, a draw, no loot.</td><td>Simulated like any combat unit. A target guarded only by them gets the extra cargo ships, already at the origin, needed to win: they cannot destroy a cargo ship.</td></tr>
+    <tr><th scope="row">Target with ships or defences (classic path)</th><td>Escorts in fixed ratios, victory never checked.</td><td>Sent only if the fleet wins every simulation without loss (otherwise <code>classic_fleet_not_safe</code>). Defender technologies, class and lifeform bonuses must be in the report.</td></tr>
+    <tr><th scope="row">Combat planner search</th><td>Escorts tried up to 8 times the threat's value: against mixed defences, "no safe plan" even with 5,000 ships of each kind.</td><td>When nothing holds up to that, steps of 16, 32, 64 and 128 times, within the stock and a bounded number of simulated battles.</td></tr>
+    <tr><th scope="row">Last check before an attack (combat planner)</th><td>299 simulated battles of the fleet with its escort doubled, all without loss: a light-fighter escort the planner had just confirmed was refused 4 times in 10.</td><td>773 battles of the fleet that leaves (doubled escort included), at most 3 with a ship lost: the risk stays under <code>MaxFailureProbabilityPercent</code> (1%) with 95% confidence, and that escort passes about 96 times in 100. A refusal says why.</td></tr>
+    <tr><th scope="row">Combat ships against defended inactives</th><td>Never built: a defended target stayed refused.</td><td><code>BuildBreakers</code> (Suggest): the cheapest fleet to build that beats a refused target and the others near it, proposed with its cost, loot per day from the targets' production, fuel, average loss, payback and risk. Nothing above <code>BreakerMaxPaybackDays</code> (3 days) or beyond the Brain's reserves. Automatic builds alone, one order per pass, only if the attack settings would use the fleet. See <a href="#breakers">below</a>.</td></tr>
+    <tr><th scope="row"><code>MinLootFuelRatio</code></th><td>Opposite meanings in the classic path and the planner; with no profitable speed, sent at 100%, the costliest.</td><td>One meaning: loot ≥ 2 × fuel (0.5 is read as 2); otherwise the attack is not sent (<code>not_worth_fuel</code>).</td></tr>
+    <tr><th scope="row"><code>FleetSpeed</code></th><td>Ignored as soon as the ratio was set, so by default.</td><td>Speed cap in both paths.</td></tr>
+    <tr><th scope="row">Not enough deuterium</th><td>Refused at the chosen speed.</td><td>Slower flight if the deuterium allows it.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.MaxFlightTime</code> at 0</th><td>Forced 100% speed.</td><td>No limit.</td></tr>
+    <tr><th scope="row"><code>MinCargosToSend</code></th><td>25 by default, duplicating <code>MinimumResources</code>.</td><td>1 by default.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">After the attack</th></tr>
+    <tr><th scope="row">Attack gain</th><td>Only the loot expected at dispatch was shown.</td><td>Real loot and losses read from the return flight; net gain = loot − fuel − losses.</td></tr>
+    <tr><th scope="row">Recalled attack (Defender or player)</th><td>Counted as a success, and the target probed again.</td><td>Recognised by its early return: loot 0, report reused if still recent (<code>attack_recalled</code>).</td></tr>
+    <tr><th scope="row">Loot of a fleet back between two passes</th><td>Unknown; the expected loot was counted.</td><td>Read from the fleet memory, seen by any fleet read (the Defender reads every 1 to 5 min).</td></tr>
+    <tr><th scope="row">Loot of a fleet back while TGoat was stopped</th><td>Unknown; the expected loot was counted.</td><td>Read from its "Return of a fleet" message (page 1 of the fleet messages, page 2 if needed, at most once per pass; reading marks them read, like opening the tab). Losses stay unknown; no message is deleted. Without a message, the expected loot is counted.</td></tr>
+    <tr><th scope="row">Defender recall back between two passes</th><td>Counted as an attack that arrived.</td><td>Recognised: the recall mark is kept 24 h, and the report is reused.</td></tr>
+    <tr><th scope="row">Re-probing a raided target</th><td>As soon as the attack is back.</td><td>When the loot is back above <code>MinimumResources</code>, from what was left and the learned production (<code>loot_regrowing</code>, <code>loot_regrown</code>).</td></tr>
+    <tr><th scope="row">Attack fleet destroyed in combat</th><td>Unnoticed: the target was attacked again on the same report.</td><td>Warning and notification (<code>attack_destroyed</code>), lost value on the dashboard, target set aside 7 days, even with <code>AutoFarm.Blacklist.Active</code> off.</td></tr>
+    <tr><th scope="row">Other planets of a player who destroyed a fleet</th><td>Attacked on their old report.</td><td>Probed again before any attack (<code>player_destroyed_a_fleet</code>), without blacklisting.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Pace and slots</th></tr>
+    <tr><th scope="row">Pauses between dispatches</th><td>0 to 5 s between probes, none between attacks.</td><td>Variable pauses with occasional longer breaks; variable batch size. Probe building: 10 minutes at most.</td></tr>
+    <tr><th scope="row">Delay between passes</th><td>Uniform, 30 to 60 min.</td><td>Follows game events; with nothing to do, ×2 then ×4 (<code>nothing_to_do</code>).</td></tr>
+    <tr><th scope="row">End of scan</th><td><code>StopAfterFullScan</code> true: stopped after one cycle.</td><td>False by default: AutoFarm slows down instead of stopping.</td></tr>
+    <tr><th scope="row">Slot counting</th><td>By mission: every attack counted for AutoFarm, its probes nowhere; <code>MaxSlots</code> reserved even when idle.</td><td>By sending feature; an idle AutoFarm reserves only its fleets in flight.</td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>Choice of origin.</strong> The lowest score wins: flight time × (1 + 0.5 × load), load being the share of the origin's cargo ships (after <code>AutoFarm.MinCargosToKeep</code>) in flight after the send. An origin over 1.5 times slower than another capable one is never chosen.</p>
+<p id="breakers"><strong>Combat ships for defended targets</strong> (<code>AutoFarm.BuildBreakers</code>, Suggest by default). TBot never built combat ships. When AutoFarm turns a target down for its defences or ships, TGoat looks for the cheapest fleet your origin can build that would win, and the other turned-down targets near it that the same fleet wins. It sends you a proposal: what to build and where, its cost, the targets it opens, the loot per day, fuel, average losses, the payback in days and the risk. Accept it and TGoat orders the ships.</p>
+<ul>
+  <li>Raided regularly, a target gives up about its whole production each day, so that is the loot per day. The production is measured between two espionage reports at least an hour apart, or estimated from the mine levels and the energy the report shows. A target whose storage is full and whose buildings are hidden adds nothing to the payback. The stock taken by the first raids is mentioned, not counted in the payback.</li>
+  <li>TGoat proposes the smallest fleet that passes the last check before a raid; it adds escort only when that check needs it.</li>
+  <li>Nothing is proposed above <code>AutoFarm.BreakerMaxPaybackDays</code> (3 days), or when the Brain's reserves on that planet cannot pay.</li>
+  <li>The search accepts losing up to a tenth of the loot in a won battle; your raid settings stay as they are. The proposal says which settings AutoFarm needs to raid with the fleet, for example the combat planner with a higher <code>MaxLossPercent</code>.</li>
+  <li>Combat ships attract raiders. The proposal reminds you to keep the Defender's fleet-save on. Players inactive for 28 days or more may be deleted within about a week; the proposal says when it counts on them.</li>
+  <li><em>Automatic</em> builds by itself, within the Brain's reserves, one order per pass, and only when your settings would raid with the fleet. <em>Off</em> does nothing.</li>
+</ul>
+<p><strong>Splitting big raids</strong> (off by default). With <code>AutoFarm.SplitAcrossOrigins.Active</code>, a target with no defence or fleet, whose loot no single origin can carry, is raided from up to <code>AutoFarm.SplitAcrossOrigins.MaxOrigins</code> origins, one slot each, each with at least <code>AutoFarm.MinCargosToSend</code> cargo ships. No effect with the combat planner on.</p>
+</details>
+<details class="feature" id="fbf-brain-buildings-and-research">
+<summary id="brain">Brain: buildings and research (34)</summary>
+<div class="table-wrap" role="region" aria-label="Brain: buildings and research, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Brain: buildings and research: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Payback threshold</th><td>7 days, then a fallback to "the first facility under its maximum": 95% of the spending on nanites.</td><td>60 real days (<code>MaxDaysOfInvestmentReturn</code>), no fallback: nothing is built without a reason.</td></tr>
+    <tr><th scope="row">A mine's payback</th><td>Without the level's energy or the lifeform production bonuses.</td><td>Both count; energy at the price of the cheapest source. Mines stop about one level earlier under the 60-day horizon.</td></tr>
+    <tr><th scope="row">Storage without supply flights</th><td>Sized for 6 h of production: the planet ended up stuck for good (metal 14 at speed 1).</td><td>The storage the build does not fit in (over 90% of its capacity) is raised first. Default caps 20/20/20 instead of 13/12/11, now upper bounds only.</td></tr>
+    <tr><th scope="row">Energy source</th><td>Fixed order: solar plant, fusion, then satellites.</td><td>The cheapest per unit: a solar plant level, satellites (price × <code>SatelliteRiskFactor</code>, 2) or fusion (with 30 days of deuterium). The <code>Max*</code> levels are caps; <code>MaxSolarSatellites</code> caps satellites (0: no cap).</td></tr>
+    <tr><th scope="row">Energy before the mine</th><td>Built once energy was negative, with the mines running slow meanwhile.</td><td>Built before the mine when the shortfall would cost more than the mine brings meanwhile. Builds in progress count: while a mine is being built, its energy counts once, and the energy bought is for the next mine.</td></tr>
+    <tr><th scope="row">Crawlers</th><td>Hundreds at once, energy ignored: a planet at about 22% production.</td><td>50 energy each, counted in their payback. In batches the stock pays (8 at least), the batch's energy first.</td></tr>
+    <tr><th scope="row">Facilities</th><td>Any facility cheaper than the next mine, the dock first.</td><td>By use: shipyard at the level its builds need (crawlers once they pay back within the longest payback accepted, AutoCargo, the defences the AutoDefence budget buys), one level when it costs less than the next mine; robotics up to 10, nanites when a queue is the bottleneck, a lab only with AutoResearch on (research planet, or a colony that counts in the network). A new colony builds its mines first. Without supply flights, never a facility the planet cannot pay (deuterium it does not produce). Dock and phalanx 0 by default.</td></tr>
+    <tr><th scope="row">Jump gate</th><td>Built on every moon.</td><td>Only on the jump gate target, or with at least two moons.</td></tr>
+    <tr><th scope="row">An AutoMine pass</th><td>About 10 requests, even during a build; retried every 10 to 20 min.</td><td>Busy queue: one request. Waits for production or an event, 1 to 3 h at most. Interval 30 to 60 min.</td></tr>
+    <tr><th scope="row">Refusals (payback, maximum levels, full moon)</th><td>The planet stopped until the feature restarted.</td><td>Checked again in 11 to 13 h, sooner after a research or an officer change.</td></tr>
+    <tr><th scope="row">A build costing more than the storage</th><td><code>supply_blocked_by_setting</code>, storage not named.</td><td><code>build_exceeds_storage</code>, with the storage, its capacity and its cap.</td></tr>
+    <tr><th scope="row">Stock of a waiting build</th><td>Repatriation and other spending took it.</td><td>Kept on the spot if it pays the build within <code>Brain.ReserveHours</code> (6 h) of production; always when no transport is possible; never on a celestial under attack.</td></tr>
+    <tr><th scope="row">Right after login</th><td>—</td><td>Nothing takes a celestial's stock (repatriation, cargo ships, defences, offer, discovery, supply) until each Brain queue has seen it, 15 min at most; repatriation comes back when that wait ends, not 6 to 12 h later.</td></tr>
+    <tr><th scope="row">During a build</th><td>The production stored during a 30 to 70 h build (0.5 to 1.2 M) counted as surplus: repatriated, then shipped back when the build ended.</td><td>The queue keeps the build that follows, chosen with the running level, until the build ends; lifeforms may still spend that stock. During a build, each Brain queue keeps the build that follows from its first pass after login, and keeps it when an order of ships beside the build fails.</td></tr>
+    <tr><th scope="row">A build's deuterium</th><td>A Brain build could spend the fleet-save fuel.</td><td>It leaves the fuel for a fleet-save of the celestial's ships, like the other spending.</td></tr>
+    <tr><th scope="row">A moon build</th><td>The deuterium floor was kept twice (the build's reserve and repatriation).</td><td>Required to start, never reserved: one floor.</td></tr>
+    <tr><th scope="row">Supply flights</th><td>Every origin read; a transport even for a 30,000 housing level; 1 M deuterium kept on every origin.</td><td>Only possible origins read. A transport if it saves <code>MinHoursSaved</code> (1 h) or a quarter of the wait, for a purchase that pays back or unlocks something. A planet origin gives its surplus, with no fixed floor. No supply flight goes to a celestial under attack.</td></tr>
+    <tr><th scope="row">Transports</th><td>Small cargo ships; <code>MinimumResourcesToSend</code> was both the origin's stock and the smallest shipment.</td><td>Large cargo ships. <code>MinimumResourcesToSend</code>: the origin's stock only; <code>MinimumShipment</code> (0): the smallest shipment.</td></tr>
+    <tr><th scope="row"><code>SendToTheMoonIfPossible</code></th><td>Delivered to the moon, nothing more.</td><td>The moon brings the resources down to the planet; used as a relay only if its cargo ships can do it.</td></tr>
+    <tr><th scope="row">Solar satellites and crawlers</th><td>Ordered with nothing said.</td><td>The report gives their value and the debris (about 30%) a raid would get. None is ordered on a celestial under attack, nor while the shipyard or the nanite factory is being upgraded, which the game refuses.</td></tr>
+    <tr><th scope="row">Under attack (option <code>Brain.AutoMine.SpendStockUnderAttack</code>, off by default)</th><td>Nothing.</td><td>What the fleet-save cannot carry goes into the best affordable build, never cancelled.</td></tr>
+    <tr><th scope="row">Choice of research</th><td>The cheapest below its maximum: 25% of the spending on combat.</td><td>By its value for the account, following <code>Brain.AutoResearch.Profile</code>: Miner (default) raises drives, espionage and combat only for a feature in use; Fleet up to their maximum; Explorer puts expedition slots and cargo first. Combat capped at 10.</td></tr>
+    <tr><th scope="row">Plasma priority</th><td>Faster than the slowest mine started since the start, and within 7 days.</td><td>As soon as it pays back as fast as the best mine on the account, requirements included.</td></tr>
+    <tr><th scope="row">Astrophysics priority</th><td>As soon as a colony "paid back", even with free slots.</td><td>With AutoColonize: every slot taken and a profitable colony (robotics, energy, ship and ramp-up counted). Otherwise the level that opens an expedition slot, with expeditions on.</td></tr>
+    <tr><th scope="row">Energy technology</th><td>A setting, <code>PrioritizeEnergyTechnology</code>, compared with fusion only.</td><td>Chosen when it gives the cheapest energy on the account.</td></tr>
+    <tr><th scope="row">Research lab</th><td>Research waited for it; without AutoMine, research stayed blocked.</td><td>Research no longer waits for it. AutoResearch builds it between two researches when the queue is free; AutoMine does not raise it during a research.</td></tr>
+    <tr><th scope="row">Research network</th><td>Could jump ahead with nothing to link.</td><td>Only when its next level links one more lab.</td></tr>
+    <tr><th scope="row"><code>EnsureExpoSlots</code></th><td>Researched even with expeditions off.</td><td>Only with expeditions on.</td></tr>
+    <tr><th scope="row">AutoResearch requests</th><td>About 65 per pass with 15 planets.</td><td>One during a research, about 8 otherwise. Everything at its maximum: stopped until the settings are next saved.</td></tr>
+    <tr><th scope="row">Order of spenders</th><td>— (no reserve)</td><td>A setting (<code>Brain.SpendingPriority</code>): each feature leaves the reserve of the features ranked before it; by default buildings and research, then lifeforms, then cargo ships and defences, then the offer, then discovery.</td></tr>
+    <tr><th scope="row">Building requirements</th><td>Not respected for the terraformer, the fusion reactor and the lunar shipyard.</td><td>Respected: terraformer after nanites 1, fusion reactor after energy technology 3, lunar shipyard after robotics 2.</td></tr>
+    <tr><th scope="row">Nanite factory</th><td>Built whenever it took under an hour.</td><td>Only when a queue is the bottleneck (see Facilities).</td></tr>
+    <tr><th scope="row">New planets and moons</th><td>—</td><td>Every Brain feature picks them up and plans again when your celestials change.</td></tr>
+    <tr><th scope="row">Supply from several origins</th><td>The moon's stock rounded wrong, partial deliveries, the target's resources subtracted twice.</td><td>Fixed.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-brain-lifeforms">
+<summary>Brain: lifeforms (21)</summary>
+<div class="table-wrap" role="region" aria-label="Brain: lifeforms, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Brain: lifeforms: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Building choice</th><td>Cheapest first; nothing below crystal mine 20 (<code>StartFromCrystalMineLvl</code>).</td><td>Production buildings and the Mineral Research Centre judged by their payback in days, requirements included, against <code>MaxDaysOfInvestmentReturn</code> and the mine AutoMine will build. No start level.</td></tr>
+    <tr><th scope="row">Buildings without return</th><td>Built up to 5, like the others.</td><td>Only with <code>BuildNonEconomic</code> (off by default), or as a requirement. Caps <code>MaxBuilding6</code> to <code>12</code> at 20, upper bounds only.</td></tr>
+    <tr><th scope="row">Energy</th><td>Total consumption of the level against gross production.</td><td>Extra consumption against available energy. Beyond it, the level starts only if AutoMine supplies the planet's energy, otherwise <code>lifeform_energy_needed</code>.</td></tr>
+    <tr><th scope="row">Population</th><td>Computed values; housing up to level 60.</td><td>Values read from the game; housing at full, fed population; a T2/T3 purchase leaves 1.55 million.</td></tr>
+    <tr><th scope="row">Refusals</th><td>Stopped until restart with "raise the Max* levels", even while waiting.</td><td>Stops only at the caps; waits for energy, population or research are retried.</td></tr>
+    <tr><th scope="row">Planets set aside</th><td>Low crystal mine, nothing to build or no lifeform: never looked at again before a restart.</td><td>All checked at each interval; without a lifeform, every 3 to 6 h.</td></tr>
+    <tr><th scope="row">Robotics and nanites</th><td>The queue restarted before AutoMine could start them.</td><td>It gives way to them for up to 30 min.</td></tr>
+    <tr><th scope="row">Building too long to pay</th><td>—</td><td>When a supply flight can fund the build (Brain and <code>LifeformAutoMine</code> transports on, origin other than the planet, or several origins), a building the planet cannot pay within <code>Brain.ReserveHours</code> gives way to the next one.</td></tr>
+    <tr><th scope="row">Research during a technology building upgrade</th><td>Order refused by the game.</td><td>Research waits for the upgrade to end.</td></tr>
+    <tr><th scope="row">Research slots</th><td>Only technologies already at level 1 were raised.</td><td>An open slot starts at level 1; <code>MaxTechsXX</code> at 0 leaves it to you. Default cap 15 → 10.</td></tr>
+    <tr><th scope="row">Research choice</th><td>Cheapest first among the open slots.</td><td>Production technologies (and the Collector enhancement on a Collector account) judged by their payback in days, gain counted on every planet's production, against <code>MaxDaysOfInvestmentReturn</code>; the others afterwards, cheapest first: with no computable return, they go up to <code>MaxResearchLevel</code> (10 by default). Another class's enhancement: never.</td></tr>
+    <tr><th scope="row">Research all at its caps</th><td>Stopped until restart.</td><td>Stops only once all 18 slots are open; otherwise checked again in 11 to 13 h.</td></tr>
+    <tr><th scope="row">Energy in a level's payback</th><td>Satellites at risk factor 1.</td><td>At the price counted for mines: cheapest source AutoMine allows, satellites at their risk factor (2 by default).</td></tr>
+    <tr><th scope="row">Ship technologies (Mk II, overhauls, overclocking)</th><td>Up to 15.</td><td>Capped by <code>MaxShipResearchLevel</code> (0: never).</td></tr>
+    <tr><th scope="row">Production bonuses</th><td>Ignored.</td><td>Read from the bonuses page, plus the planet's buildings.</td></tr>
+    <tr><th scope="row">Technology building discount</th><td>Never applied.</td><td>0.25% of the cost and 2% of the duration of research per level.</td></tr>
+    <tr><th scope="row">Building state</th><td>Requirements recomputed: refused orders.</td><td>Read from the page (<code>data-status</code>).</td></tr>
+    <tr><th scope="row">Reads</th><td>Ships read on every pass.</td><td>Ships no longer read.</td></tr>
+    <tr><th scope="row">Research building (Humans' Research Centre)</th><td>Built only once it became the cheapest unlock: on the test account, housing and food went up to 29 and 30 for the tier-2 population while research waited.</td><td>With lifeform research on for the planet, its level 1 comes right after food, requirements included (<code>lifeform_research_building_needed</code>). Later levels keep the cheapest-first rule.</td></tr>
+    <tr><th scope="row">Technology of a slot</th><td>Never chosen: TBot raised only the technologies already started.</td><td>Chosen by TGoat as <code>Brain.LifeformAutoResearch.SlotChoice</code> says: <code>Guaranteed</code> (default, the technology the game guarantees), <code>Random</code> or <code>Never</code> (you choose). An Info line and a notification for each choice. The report says which slot waits for you and which population opens the next one. A slot capped at 0 is left to you.</td></tr>
+    <tr><th scope="row">Cost of a research without yield</th><td>No bound: those already started went up, cheapest first, to their cap, whatever they cost.</td><td>A level without a production bonus starts only if it costs at most <code>MaxHoursWithoutYield</code> hours of the planet's production (24 by default; 0: never). Otherwise it waits, and the report gives its cost in hours (<code>lifeform_research_over_budget</code>).</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Choosing the lifeform of a planet is a Discovery setting: see <a href="#fbf-discovery">Discovery</a>.</p>
+</details>
+<details class="feature" id="fbf-brain-repatriation-cargo-ships-defences-offer">
+<summary>Brain: repatriation, cargo ships, defences, offer (21)</summary>
+<div class="table-wrap" role="region" aria-label="Brain: repatriation, cargo ships, defences, offer, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Brain: repatriation, cargo ships, defences, offer: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">When a celestial is repatriated</th><td>Every 2 to 4 days, whatever its stock: up to 6 M per planet at mines 35.</td><td>Once its surplus reaches <code>MinimumResources</code> (1 M); at the latest 6 to 12 h after the previous pass.</td></tr>
+    <tr><th scope="row">What leaves</th><td>The whole stock, except the deuterium of moons.</td><td>The surplus: stock minus the reserve of the Brain's builds and the fuel for a fleet-save of the celestial's ships.</td></tr>
+    <tr><th scope="row">Deuterium of planets</th><td>Emptied: the next fleet-save failed.</td><td>The fuel for a fleet-save stays; a moon also keeps <code>LeaveDeut.DeutToLeave</code>.</td></tr>
+    <tr><th scope="row">Supply origin</th><td>Emptied, then supplied again from the hub.</td><td>Never repatriated by the Brain; a command can.</td></tr>
+    <tr><th scope="row">Celestials read</th><td>All of them, every pass.</td><td>All of them at most once every 6 h; in between, those the estimate says are ready.</td></tr>
+    <tr><th scope="row">In the evening</th><td>Stopped as soon as a return would fall during sleep.</td><td>Each celestial ships one last time before bedtime, from a tenth of the threshold; its transport is back 15 to 90 min before sleep.</td></tr>
+    <tr><th scope="row">Return during sleep</th><td>Stopped the whole pass.</td><td>Skips that celestial only.</td></tr>
+    <tr><th scope="row"><code>TargetAssociateMoon</code></th><td>Planet to its moon and moon to its planet: a round trip; <code>Target</code> required.</td><td>Each planet to its own moon; no moon emptied; <code>Target</code> optional, for planets without a moon.</td></tr>
+    <tr><th scope="row">Planet as destination</th><td>Nothing said so.</td><td>A warning once per revision: a phalanx sees arrivals on a planet.</td></tr>
+    <tr><th scope="row">Slots</th><td>Repatriation ignored the slot ranks, and <code>Brain.Transports.MaxSlots</code>.</td><td>It counts in <code>Brain.Transports.MaxSlots</code> with supply flights. A long trip waits for its rank; a trip of 15 min or less (to its own moon) goes ahead of the ranks, never past this maximum. A command ignores the ranks.</td></tr>
+    <tr><th scope="row">Destination's cargo room</th><td>Nothing said.</td><td>The report says what part of the destination's stock its ships could not carry away.</td></tr>
+    <tr><th scope="row">Cargo ships in flight (AutoCargo)</th><td>Ignored: up to 50 more each round; overbuilt with <code>Brain.AutoCargo.LimitToCapacity</code>.</td><td>Counted: <code>MaxCargosToKeep</code> is a real maximum.</td></tr>
+    <tr><th scope="row">Number of cargo ships</th><td>Gap ÷ capacity: 267 large cargo ships for 10 M.</td><td>Gap ÷ (capacity + price): 203. With repatriation on: the threshold plus 20%.</td></tr>
+    <tr><th scope="row">Requirements of cargo ships and defences</th><td>Not checked: orders refused every 1 to 4 h; one refusal stopped the next types.</td><td>Checked before any order; a refusal no longer stops the rest.</td></tr>
+    <tr><th scope="row">Resources spent (AutoCargo, AutoDefence)</th><td>The whole stock.</td><td>The surplus only.</td></tr>
+    <tr><th scope="row">Amount of defences</th><td>Fixed quantities never reached (447 M per celestial).</td><td>A budget of 24 h of production (<code>TargetHoursOfProduction</code>); <code>DefenceToReach</code> gives maxima. Nothing on a moon.</td></tr>
+    <tr><th scope="row">Defence mix</th><td>One unit of each type in turn: 73% of the cost in plasma turrets.</td><td>Shares of the cost (<code>Ratio</code>: RL 25, LL 15, HL 10, Gauss 25, plasma 25%). A locked type gives its share to the nearest type available.</td></tr>
+    <tr><th scope="row">Shield domes</th><td>Built as soon as ticked.</td><td>Each one once it costs at most 20% of the budget.</td></tr>
+    <tr><th scope="row">Anti-ballistic missiles</th><td>0 by default, silo ignored.</td><td>The silo is filled (up to <code>AntiBallisticMissiles</code>, 100) on planets holding 1 M of defences, or in the galaxy of a missile strike in the last 7 days.</td></tr>
+    <tr><th scope="row">Offer of the day</th><td>A blind purchase every 4 to 6 h, paid by the first celestial; the item never reported.</td><td>One try at a random time within 12 h after the renewal (never right after a sleep or break ends: drawn again), plus one retry. Bought under <code>MaxPriceHours</code> (6 h of production), paid from one celestial's surplus (the hub first). Item and rarity in the report and a notification.</td></tr>
+    <tr><th scope="row">The <code>Brain.AutoRepatriate.Target</code> list</th><td>Could crash repatriation.</td><td>Read without a crash.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-jump-gate">
+<summary>Jump gate (7)</summary>
+<div class="table-wrap" role="region" aria-label="Jump gate, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Jump gate: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Unexpected game response (a 4xx, for example)</th><td>Counted as a successful jump.</td><td>The jump is confirmed only if the gate is recharging when read again, or if ships have left it.</td></tr>
+    <tr><th scope="row">Sleep</th><td>See Sleep mode.</td><td>Paused during ghost sleep, while waiting for fleets, and during breaks.</td></tr>
+    <tr><th scope="row">Threshold (<code>MinimumAmountOfShipPointsToTeleport</code>)</th><td>500,000 "resources", compared in points, so 500 M of ships: the gate never jumped.</td><td>1,000 points by default (about 1 M resources of ships), shown in points.</td></tr>
+    <tr><th scope="row">After a jump</th><td>Retried every 5 to 10 min, as a warning.</td><td>Waits for the recharge read on the gate, plus 2 to 5 min. A destination missing from the list counts as a recharging gate, without a warning. A jump recharges both gates, and both are recorded.</td></tr>
+    <tr><th scope="row">Moon under attack</th><td>Not checked.</td><td>No jump to a moon an attack is heading for, nor from it. Without the Defender, the event list is read; if it is unreadable, no jump.</td></tr>
+    <tr><th scope="row">Ships kept</th><td>Everything that flies left.</td><td>Each moon keeps the cargo ships of its stock. A moon that is the origin of Expeditions, AutoFarm, Discovery or Colonize is never a departure; Brain transports keep their cargo ships.</td></tr>
+    <tr><th scope="row">Reads</th><td>More than 1,000 requests a day with five moons, a pass every 5 to 10 min.</td><td>Gate level read once a day, ships after a fleet arrives, a pass every 15 to 30 min. The attack list is read only when a jump is possible.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-expeditions">
+<summary id="expeditions">Expeditions (19)</summary>
+<div class="table-wrap" role="region" aria-label="Expeditions, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Expeditions: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Expeditions per origin</th><td>One in flight per origin (<code>MaxExpeditionsPerOrigin</code> = 1): 6 a day instead of 42 with 7 slots.</td><td>No limit by default (0). The value counts expeditions in flight at the same time.</td></tr>
+    <tr><th scope="row">No main ship</th><td>A probe, a combat ship and a pathfinder left on their own.</td><td>The origin is skipped (<code>no_usable_fleet</code>), except with a fixed fleet (<code>ManualShips</code>).</td></tr>
+    <tr><th scope="row"><code>Expeditions.MinPrimaryToSend</code></th><td>Never read.</td><td>Read: a smaller fleet is raised to it; an origin that cannot provide it after <code>Expeditions.PrimaryToKeep</code> sends nothing (<code>below_min_primary_to_send</code>).</td></tr>
+    <tr><th scope="row">Deuterium loaded</th><td>20,000 per expedition (<code>FuelToCarry</code>): 2 expeditions out of 7 from a moon with 30,000.</td><td>Setting removed: only the flight's fuel leaves.</td></tr>
+    <tr><th scope="row">Automatic origin (no <code>Expeditions.Origin</code> set)</th><td>Any planet before any moon, even an empty one.</td><td>The celestial that lines up the largest expedition, a moon on a tie. A planet set as origin gets an information line (phalanx).</td></tr>
+    <tr><th scope="row">Pace</th><td>Each return re-sent 30 s to 5 min later (<code>Min/MaxWaitNextRound</code>).</td><td>Waves: once a third of the slots are free (<code>MinFreeSlotsForWave</code>) or the first free slot has waited 20 to 60 min, after a human delay. At start-up, every free slot leaves.</td></tr>
+    <tr><th scope="row">Wake-ups and reads</th><td>Research read on every pass; a pass every 4 to 6 min when nothing could leave.</td><td>Astrophysics from the cache. Woken by an expedition return, or by ships coming back to an origin (30 to 60 min at most). With the automatic origin and nothing able to leave, only celestials where ships may have arrived are read again (a fleet landed or came back, a shipyard at work for 3 h, or 6 h without a read), instead of every celestial every 3 h.</td></tr>
+    <tr><th scope="row">Size</th><td>Cargo for 100% of the largest find.</td><td>For <code>CargoShare</code> (75%) of that find.</td></tr>
+    <tr><th scope="row">Doubled find</th><td>The cargo was sized for a doubled find on every fleet, with a pathfinder or not.</td><td>The doubling counts only with a pathfinder in the fleet. Without one, about half as many large cargo ships are sent.</td></tr>
+    <tr><th scope="row">Escort (<code>Expeditions.Escort</code>)</th><td>A combat ship always joined large expeditions.</td><td>Unchanged by default (<code>Strongest</code>); <code>None</code> sends none.</td></tr>
+    <tr><th scope="row">Sharing a wave</th><td>The first took the whole fleet: 40, 40, 20, nothing for 100 large cargo ships and 4 slots.</td><td>The main ships are shared, 25 each, across several origins too.</td></tr>
+    <tr><th scope="row">Escort</th><td>The first combat ship of the list, even slower, even with 1 cargo ship.</td><td>The strongest one not slower than the main ship, only if the expedition carries at least half the target cargo.</td></tr>
+    <tr><th scope="row">Pathfinders of a full expedition</th><td>A 31st asked for when 30 were available.</td><td>No more than the 30 available.</td></tr>
+    <tr><th scope="row">Ships taken before sending</th><td>Another feature or the player could take the cargo ships between the read and the send: the expedition left with an escort only or undersized, then was reported lost.</td><td>Exactly the ships composed, or nothing. The origin is read again once and the expedition composed again. The result compares the return with the ships the game says left.</td></tr>
+    <tr><th scope="row">Origin out of deuterium</th><td>A warning on every pass.</td><td>An information line. For a moon, it says that only repatriation refills it.</td></tr>
+    <tr><th scope="row">Destination (<code>SplitExpeditionsBetweenSystems</code>, off by default)</th><td>A random system, memory reset every pass, galaxy edge crossed.</td><td>The least visited system (in flight and over 24 h), never beyond <code>Range</code>, yours on a tie.</td></tr>
+    <tr><th scope="row">Results</th><td>Nothing measured; a lost fleet went unnoticed.</td><td>Each expedition is judged on its return (found, lost, net), with a daily total in the log; a lost fleet is notified. A fleet is called lost for certain only if neither a recall nor an unseen early return can explain its absence; otherwise the message says "lost, or returned early". An early return seen on its way home counts as a return, not a recall. In memory only, no extra request.</td></tr>
+    <tr><th scope="row">Expedition and exploration results</th><td>Never read: no gains, no losses, no artifacts.</td><td>Read from the game's messages: only the messages not seen yet, usually one page, nothing deleted, 7 days kept. The Expedition report gives the last 24 h and 7 days (resources, dark matter, ships found, fleets lost); the Discovery report gives the last 24 h (explorations, artifacts, ships lost, lifeforms found).</td></tr>
+    <tr><th scope="row">Ships for expeditions (<code>Expeditions.BuildFleet</code>)</th><td>TBot never built combat ships or pathfinders for expeditions.</td><td>TGoat proposes (Suggest, the default) what is missing, with its cost, value per day, payback and risk. For a Discoverer, one pathfinder per slot served at each origin, valued by the find model alone. For any class, more of the main ship, only with every slot in use and once 7 days and 20 results show finds cut by a full hold (measured, or by the find model fitted to those finds), and only the ships that each pay back within <code>Expeditions.BuildFleetMaxPaybackDays</code> (10 days). An order waits for 20 results flown with the new hold before the next, and accepting never builds more than you accepted. The proposal says which figures are measured and which come from the find model. Ships are paid from the origin's surplus, never from what the Brain keeps for builds ranked before cargo ships; Automatic places one order per check.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-harvest">
+<summary id="harvest">Harvest (13)</summary>
+<div class="table-wrap" role="region" aria-label="Harvest, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Harvest: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Fuel</th><td>No check: 2,743 deuterium for 300 crystal.</td><td>Refused above 10% of the value recovered; the next origin is tried.</td></tr>
+    <tr><th scope="row">Origin</th><td>The nearest that could take everything, otherwise the one with the most recyclers, at any distance.</td><td>The field's own celestial first (moon, then planet), then the origin that brings back the most per hour of slot.</td></tr>
+    <tr><th scope="row">After an attack on one of your celestials</th><td>The next pass: 23 min on average.</td><td>System read 20 to 90 s after the impact, even during a break. Recyclers away on a fleet-save are awaited up to 3 h after the impact, and a field left for lack of recyclers is read again when they return. Without the Defender, the attack may go unseen.</td></tr>
+    <tr><th scope="row">Position 16</th><td>±<code>Range</code> around every planet every 30 to 60 min (about 945 views a day for 9 planets).</td><td>The system of each expedition, shortly after its holding time, one view an hour at most; your systems in the background every 2 to 4 h.</td></tr>
+    <tr><th scope="row">Order of the fields</th><td>Yours first, then the richest.</td><td>The most profitable per hour of slot; a fresh field counts double.</td></tr>
+    <tr><th scope="row">Field already targeted</th><td>A fleet on its way back still counted.</td><td>Returns no longer count; the rest of a large field gets a second fleet.</td></tr>
+    <tr><th scope="row">Sleep</th><td>One harvest that would come back during sleep stopped Harvest.</td><td>Only that harvest is left out.</td></tr>
+    <tr><th scope="row">Requests</th><td>Ships of every celestial read; views read without a recycler.</td><td>Only useful celestials; no view without the ships it needs; no request between two due times; each celestial's ships are read at most once per 6 h when nothing can recycle, and origins are read best first, until the fields are covered.</td></tr>
+    <tr><th scope="row">Expedition pathfinders</th><td>All could leave.</td><td>Each expedition origin keeps as many pathfinders as the expedition slots it serves (the account's slots shared between the origins).</td></tr>
+    <tr><th scope="row">Threshold for your fields (<code>MinimumResourcesOwnDF</code>)</th><td>300, the field of one probe.</td><td>5,000; an imported 300 is kept and flagged.</td></tr>
+    <tr><th scope="row">Other fields (option <code>HarvestOtherDF</code>, off by default)</th><td>Never recycled.</td><td>Fields of your attacks and other positions of your systems, above <code>MinimumResourcesOtherDF</code> (100,000).</td></tr>
+    <tr><th scope="row">Field left for lack of a slot</th><td>Read again at the next pass (30 to 60 min).</td><td>Read again when the harvest holding the slot comes back, within 3 h.</td></tr>
+    <tr><th scope="row">Galaxy size</th><td>A universe of 499 systems assumed.</td><td>The universe's own size.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-colonization">
+<summary id="colonize">Colonization (19)</summary>
+<div class="table-wrap" role="region" aria-label="Colonization, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Colonization: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Game response</th><td>Ignored, even a refusal.</td><td>The abandon is confirmed only if the planet is gone from the celestial list when read again.</td></tr>
+    <tr><th scope="row">Abandon on with no stored password (token login)</th><td>Failed silently on every pass; the colony stayed virgin and AutoMine skipped it.</td><td>No request is sent: abandon counts as off, and the colony is kept and developed. Reported once per settings revision.</td></tr>
+    <tr><th scope="row">Failed abandon</th><td>Retried about every 3 min, forever: up to 480 password posts a day.</td><td>Retried after 5 to 15 min, the wait doubling; at the third failure the colony is kept untouched and you are warned. A refusal by the game, which received the password, makes abandon count as off until TGoat connects again: the password is not sent again. A planet still listed after the abandon was sent counts as such a refusal.</td></tr>
+    <tr><th scope="row">After a successful abandon</th><td>A "no longer listed" warning was sent to Telegram.</td><td>The planet leaves the state without a warning.</td></tr>
+    <tr><th scope="row">Fields threshold</th><td>One global threshold (<code>Abandon.MinFields</code>, 280 by default, probably out of reach).</td><td>One threshold per zone (<code>Targets[].MinFields</code>, 0: every colony is kept). The import copies the old threshold into each zone when abandon was on.</td></tr>
+    <tr><th scope="row">Tries</th><td>No limit and no memory: an endless colonize-and-abandon loop.</td><td>At most <code>Abandon.MaxAttempts</code> (10) failed colonies per zone. The last one is kept untouched, nothing is built on it, and you are warned with the draws seen. Changing the criteria or the limit starts the count again. The zone then gets no more colony ships.</td></tr>
+    <tr><th scope="row">Draws</th><td>No record.</td><td>Each colony of a zone is recorded in <code>data/&lt;id&gt;/colonize/draws.json</code>: position, fields, temperatures, date, outcome.</td></tr>
+    <tr><th scope="row">When the abandon happens</th><td>1 to 5 s after the arrival: a recognisable pattern.</td><td>3 to 20 min after the colony is first seen.</td></tr>
+    <tr><th scope="row">Planet outside the target zones</th><td>Abandoned if it missed the global criteria, even when founded by hand.</td><td>Never abandoned.</td></tr>
+    <tr><th scope="row">Zone quota (<code>MaxPlanets</code>)</th><td>A planet counted only if it passed the global threshold, even with abandon off; ships in flight ignored.</td><td>Without abandon, every planet of the zone counts; with it, those that pass its threshold. Ships in flight count. A planet inside two zones belongs to the first one listed: it is counted and chosen for that zone only.</td></tr>
+    <tr><th scope="row">Zone order</th><td>All mixed, the nearest position first.</td><td>The list order: a zone is filled before the next one. This holds even when fewer ships leave than planned.</td></tr>
+    <tr><th scope="row">Reading the galaxy</th><td>Every zone read in full on every pass (about 200 views).</td><td>Nearest first, stopping once enough free positions are found, 6 h cache, the chosen system read again before sending (5 to 20 views). A taken or refused position gives way to the next of its zone, without exceeding its quota.</td></tr>
+    <tr><th scope="row">Pace</th><td>One 15 to 20 h interval for everything.</td><td>Wakes at the event (arrival, end of a build, resources produced, end of the Astrophysics research) after a human delay. Idle: 4 to 8 h (30 min at least). Transient error: 5 to 15 min, then doubled, up to 2 h. No free slot: first fleet return plus a human delay.</td></tr>
+    <tr><th scope="row">Colony ships</th><td>Ordered only on an empty queue; ships in flight were not subtracted.</td><td>Ordered behind the production, prepared during an Astrophysics level that opens a planet; ships in flight are subtracted.</td></tr>
+    <tr><th scope="row">Parallel tries (<code>ParallelTries</code>)</th><td>The <code>IntensiveResearch</code> mode.</td><td>With abandon, at most <code>ParallelTries</code> ships in flight, never more than the free planet slots, plus one built in advance. Without abandon, one ship per free slot.</td></tr>
+    <tr><th scope="row">Colony ship cargo</th><td>Empty.</td><td>Without abandon, metal and crystal from the origin's surplus, for the first buildings.</td></tr>
+    <tr><th scope="row">Notifications</th><td>None.</td><td>New colony (lifeform to choose), colony abandoned, try limit reached; one notification per pass, Discord by default.</td></tr>
+    <tr><th scope="row">Misconfigured zones</th><td>Nothing said so.</td><td>The form refuses inverted bounds and 0 planets wanted; a file that has them is read, with a warning per revision.</td></tr>
+    <tr><th scope="row">Positions with Astrophysics at 0</th><td>Every position accepted.</td><td>Only the positions your Astrophysics level allows.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-discovery">
+<summary>Discovery (13)</summary>
+<div class="table-wrap" role="region" aria-label="Discovery, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Discovery: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Research not unlocked, origin without resources</th><td>The whole galaxy read: 499 system views a pass, about 10,000 a day.</td><td>The origin's stock read before any view. A refused origin costs one view; at most 3 views without a discovery per origin and pass. The game's text is a warning, once per revision.</td></tr>
+    <tr><th scope="row">Order of positions</th><td>Random order possible (<code>AutoDiscovery.RandomizeDestination</code>).</td><td>Nearest first. A position explored is not tried again for 7 days while TGoat runs. Discovery starts empty after the import.</td></tr>
+    <tr><th scope="row">Spending</th><td>No limit, taken even from a stock waiting for a build.</td><td>At most 5% of the account's production over 24 h (<code>MaxShareOfProduction</code>) and <code>MaxMissionsPerDay</code> missions (0: no cap). Each origin pays from its surplus.</td></tr>
+    <tr><th scope="row">Pace</th><td>A discovery re-sent 20 to 50 s after each return.</td><td>Slots full: half the discoveries back, or the first one back waiting 20 to 60 min, then a human delay. Budget spent: waits for the 24 h to pass.</td></tr>
+    <tr><th scope="row">Positions of one system</th><td>One view, then per position another view, the fleets and two slot reads.</td><td>One series: about 26 requests become 9 to 13 for 5 positions.</td></tr>
+    <tr><th scope="row">Reason <code>no_ships</code></th><td>"No origin has the ships": wrong, a discovery uses no ship.</td><td><code>origin_refused</code> (with the game's text), <code>no_origin_surplus</code>, <code>daily_budget_spent</code>.</td></tr>
+    <tr><th scope="row">Artifact pause (<code>StopAt</code>)</th><td>Fixed at 3,600; 0 turned the check off.</td><td>0 (default) follows the limit read in the game.</td></tr>
+    <tr><th scope="row">Slots</th><td>Its 5 slots kept ahead of Harvest, even with nothing to send.</td><td>With nothing to send, it gives its share back until its next pass.</td></tr>
+    <tr><th scope="row">Refused system view</th><td>One refusal that was not the missing research froze Discovery.</td><td>The system is skipped (index and cursor move on) and the game's text is a warning, once per revision.</td></tr>
+    <tr><th scope="row">Whole-system send refused</th><td>The pass failed.</td><td>It falls back to sending position by position.</td></tr>
+    <tr><th scope="row">Research missing</th><td>Each origin was tried in turn.</td><td>The pass stops at the first origin.</td></tr>
+    <tr><th scope="row">Stock of the origins</th><td>Read for every origin on every pass.</td><td>Read for the best-stocked origins until the pass is covered, then for the origins the pass picks.</td></tr>
+    <tr><th scope="row">Lifeform of the planets</th><td>Never chosen: done in the game, planet by planet.</td><td>Setting <code>AutoDiscovery.SettleLifeforms</code>, off by default. On: Humans go to the home planet when no planet has them (only they discover the other lifeforms); every other planet without a lifeform takes the highest-ranked lifeform available now (<code>Preference</code>) and keeps it. A settled lifeform is never changed, and a planet in <code>AutoDiscovery.SettleLifeforms.Exclude</code> is kept for later. Off: the report and a daily notification list the planets without a lifeform.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-directives">
+<summary>Directives (3)</summary>
+<div class="table-wrap" role="region" aria-label="Directives, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Directives: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Rewards</th><td>Never collected: the Dark Matter and resources of finished missions stayed in the game.</td><td>With <code>Directives.Active</code> (off by default), each finished mission and finished chapter is collected; <code>Directives.Notify</code> says when you get a notice: every collect, only when Dark Matter comes in (default) or never. The log line and the notice name each mission and its chapter. A mission in progress is never collected. See <a href="interface.html#ui-directives">Directives</a>.</td></tr>
+    <tr><th scope="row">Reads</th><td>None.</td><td>The reward count shown on the pages TGoat already loads, or the menu when no recent page shows it, every 2 to 6 hours; a rising count brings the collect forward, never less than 30 to 60 minutes after the previous one; the chapters only when it shows a reward, and about once a day.</td></tr>
+    <tr><th scope="row">Missions</th><td>None.</td><td>Two, each with its own setting, off by default: Metal Mine to 90% then 100% (only when at 100%), the Small Cargo's technology tree. Alliance, buddy, renaming, class, merchant, tearing down and a fleet sent only for the mission stay yours.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-fleet-sends">
+<summary id="fleet-sends">Fleet sends (6)</summary>
+<div class="table-wrap" role="region" aria-label="Fleet sends, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Fleet sends: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Attack guard</th><td>A send could deliver to a celestial under attack, or come back to its origin just before the impact.</td><td>No fleet lands on one of your celestials, going out or coming back, if an attack hits it after the landing or less than 5 min before: the fleet-save has already left and would not take it. Ships alone or cargo, same rule. Fleet-saves, the Defender and forced commands (deploy, spycrash) are not concerned.</td></tr>
+    <tr><th scope="row">Without the Defender</th><td>Attacks never read again.</td><td>The event list is read for the guard, once every 1 to 2 min at most.</td></tr>
+    <tr><th scope="row">Event list unreadable</th><td>The guard used the last list read, often empty.</td><td>No cargo is delivered to your celestials until the next read (1 to 2 min).</td></tr>
+    <tr><th scope="row">Deuterium reserve</th><td>A send kept only its own fuel.</td><td>An ordinary send leaves only if its origin keeps the fuel for a slow fleet-save (10% speed, to a planet 5 systems away) of the ships that will be home: those that stay and those that come back. Otherwise: "not enough deuterium", with the amount needed. Only a fleet-save may take everything.</td></tr>
+    <tr><th scope="row">Account reads</th><td>Lifeform bonuses read per celestial and per pass; stock and production in two requests.</td><td>Bonuses once an hour for the whole account; stock and production in one request.</td></tr>
+    <tr><th scope="row"><code>/fleet spycrash</code></th><td>Refused near an impact on the origin, or below the fuel reserve.</td><td>A forced command, like a deploy: it leaves even just before an impact.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-fleet-slot-sharing">
+<summary>Fleet slot sharing (9)</summary>
+<div class="table-wrap" role="region" aria-label="Fleet slot sharing, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Fleet slot sharing: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Reserve of a higher-priority feature</th><td>Its whole <code>MaxSlots</code> whenever active: Harvest and Discovery at 0 with 14 slots free.</td><td>What its next pass will send, plus its fleets in flight. With no declaration, its whole maximum, to be safe.</td></tr>
+    <tr><th scope="row">Expeditions</th><td>All their slots kept, even with nothing to send.</td><td>Nothing to send: no reserve until the next pass. During a wave, what the next wave can really send beyond the expeditions already in flight.</td></tr>
+    <tr><th scope="row">AutoFarm</th><td>All of <code>AutoFarm.MaxSlots</code>, during and between its passes.</td><td>Its ready attacks, its awaited reports and its batch of probes.</td></tr>
+    <tr><th scope="row">Brain</th><td><code>Brain.Transports.MaxSlots</code> (10), all the time.</td><td>The supply and repatriation flights waiting for a slot; all of <code>MaxSlots</code> before its first declaration.</td></tr>
+    <tr><th scope="row">Colonize</th><td>A share set by <code>IntensiveResearch</code>.</td><td><code>ParallelTries</code> with abandon; with or without it, never more free slots than the free planet slots its ships can still fill; it keeps only what its next pass will send, until that pass plus 10 min; when stopped, it keeps nothing.</td></tr>
+    <tr><th scope="row">Short trips</th><td>Subject to the ranks.</td><td>A round trip of 15 min or less (own debris field, repatriation to its own moon) goes ahead of the ranks, never ahead of <code>SlotsToLeaveFree</code> or the Defender's reserve.</td></tr>
+    <tr><th scope="row">Free but reserved slots</th><td>"no fleet slot available", with a reserved count that could exceed the total.</td><td>Reason <a href="interface.html#ui-reasons"><code>slots_reserved</code></a>, with each feature's share.</td></tr>
+    <tr><th scope="row">Unranked feature</th><td>Could exceed its own maximum.</td><td>Capped at its maximum.</td></tr>
+    <tr><th scope="row">Free slot count</th><td>Could go negative.</td><td>Never below 0.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-fleet-recall">
+<summary>Fleet recall (3)</summary>
+<div class="table-wrap" role="region" aria-label="Fleet recall, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Fleet recall: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Recall that the game does not apply</th><td>Logged as "recalled" and recorded as a recall.</td><td>An error; the fleet is not recorded as recalled.</td></tr>
+    <tr><th scope="row">Fleets unreadable right after the recall</th><td>Error "did not complete and is not retried".</td><td>"Sent but not confirmed": recorded as a recall, with a warning.</td></tr>
+    <tr><th scope="row">Estimated return time</th><td><code>ArriveIn × 2</code>.</td><td>The flight time already elapsed, as in the game.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-flight-calculations">
+<summary>Flight calculations (11)</summary>
+<div class="table-wrap" role="region" aria-label="Flight calculations, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Flight calculations: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Fuel</th><td>1 deuterium too much per flight (a "+1" the game no longer applies).</td><td>Same as the game.</td></tr>
+    <tr><th scope="row">Ship fuel consumption and cargo</th><td>Truncated by floating-point error (bomber at 489 instead of 490).</td><td>Same as the game.</td></tr>
+    <tr><th scope="row">General's fuel reduction</th><td>Fixed at 50%.</td><td>Read from the server (25 to 50%).</td></tr>
+    <tr><th scope="row">Lifeform fuel consumption bonus</th><td>Wrong sign.</td><td>Applied with the right sign.</td></tr>
+    <tr><th scope="row">Moon destruction</th><td>War speed.</td><td>Speed without a multiplier.</td></tr>
+    <tr><th scope="row">Alliance defend</th><td>Wrong speed.</td><td>The game's speed.</td></tr>
+    <tr><th scope="row">Skipped empty systems</th><td>The distance could drop to 0 systems.</td><td>At least 1 system.</td></tr>
+    <tr><th scope="row">Deuterium to carry</th><td>Could go negative.</td><td>Never below 0.</td></tr>
+    <tr><th scope="row">Flight durations</th><td>Already correct.</td><td>Checked in game to the second.</td></tr>
+    <tr><th scope="row">Universe that skips empty or inactive systems</th><td>Time and fuel used the full distance: a fleet-save came home before its minimum time, the night-round expedition landed during sleep, and a send could be refused for fuel it does not burn.</td><td>The game's count of skipped systems is taken off the distance. It is asked once per pair of systems, without sending anything, kept 12 hours and refreshed by every send. A universe that skips nothing is never asked.</td></tr>
+    <tr><th scope="row">Fleet-save on such a universe</th><td>Speed chosen from a time that was too long.</td><td>The destination tried is checked with the exact count (one target check), and the speed drops if needed.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature">
+<summary id="calc">Calculation fixes: cargo, production, costs (15)</summary>
+<p>These change the numbers you see and the Brain's and AutoFarm's choices. Fuel and flight times are under <a href="#fbf-flight-calculations">Flight calculations</a>; the value of energy technology under <a href="#brain">Brain: buildings and research</a>.</p>
+<div class="table-wrap" role="region" aria-label="Calculation fixes: cargo, production, costs, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Calculation fixes: cargo, production, costs: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr class="sub"><th colspan="3" scope="colgroup">Cargo capacity</th></tr>
+    <tr><th scope="row">Cargo capacity</th><td>Cut by 1% everywhere: a probe carried 9, not 10.</td><td>As in the game.</td></tr>
+    <tr><th scope="row">General's bonus on pathfinders</th><td>The +20% was missing.</td><td>Applied.</td></tr>
+    <tr><th scope="row">Probe base cargo, Collector's bonus</th><td>Fixed values.</td><td>Read from the server.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Production</th></tr>
+    <tr><th scope="row">Deuterium production</th><td>Used the crystal mine's level.</td><td>Uses the deuterium synthesizer's level.</td></tr>
+    <tr><th scope="row">Crystal mine</th><td>Wrong position bonus; base income 20.</td><td>Position bonus 40/30/20%; base income 15.</td></tr>
+    <tr><th scope="row">A level 1 mine</th><td>Looked about 10 times less profitable: the basic income counted as the mine's output at level 0.</td><td>Judged on what the level adds.</td></tr>
+    <tr><th scope="row">Mine energy use</th><td>Rounded up: one unit too much per mine.</td><td>Rounded down, as in the game.</td></tr>
+    <tr><th scope="row">Crawler production bonus</th><td>0.3% each.</td><td>0.02% each (0.03% for a Collector).</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Costs and durations</th></tr>
+    <tr><th scope="row">Battleship cost</th><td>35,000.</td><td>45,000.</td></tr>
+    <tr><th scope="row">Graviton technology cost</th><td>Wrong growth.</td><td>Grows ×3 per level.</td></tr>
+    <tr><th scope="row">Cost roundings</th><td>Some wrong.</td><td>As in the game.</td></tr>
+    <tr><th scope="row">Lifeform energy costs, cost reductions and duration bonuses</th><td>Not applied.</td><td>Applied.</td></tr>
+    <tr><th scope="row">Research duration</th><td>The server's research speed ignored.</td><td>Uses the server's research speed.</td></tr>
+    <tr><th scope="row">Lifeform data</th><td>Some values wrong.</td><td>Corrected.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Other</th></tr>
+    <tr><th scope="row">Auctions</th><td>The wrong celestial picked: points were divided, not multiplied.</td><td>The right celestial.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-settings-reload-and-notifications">
+<summary>Settings reload, start and stop, notifications (9)</summary>
+<div class="table-wrap" role="region" aria-label="Settings reload, start and stop, notifications, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Settings reload, start and stop, notifications: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Settings reload</th><td>Every feature restarted and lost its pace.</td><td>Only the features whose section changed restart. The Defender is never stopped.</td></tr>
+    <tr><th scope="row">Crash in one feature</th><td>Stopped the instance.</td><td>Logged; the feature restarts.</td></tr>
+    <tr><th scope="row">Reasons</th><td>—</td><td>Every decision carries a short reason code. See <a href="interface.html#ui-reasons">Reasons</a>.</td></tr>
+    <tr><th scope="row">Starting or stopping a feature</th><td><code>/stopX</code> stopped the worker until the next wake-up or settings reload, which restarted it.</td><td>Turning on or off holds whatever the setting says, through reloads, sleep, breaks, reconnections and a restart of TGoat, until "Follow the setting" (<code>/followsetting</code>), a write of <code>X.Active</code> or the end of an optional duration (<code>/stopautofarm 4h</code>). The settings do not change; the interface shows the state you chose and the setting. <a href="interface.html#feature-switch">Details</a>.</td></tr>
+    <tr><th scope="row">Telegram and Discord notifications</th><td>Sent synchronously: a slow Telegram (up to 30 s per channel) blocked the feature that sent the notification.</td><td>Queued in the background, in order. The queue is flushed within 10 s when the instance stops.</td></tr>
+    <tr><th scope="row">Slot priority, Settings page</th><td>Six number fields (1, 2, 3, 4, 10, 99) to compare in your head.</td><td>A list in effective order, reordered by dragging or arrows, with ties and a sentence "When fleet slots run short: ..."; a hand-edited file keeps its numbers until the order changes. See <a href="interface.html#ui-priorities">Priority lists</a>.</td></tr>
+    <tr><th scope="row">Spending priority, Settings page</th><td>—</td><td>The same kind of list (<code>Brain.SpendingPriority</code>).</td></tr>
+    <tr><th scope="row">A feature's notification</th><td>No feature named; a few messages had a name typed in front.</td><td>Every notification names its feature: in bold on Telegram, in the title on Discord ("Directives · Action completed"). TGoat's own messages are unchanged.</td></tr>
+    <tr><th scope="row">Game session lost again and again</th><td>Up to 10 logins in 4 minutes, silently.</td><td>At most 3 automatic logins in 30 minutes, then one notification with the number of losses and the time of the next login; at most one per half hour.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature">
+<summary id="messaging">Telegram, Discord and commands (10)</summary>
+<div class="table-wrap" role="region" aria-label="Telegram, Discord and commands, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Telegram, Discord and commands: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Who can command the bot</th><td>Not limited to your chat.</td><td>Only your chat (<code>TelegramMessenger.ChatId</code>). A command is recognised on its first word only.</td></tr>
+    <tr><th scope="row"><code>/setloglevel</code>, <code>/editsettings</code>, <code>/minexpecargo 0</code></th><td><code>/setloglevel</code> did nothing, <code>/editsettings</code> ignored its argument, <code>/minexpecargo 0</code> wrote nothing.</td><td><code>/setloglevel</code> works, <code>/editsettings</code> accepts its argument, <code>/minexpecargo 0</code> writes the value.</td></tr>
+    <tr><th scope="row">Attack announcements and failed commands</th><td>Forwarded twice.</td><td>Forwarded once.</td></tr>
+    <tr><th scope="row"><code>/collect</code>, <code>/collectdeut</code></th><td>Used the probe cargo setting instead of the deuterium reserve.</td><td>Use the deuterium reserve.</td></tr>
+    <tr><th scope="row">Deploy and Switch</th><td>Announced success even when it failed.</td><td>Report the real result.</td></tr>
+    <tr><th scope="row"><code>/build</code></th><td>Did not work for defences.</td><td>Works for defences.</td></tr>
+    <tr><th scope="row"><code>/wakeup</code> on an awake instance, <code>/cancelghostsleep</code> with nothing to cancel</th><td>An error.</td><td>A plain answer.</td></tr>
+    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-alpha.1". The regular sign of life also gives the version.</td></tr>
+    <tr><th scope="row">Discord webhook (<code>DiscordWebhook.Active</code>)</th><td>—</td><td>Posts as "TGoat" unless you set <code>DiscordWebhook.Username</code>.</td></tr>
+    <tr><th scope="row">Discord bot</th><td>None.</td><td>Every Telegram command. See <a href="discord.html#discord">Discord bot</a>.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>How notifications are sent, named and limited: see <a href="#fbf-settings-reload-and-notifications">Settings reload, start and stop, notifications</a>.</p>
+</details>
+<details class="feature" id="fbf-log-lines">
+<summary>Log lines (8)</summary>
+<div class="table-wrap" role="region" aria-label="Log lines, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Log lines: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Console line</th><td><code>[17:56:25.123 INF Main|Defender] No attack in progress</code>, the whole line in the level's colour.</td><td><code>17:56:25  Main › Defender    No attack in progress</code>: ⚠ for a warning, ✖ for an error, debug dimmed, each feature's name in its own colour. <code>Logging.Style</code> gives the Levels or TBot layout, <code>Logging.Colours</code> fewer colours or none.</td></tr>
+    <tr><th scope="row">Message that starts with its feature's name</th><td>The name twice.</td><td>Shown once: the console, <code>TGoat.log</code> and the Logs page drop the prefix; <code>TGoat.csv</code> and the API keep the message as logged.</td></tr>
+    <tr><th scope="row">Windows console</th><td>Colours only; symbols never checked.</td><td>⚠ ✖ › · where the console shows them (Windows Terminal, Windows 11 console, UTF-8 terminals), <code>! x &gt; .</code> elsewhere; <code>NO_COLOR</code> turns colours off.</td></tr>
+    <tr><th scope="row"><code>TGoat.log</code></th><td>Old TBot line with date.</td><td>The chosen style with date and zone; the TBot style keeps the old line. A style change keeps the file.</td></tr>
+    <tr><th scope="row">Logs page</th><td>Columns time, level, instance, sender.</td><td>The console's layout and colours, updated as soon as <code>tgoat.json</code> changes; <strong>Colours</strong> picks a feature's colour.</td></tr>
+    <tr><th scope="row">Messages and senders</th><td>—</td><td>Every message is a full sentence. Senders: <code>TGoat</code>, <code>Instance</code>, <code>Game</code>, and one per feature.</td></tr>
+    <tr><th scope="row">Number of lines</th><td>More noise.</td><td>One line per fleet sent, per failed request and per pass. <code>log/TGoat.csv</code> has <code>instance</code> and <code>fields</code> columns.</td></tr>
+    <tr><th scope="row">Logs page history</th><td>—</td><td>The last <code>WebUI.MaxLogsToShow</code> lines (2,000), repeats grouped ("×N"), warnings kept apart.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Default level of each output:</p>
+<div class="table-wrap" role="region" aria-label="Log levels per output" tabindex="0">
+<table>
+  <caption class="sr-only">Default log level per output</caption>
+  <thead><tr><th scope="col">Output</th><th scope="col">Default level</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Console</th><td>Information and above</td></tr>
+    <tr><th scope="row">Log files and the Logs page</th><td>Debug and above</td></tr>
+    <tr><th scope="row">Telegram</th><td>Warning and above (<code>/setloglevel</code>)</td></tr>
+    <tr><th scope="row">Discord bot</th><td>Warning and above (<code>/logs set-level</code>)</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-setup-assistant">
+<summary>Setup assistant (3)</summary>
+<div class="table-wrap" role="region" aria-label="Setup assistant, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Setup assistant: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Settings of an account that has grown</th><td>TBot had no setup assistant: the defaults, written for a new account, stayed until the player changed them one by one.</td><td>At most six questions filled in from the account, then a plan by theme with a reason built from the account's numbers. Each theme is applied or skipped with one click, and nothing is written without a click.</td></tr>
+    <tr><th scope="row">Your values and profiles</th><td>—</td><td>A value you set yourself changes only if you tick "Use the proposed value". A setting decided by an active profile is left alone.</td></tr>
+    <tr><th scope="row">Going back</th><td>—</td><td>Each Apply is one settings-history revision with the source "assistant": restore the previous version.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-importing-tbot-settings">
+<summary>Importing TBot settings (5)</summary>
+<div class="table-wrap" role="region" aria-label="Importing TBot settings, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Importing TBot settings: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Value equal to TBot's old default, when the default changed</th><td>Kept and only flagged (about forty in the sample file).</td><td>Replaced by the new default, with one report line per setting. Exception: <code>AutoHarvest.MinimumResourcesOwnDF</code> (300), kept and flagged.</td></tr>
+    <tr><th scope="row">Template values reset (second batch)</th><td>Kept as a choice: 1000 and 10000 expedition ships (<code>MinPrimaryToSend</code>, <code>PrimaryToKeep</code>), the lifeform research caps <code>MaxTechs12</code> to <code>MaxTechs36</code>, and <code>ArtifactStorage.ResumeBelow</code> 3000.</td><td>Reset to TGoat's defaults, one report line each. A cap of 0 ("never research") in the template, which was not a choice, becomes 10 as well. 19 more settings in the sample file, so 64 are reset and 45 kept.</td></tr>
+    <tr><th scope="row">Half of an interval</th><td>—</td><td>Kept, and flagged, if resetting it would leave a fixed pause.</td></tr>
+    <tr><th scope="row">Converted settings</th><td>—</td><td><code>Abandon.MinFields</code> copied into each zone when abandon was on; an active <code>IntensiveResearch</code> → <code>ParallelTries</code>; <code>DefenceToReach</code> quantities → <code>Ratio</code>, TBot's sample quantities giving TGoat's mix.</td></tr>
+    <tr><th scope="row">Profiles</th><td>—</td><td>Never reset to defaults. Their defence mix counts only the defences they name; their zones without a threshold are flagged.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>What the import does, step by step: <a href="from-tbot.html#import">The import</a>.</p>
+</details>
+<details class="feature" id="fbf-simulated-device">
+<summary>Simulated device (9)</summary>
+<div class="table-wrap" role="region" aria-label="Simulated device, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Simulated device: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Fingerprint</th><td>The one of the TBot sample file for every install that filled nothing in: all these accounts looked alike.</td><td>One plausible PC drawn once per account, following real market shares, written in the instance file, then stable.</td></tr>
+    <tr><th scope="row">User-Agent</th><td>Chrome 124, frozen and getting older.</td><td>Current at creation, then moving forward like a browser that updates itself, never ahead of a released version.</td></tr>
+    <tr><th scope="row">Time zone</th><td><code>Europe/London</code>, whatever the player's country.</td><td>The one of the computer TGoat runs on (Gameforge sees its IP); otherwise, or behind an active proxy, the one of the universe's country. A written time zone is kept.</td></tr>
+    <tr><th scope="row">Language</th><td><code>en</code>.</td><td>The language of the universe, as the browser reports it (<code>fr-FR,fr</code> with Chrome for a French universe).</td></tr>
+    <tr><th scope="row">Impossible values</th><td>Memory reported by Firefox, Windows 7 with a recent Chrome, <code>fr-FR</code> refused, Edge and Safari impossible to create.</td><td>Only what a real browser reports.</td></tr>
+    <tr><th scope="row">Devices already created with the sample</th><td>Kept.</td><td>Replaced once at start-up: new values written (<code>startup</code> revision), old folder kept aside, one Information line. Gameforge sees a new device: new login, captcha possible.</td></tr>
+    <tr><th scope="row">Devices partly on the sample</th><td>Kept, with the sample combination for the fields left unchanged.</td><td>Once at start-up, the fields still on the sample are drawn again; the values changed by the user are kept, and the Information line lists both.</td></tr>
+    <tr><th scope="row">Device folder left by an account test or an old instance</th><td>Taken over by the new instance, fingerprint included.</td><td>Set aside when the instance is added if it does not match the device written in the file.</td></tr>
+    <tr><th scope="row">Import from TBot</th><td>Device copied as is, even the sample one.</td><td>The fields still on the sample are drawn again; a chosen device is copied.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+<details class="feature" id="fbf-network-fingerprint">
+<summary>Network fingerprint (5)</summary>
+<div class="table-wrap" role="region" aria-label="Network fingerprint, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Network fingerprint: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">TLS handshake</th><td>Go's (TBot went through ogamed, also in Go): a program, not a browser.</td><td>The device browser's, in its version: Chrome or Edge (GREASE, shuffled extensions, X25519MLKEM768), Firefox or Safari.</td></tr>
+    <tr><th scope="row">HTTP/2 connection</th><td>Go's settings and pseudo-header order, random header order.</td><td>The browser's SETTINGS, WINDOW_UPDATE, pseudo-headers and priority; headers in its order.</td></tr>
+    <tr><th scope="row">Headers</th><td>User-Agent only: no <code>Sec-CH-UA</code>, no <code>Sec-Fetch-*</code>, no <code>Accept-Language</code>; <code>br</code> announced but not decoded.</td><td>The browser's, by request type (page, form, ajax, image…); <code>Accept-Language</code> from the device languages; gzip, deflate, br and zstd decoded.</td></tr>
+    <tr><th scope="row">Account proxy and game proxy</th><td>Go signature through the proxy; game proxy assets requested without headers.</td><td>Same browser fingerprint through the HTTP or SOCKS5 proxy; the game proxy keeps the request type of the player's browser, with the device identity.</td></tr>
+    <tr><th scope="row">Imitated browsers and universe list</th><td>Go signature, whatever browser the device announced.</td><td>Only Chrome and Edge, whose fingerprint is verified, are drawn for new devices (a written Firefox or Safari is kept, with a warning); the settings form's universe list (new) goes out with the instance's session (fingerprint, proxy), otherwise as a current Chrome through the proxy of its settings.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+<a class="to-top" href="#toc">↑ On this page</a>
+<script>
+(function () {
+  var input = document.getElementById('change-filter-input');
+  var all = document.getElementById('change-filter-all');
+  var status = document.getElementById('change-filter-status');
+  if (!input || !all || !status) return;
+  var folds = Array.prototype.slice.call(document.querySelectorAll('details.feature'));
+  function norm(s) {
+    s = s.toLowerCase();
+    if (s.normalize) s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return s.replace(/\s+/g, ' ');
+  }
+  var total = 0;
+  var data = folds.map(function (d) {
+    var sum = d.querySelector('summary');
+    var title = norm(sum ? sum.textContent : '');
+    var id = sum && sum.id ? sum.id : d.id;
+    var link = id ? document.querySelector('.toc a[href="#' + id + '"]') : null;
+    var items = [];
+    var groups = [];
+    Array.prototype.forEach.call(d.querySelectorAll('tbody tr'), function (tr) {
+      if (tr.classList.contains('sub')) { groups.push({ el: tr, rows: [] }); return; }
+      var bn = !!tr.closest('table.bn');
+      var it = { el: tr, text: title + ' ' + norm(tr.textContent), note: !bn };
+      items.push(it);
+      if (groups.length && tr.parentNode === groups[groups.length - 1].el.parentNode) groups[groups.length - 1].rows.push(it);
+      if (bn) total++;
+    });
+    Array.prototype.forEach.call(d.querySelectorAll('p, li'), function (el) {
+      if (el.closest('table')) return;
+      if (el.tagName === 'P' && el.closest('li')) return;
+      if (el.tagName === 'LI' && el.querySelector('li')) return;
+      items.push({ el: el, text: title + ' ' + norm(el.textContent), note: true });
+    });
+    return { fold: d, items: items, groups: groups, item: link ? link.parentNode : null, wasOpen: d.open };
+  });
+  var filtering = false;
+  function apply() {
+    var words = norm(input.value).split(' ').filter(function (w) { return w; });
+    if (!words.length) {
+      data.forEach(function (f) {
+        f.items.forEach(function (it) { it.el.hidden = false; });
+        f.groups.forEach(function (g) { g.el.hidden = false; });
+        f.fold.hidden = false;
+        if (f.item) f.item.hidden = false;
+        if (filtering) f.fold.open = f.wasOpen;
+      });
+      filtering = false;
+      status.textContent = 'Showing all ' + total + ' rows. Every word you type must appear in a row.';
+      return;
+    }
+    if (!filtering) data.forEach(function (f) { f.wasOpen = f.fold.open; });
+    filtering = true;
+    var rows = 0, feats = 0;
+    data.forEach(function (f) {
+      var shown = 0;
+      f.items.forEach(function (it) {
+        var ok = words.every(function (w) { return it.text.indexOf(w) >= 0; });
+        it.el.hidden = !ok;
+        if (ok && !it.note) { shown++; rows++; }
+      });
+      f.groups.forEach(function (g) {
+        g.el.hidden = !g.rows.some(function (it) { return !it.el.hidden; });
+      });
+      var any = shown > 0 || f.items.some(function (it) { return it.note && !it.el.hidden; });
+      f.fold.hidden = !any;
+      if (f.item) f.item.hidden = !any;
+      if (any) { f.fold.open = true; feats++; }
+    });
+    status.textContent = rows === 0 && feats === 0 ? 'No row contains every word you typed.' :
+      rows + (rows === 1 ? ' row' : ' rows') + ' in ' + feats + (feats === 1 ? ' feature' : ' features') + ' contain every word you typed.';
+  }
+  var timer = 0;
+  input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(apply, 120); });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && input.value) { input.value = ''; apply(); e.stopPropagation(); }
+  });
+  function syncButton() {
+    var open = folds.every(function (d) { return d.hidden || d.open; });
+    all.textContent = open ? 'Close all' : 'Open all';
+  }
+  all.addEventListener('click', function () {
+    var open = all.textContent === 'Open all';
+    folds.forEach(function (d) { if (!d.hidden) d.open = open; });
+    syncButton();
+  });
+  folds.forEach(function (d) { d.addEventListener('toggle', syncButton); });
+  if (input.value) apply();
+})();
+</script>
+</body>
+</html>

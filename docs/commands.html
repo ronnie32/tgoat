@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Commands · TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="start.html">Get started</a></li>
+      <li><a href="interface.html">Web interface</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="commands.html" aria-current="page">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html">Every change</a></li>
+      <li><a href="limits.html">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout no-toc">
+<main id="main">
+
+<h1 class="sr-only">Commands</h1>
+
+<section aria-labelledby="commands">
+<h2 id="commands">Telegram and Discord commands</h2>
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>Telegram and Discord share one list of commands. Each row below gives both names.</li>
+  <li>Most commands act on the current instance (<code>/setmain</code>, <code>/instance main</code>); fleet commands act on the current planet or moon (<code>/celestial</code>).</li>
+  <li><code>/help</code> on Telegram and <code>/tgoat help</code> on Discord list every command with its syntax.</li>
+  <li>On Discord, seven costly commands ask you to confirm. Telegram runs them at once, and answers only the configured chat.</li>
+</ul>
+</aside>
+<p>Telegram and Discord share one list, so a command does the same on both. On Telegram, type the command in the configured chat. On Discord, type <code>/</code>, pick the command and fill in its options; Discord suggests values as you type. <code>/help</code> (Telegram) and <code>/tgoat help</code> (Discord) list every command with its syntax.</p>
+<p>Most commands act on the <strong>current instance</strong>. Change it with <code>/setmain</code> or <code>/instance main</code>. On Discord, these commands also take an optional <code>instance</code> option, to act on another instance once.</p>
+<p>Fleet commands act on the <strong>current celestial</strong>, the planet or moon you pick with <code>/celestial</code> (Telegram) or <code>/celestial select</code> (Discord).</p>
+<p>On Discord, seven commands ask you to confirm before they run. The tables mark them "Confirm on Discord". Telegram runs them at once. See <a href="discord.html#discord-confirm">Buttons and confirmation</a>.</p>
+
+<h3 id="telegram">Telegram</h3>
+<p>Set up the bot in the web interface, with <code>tgoat setup</code>, or in <code>config/tgoat.json</code>: <code>TelegramMessenger.Active</code>, <code>TelegramMessenger.ChatId</code> and the token <code>TelegramMessenger.API</code> (kept in <code>secrets.json</code>). Only the configured chat can send commands. For Discord, see <a href="discord.html#discord">Discord bot</a>.</p>
+<p>Notifications start with the instance, then, when a feature sends them, its name in bold, such as <strong>Directives</strong> or <strong>AutoMine</strong>. When the game session is lost too often, one notification says when TGoat will log in again (see <a href="discord.html#discord-notes">Notifications</a>).</p>
+<p>When <code>TelegramMessenger.TelegramAutoPing.Active</code> is on, the sign of life repeats every <code>TelegramMessenger.TelegramAutoPing.EveryHours</code> hours (1 by default).</p>
+
+<h3 id="cmd-tgoat">Commands for TGoat</h3>
+<div class="table-wrap" role="region" aria-label="Commands for TGoat" tabindex="0">
+<table class="cmds">
+  <caption class="sr-only">Commands for TGoat as a whole, on Telegram and on Discord</caption>
+  <thead><tr><th scope="col">Telegram</th><th scope="col">Discord</th><th scope="col">What it does</th></tr></thead>
+  <tbody>
+    <tr class="sub"><th colspan="3" scope="colgroup">Instances</th></tr>
+    <tr><th scope="row"><code>/listinstances</code></th><td><code>/instance list</code></td><td>List the instances.</td></tr>
+    <tr><th scope="row"><code>/setmain &lt;index&gt;</code></th><td><code>/instance main</code></td><td>Choose the current instance, by its index in the list.</td></tr>
+    <tr><th scope="row"><code>/getmain</code></th><td><code>/instance current</code></td><td>Show the current instance.</td></tr>
+    <tr><th scope="row"><code>/instance enable &lt;index|alias&gt;</code></th><td><code>/instance enable</code></td><td>Connect an instance. Saved in its file.</td></tr>
+    <tr><th scope="row"><code>/instance disable &lt;index|alias&gt;</code></th><td><code>/instance disable</code></td><td>Stop an instance but keep it configured. Confirm on Discord.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Bot</th></tr>
+    <tr><th scope="row"><code>/ping</code></th><td><code>/tgoat ping</code></td><td>Check that the bot is alive; the answer gives the version.</td></tr>
+    <tr><th scope="row"><code>/startautoping</code></th><td><code>/tgoat autoping</code></td><td>Start the regular sign of life.</td></tr>
+    <tr><th scope="row"><code>/stopautoping</code></th><td><code>/tgoat autoping-stop</code></td><td>Stop the sign of life.</td></tr>
+    <tr><th scope="row"><code>/help</code></th><td><code>/tgoat help</code></td><td>List all commands with their syntax.</td></tr>
+    <tr><th scope="row"><span class="muted">Discord only</span></th><td><code>/tgoat channel</code></td><td>Send alerts, notifications or logs to this channel. See <a href="discord.html#discord-channels">Channels</a>.</td></tr>
+    <tr><th scope="row"><code>/loglevel</code></th><td><code>/logs level</code></td><td>Show the level of the forwarded logs.</td></tr>
+    <tr><th scope="row"><code>/setloglevel Debug|Information|Warning|Error</code></th><td><code>/logs set-level</code></td><td>Forward the logs from this level up.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="cmd-instance">Commands for the current instance</h3>
+<p>On Telegram, <code>/start&lt;x&gt;</code> and <code>/stop&lt;x&gt;</code> take <code>expe</code>, <code>defender</code>, <code>automine</code>, <code>autoresearch</code>, <code>lifeformautomine</code>, <code>lifeformautoresearch</code>, <code>autofarm</code>, <code>autodiscovery</code> or <code>brain</code> (the whole Brain), as in <code>/startautofarm</code>. On Discord, you pick the feature in a list.</p>
+<p>Start and stop turn a feature on or off whatever its setting, without changing the settings. Add a duration to make it temporary, as in <code>/stopautofarm 4h</code> or the <code>duration</code> option on Discord. When the choice ends, and what still holds a feature you turned on, is in <a href="interface.html#feature-switch">Turning a feature on or off</a>.</p>
+<div class="table-wrap" role="region" aria-label="Commands for the instance" tabindex="0">
+<table class="cmds">
+  <caption class="sr-only">Commands for the current instance, on Telegram and on Discord</caption>
+  <thead><tr><th scope="col">Telegram</th><th scope="col">Discord</th><th scope="col">What it does</th></tr></thead>
+  <tbody>
+    <tr class="sub"><th colspan="3" scope="colgroup">Settings and profiles</th></tr>
+    <tr><th scope="row"><code>/settings get &lt;setting&gt;</code></th><td><code>/settings get</code></td><td>Read a setting by its full path, such as <code>AutoFarm.NumProbes</code>.</td></tr>
+    <tr><th scope="row"><code>/settings set &lt;setting&gt; &lt;value|default&gt;</code></th><td><code>/settings set</code></td><td>Change a setting at once, even offline. <code>default</code> resets it.</td></tr>
+    <tr><th scope="row"><code>/settings undo</code></th><td><code>/settings undo</code></td><td>Undo your last change.</td></tr>
+    <tr><th scope="row"><code>/mode [human|rage|custom]</code></th><td><code>/mode</code></td><td>Show the play mode and what it does, or set it to Human, RAGE or Custom. It is written like a settings edit, works offline and <code>/settings undo</code> reverts it. See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
+    <tr><th scope="row"><code>/proposals</code></th><td><code>/proposals list</code></td><td>Show what TGoat proposes and waits for your answer to do: features set to Suggest, such as Brain.Boosters, the AutoMine production settings Expeditions.BuildFleet and AutoFarm.BuildBreakers. See <a href="interface.html#ui-proposals">Proposals</a>.</td></tr>
+    <tr><th scope="row"><code>/accept [number]</code></th><td><code>/proposals accept</code></td><td>Do a proposal, or every proposal without a number. TGoat first checks that its reason still holds; if not, it refuses and says why.</td></tr>
+    <tr><th scope="row"><code>/recall true|false</code></th><td><code>/settings recall</code></td><td>Turn the recall of fleet-saved fleets on or off.</td></tr>
+    <tr><th scope="row"><code>/minexpecargo &lt;number&gt;</code></th><td><code>/settings min-expedition-cargo</code></td><td>Set <code>Expeditions.MinPrimaryToSend</code>.</td></tr>
+    <tr><th scope="row"><code>/editsettings 2:45:8 planet|moon [feature]</code></th><td><code>/celestial origin</code></td><td>Make this celestial the origin or target in the feature settings.</td></tr>
+    <tr><th scope="row"><code>/profile ls</code></th><td><code>/profile list</code></td><td>List the available profiles.</td></tr>
+    <tr><th scope="row"><code>/profile ls-r</code></th><td><code>/profile running</code></td><td>List the running and base profiles.</td></tr>
+    <tr><th scope="row"><code>/profile load &lt;name&gt;… [duration]</code></th><td><code>/profile load</code></td><td>Load profiles, for good or for a duration such as <code>4h</code>.</td></tr>
+    <tr><th scope="row"><code>/profile reset</code></th><td><code>/profile reset</code></td><td>Unload the active profiles.</td></tr>
+    <tr><th scope="row"><code>/profile base &lt;name&gt;…|none</code></th><td><code>/profile base</code></td><td>Set the base profiles, applied under the instance settings.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">State</th></tr>
+    <tr><th scope="row"><code>/testaccount</code></th><td><code>/tgoat test-account</code></td><td>Test the Gameforge login and list the universes; starts nothing.</td></tr>
+    <tr><th scope="row"><code>/getmainstats</code></th><td><code>/feature status</code></td><td>Show which features are running.</td></tr>
+    <tr><th scope="row"><code>/getcelestials</code></th><td><code>/celestial list</code></td><td>List your planets and moons.</td></tr>
+    <tr><th scope="row"><code>/celestial 2:45:8 planet|moon</code></th><td><code>/celestial select</code></td><td>Select the current celestial.</td></tr>
+    <tr><th scope="row"><code>/getinfo [celestial id | 2:45:8 planet|moon]</code></th><td><code>/celestial info</code></td><td>Show resources and ships of a celestial (the current one by default).</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Features</th></tr>
+    <tr><th scope="row"><code>/start&lt;x&gt; [duration]</code></th><td><code>/feature start</code></td><td>Turn a feature on whatever its setting, for a duration such as <code>4h</code> or until further notice. Telegram feature names are listed above the table.</td></tr>
+    <tr><th scope="row"><code>/stop&lt;x&gt; [duration]</code></th><td><code>/feature stop</code></td><td>Turn a feature off whatever its setting, for a duration or until further notice.</td></tr>
+    <tr><th scope="row"><code>/followsetting &lt;feature&gt;</code></th><td><code>/feature follow</code></td><td>Undo a start or a stop: the feature follows its setting again. Takes any feature name, such as <code>AutoFarm</code> or <code>Brain</code>.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Fleets</th></tr>
+    <tr><th scope="row"><code>/getfleets</code></th><td><code>/fleet list</code></td><td>List the outgoing fleets.</td></tr>
+    <tr><th scope="row"><code>/cancel &lt;fleet id&gt;</code></th><td><code>/fleet recall</code></td><td>Recall one fleet.</td></tr>
+    <tr><th scope="row"><code>/cancelmission &lt;mission&gt;</code></th><td><code>/fleet recall-mission</code></td><td>Recall every fleet on a mission (Deploy, Harvest…).</td></tr>
+    <tr><th scope="row"><code>/switch &lt;speed 1-10&gt;</code></th><td><code>/fleet switch</code></td><td>Send everything from the current celestial to its moon or planet.</td></tr>
+    <tr><th scope="row"><code>/deploy 2:45:8 planet|moon &lt;speed 1-10&gt;</code></th><td><code>/fleet deploy</code></td><td>Deploy ships and resources of the current celestial.</td></tr>
+    <tr><th scope="row"><code>/jumpgate 2:45:8 auto|full</code></th><td><code>/fleet jumpgate</code></td><td>Jump the ships of the current moon; <code>auto</code> keeps the cargo needed.</td></tr>
+    <tr><th scope="row"><code>/fleetjumpgate</code></th><td><code>/fleet jumpgate-all</code></td><td>Run the jump gate feature now.</td></tr>
+    <tr><th scope="row"><code>/phalanx &lt;moon&gt; &lt;target&gt;</code></th><td><code>/fleet phalanx</code></td><td>Scan with a moon's phalanx. Confirm on Discord.</td></tr>
+    <tr><th scope="row"><code>/spycrash auto|2:45:8</code></th><td><code>/fleet spycrash</code></td><td>Crash a probe to make a debris field, even just before an impact. Confirm on Discord.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Fleet-save and sleep</th></tr>
+    <tr><th scope="row"><code>/ghost &lt;duration&gt; [mission]</code></th><td><code>/fleet ghost</code></td><td>Fleet-save the current celestial, for example <code>/ghost 4h30m Harvest</code>.</td></tr>
+    <tr><th scope="row"><code>/ghostmoons &lt;duration&gt; [mission]</code></th><td><code>/fleet ghost-moons</code></td><td>Fleet-save every moon.</td></tr>
+    <tr><th scope="row"><code>/ghostsleep &lt;duration&gt; [mission]</code></th><td><code>/sleep ghost</code></td><td>Wait for fleets to return, fleet-save the current celestial, then sleep. Bedtime still happens during it; if it ends during the night, its fleets are saved again.</td></tr>
+    <tr><th scope="row"><code>/ghostsleepall &lt;duration&gt; [mission]</code></th><td><code>/sleep ghost-all</code></td><td>The same for every moon (every planet if none).</td></tr>
+    <tr><th scope="row"><code>/cancelghostsleep</code></th><td><code>/sleep cancel</code></td><td>Cancel a planned ghost sleep.</td></tr>
+    <tr><th scope="row"><code>/sleep &lt;duration&gt;</code></th><td><code>/sleep now</code></td><td>Stop the bot for a while, for example <code>/sleep 4h3m</code>. Bedtime still happens during it, with its fleet-save; if it ends during the night, the bot sleeps on until the wake-up.</td></tr>
+    <tr><th scope="row"><code>/wakeup</code></th><td><code>/sleep wakeup</code></td><td>Wake the bot up.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Attacks</th></tr>
+    <tr><th scope="row"><code>/attacked</code></th><td><code>/attacks list</code></td><td>Check whether you are under attack.</td></tr>
+    <tr><th scope="row"><code>/msg &lt;text&gt;</code></th><td><code>/attacks message</code></td><td>Message the current attackers. Confirm on Discord.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Resources and building</th></tr>
+    <tr><th scope="row"><code>/collect</code></th><td><code>/resources collect</code></td><td>Send the planets' resources to the repatriation target. Ignores the Brain's build reserve; each planet keeps its fleet-save fuel.</td></tr>
+    <tr><th scope="row"><code>/collectall</code></th><td><code>/resources collect-all</code></td><td>The same, ignoring minimum amounts. Confirm on Discord.</td></tr>
+    <tr><th scope="row"><code>/collectdeut &lt;minimum&gt;</code></th><td><code>/resources collect-deut</code></td><td>Send the planets' deuterium to the repatriation target. Each planet keeps its fleet-save fuel.</td></tr>
+    <tr><th scope="row"><code>/build &lt;ship|defence&gt; [quantity]</code></th><td><code>/build</code></td><td>Build on every planet, as many as affordable. Confirm on Discord.</td></tr>
+    <tr class="sub"><th colspan="3" scope="colgroup">Auctions</th></tr>
+    <tr><th scope="row"><code>/getcurrentauction</code></th><td><code>/auction show</code></td><td>Show the current auction.</td></tr>
+    <tr><th scope="row"><code>/bidauction [&lt;celestial id&gt; m:1000 c:1000 d:1000]</code></th><td><code>/auction bid</code></td><td>Bid; the minimum winning bid by default. Confirm on Discord.</td></tr>
+    <tr><th scope="row"><code>/subscribeauction</code></th><td><code>/auction subscribe</code></td><td>Get notified when the next auction starts.</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/commands.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+</body>
+</html>

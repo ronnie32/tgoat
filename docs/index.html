@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="TGoat, an OGame bot rebuilt from scratch in Go, successor of TBot 3.6 and ogamed: what it is, what it does better, and where to start.">
+<title>TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html" aria-current="page">Home</a></li>
+      <li><a href="start.html">Get started</a></li>
+      <li><a href="interface.html">Web interface</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="commands.html">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html">Every change</a></li>
+      <li><a href="limits.html">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="On this page">
+  <p class="toc-title">On this page</p>
+  <ol>
+    <li><a href="#paths">Choose your path</a></li>
+    <li><a href="#what">What TGoat is</a></li>
+    <li><a href="#highlights">Highlights</a>
+      <ol>
+        <li><a href="#safety">Safety and stealth</a></li>
+        <li><a href="#farming">Smarter play</a></li>
+        <li><a href="#hl-ui">A web interface</a></li>
+        <li><a href="#easier">Easier setup</a></li>
+        <li><a href="#hl-discord">A Discord bot of your own</a></li>
+        <li><a href="#numbers">Numbers that match the game</a></li>
+        <li><a href="#hl-control">More control</a></li>
+        <li><a href="#hl-game">More of the game</a></li>
+      </ol>
+    </li>
+    <li><a href="#where">Where to start</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<header class="hero">
+  <p class="eyebrow">OGame bot · successor of TBot 3.6 and ogamed · <span class="alpha-badge">alpha · 0.1.0-alpha.1</span></p>
+  <h1>TGoat</h1>
+  <p class="lead">TGoat is a bot that plays your OGame accounts. You follow and command it from a web page on your computer, from Telegram or from Discord.</p>
+  <aside class="in-short" aria-label="In short">
+  <ul>
+    <li><strong>The successor of TBot.</strong> TGoat does what TBot 3.6 did, and better: fewer requests to the game, decisions checked against the game's own rules, a Defender that keeps watching while you sleep.</li>
+    <li>It goes further than TBot ever did: lifeform research and settlement, Directives rewards, explorations, a web interface and a Discord bot of your own.</li>
+    <li>Nearly every behaviour is a setting, so it suits a careful first try as well as very advanced use. The setup assistant suggests settings that fit your account.</li>
+    <li>Your TBot settings are imported on the first start. <a href="from-tbot.html">See what changed, feature by feature</a>.</li>
+    <li>It is an alpha: start with every feature off, on a secondary account (<a href="start.html#alpha">warnings</a>).</li>
+  </ul>
+  </aside>
+</header>
+
+<section class="paths" aria-labelledby="paths">
+<h2 id="paths">Choose your path</h2>
+<p>Read only what you need. Reading times count the text you see; collapsed parts open when you want them.</p>
+<ul class="path-list">
+  <li class="path">
+    <h3>New to TGoat</h3>
+    <p>Install it, log in safely and make a careful first run. Then learn the pages you will use every day.</p>
+    <p><a class="path-go" href="start.html">Get started</a>, then <a class="path-go" href="interface.html">Web interface</a></p>
+    <span class="path-time">About 5 min, then 20 min</span>
+  </li>
+  <li class="path">
+    <h3>Coming from TBot</h3>
+    <p>What the import brings over, what to check after it, and what TGoat does differently.</p>
+    <p><a class="path-go" href="from-tbot.html">What changes for you</a></p>
+    <span class="path-time">About 7 min</span>
+  </li>
+  <li class="path">
+    <h3>Reference</h3>
+    <p>Look up one setting, one command or one change. Search finds it from any page.</p>
+    <p><a class="path-go" href="settings.html">Settings</a>, <a class="path-go" href="commands.html">Commands</a>, <a class="path-go" href="changes.html">Every change</a></p>
+    <span class="path-time">About 4 min for Settings, 6 min for Commands. Every change is for looking up, one feature at a time.</span>
+  </li>
+</ul>
+</section>
+
+<section aria-labelledby="what">
+<h2 id="what">What TGoat is</h2>
+<p>TGoat replaces TBot 3.6 and ogamed, the separate program TBot needed to reach the game. It is a new project, written from scratch in Go. Every feature was reviewed against the rules of the game and rebuilt where TBot's logic fell short.</p>
+<p>One TGoat plays several accounts. Each account is an <em>instance</em>, with its own device, proxy and settings.</p>
+<div class="note" role="note" id="author-note">
+<p class="note-title">A note from the author</p>
+<p>Many of TGoat's decisions come from my own reading of the game: its rules, how I understand the meta, and how a careful player would play. I did my best with all of that, and tested in the game what could be tested. Still, I cannot promise that every decision is optimal, or that each one makes sense in every situation on your account. When a choice does not suit you, the settings let you change it.</p>
+<p class="signature">Zeus (<code>zeus8000</code> on Discord)</p>
+</div>
+</section>
+
+<section aria-labelledby="highlights">
+<h2 id="highlights">Highlights</h2>
+
+<section class="group" aria-labelledby="safety">
+<h3 id="safety">Safety and stealth</h3>
+<ul>
+  <li><a href="settings.html#settings-device"><strong>A device of its own.</strong></a> Each account gets its own plausible PC, written in its instance file. TGoat connects like that PC's browser.</li>
+  <li><strong><a href="changes.html#requests">A human pace.</a></strong> 1.5 to 8 seconds between two requests, and a 15 to 45 second break every 30 to 70 requests.</li>
+  <li><strong><a href="changes.html#defender">A Defender that never sleeps.</a></strong> It keeps watching in sleep mode and, when every fleet slot is taken, frees one for the fleet-save. If it cannot read the attacks, it warns you, and again every 15 minutes until it sees again.</li>
+  <li><strong><a href="changes.html#requests">Fewer requests.</a></strong> Starting the Brain: 104 reads → 47 on a simulated game. A probe: 1 request instead of about 10. Deleting 15 reports: 19 requests instead of 47. The server time: no request at all.</li>
+  <li><strong><a href="start.html#login">Your real IP stays hidden.</a></strong> If the proxy is badly configured, TGoat waits for you to fix it. It never connects without it.</li>
+</ul>
+</section>
+
+<section class="group" aria-labelledby="farming">
+<h3 id="farming">Smarter play</h3>
+<ul>
+  <li><strong><a href="changes.html#autofarm">Raids that pay.</a></strong> AutoFarm simulates the battle against any defended target, checks the player is still inactive, and attacks only when the loot is worth the fuel. The AutoFarm page gives the reason for every target.</li>
+  <li><strong><a href="changes.html#expeditions">Expeditions and explorations.</a></strong> Fleets sized for the find the game allows, and the results of the last 24 hours and 7 days in the reports.</li>
+  <li><strong><a href="changes.html#brain">An economy that reasons.</a></strong> Mines, lifeform buildings and research chosen by return on investment, with a reason for each choice.</li>
+</ul>
+</section>
+
+<section class="group" aria-labelledby="hl-ui">
+<h3 id="hl-ui">A web interface</h3>
+<ul>
+  <li><strong><a href="interface.html#ui-map">See your empire.</a></strong> A live map of your planets, moons, fleets and incoming attacks, with each feature's last pass and its reason.</li>
+  <li><strong><a href="interface.html#ui-settings">Change settings safely.</a></strong> Forms with help for every setting, and a history you can restore.</li>
+  <li><strong><a href="interface.html#ui-ogame">Play by hand.</a></strong> The game opens inside TGoat, and manual mode keeps the bot out of your way.</li>
+  <li><strong><a href="interface.html#ui-logs">Logs you can read.</a></strong> Time, instance › feature, then the message, with ⚠ and ✖ only when it matters and a colour per feature.</li>
+</ul>
+<p><a href="interface.html#tour">Take the tour of the web interface</a>.</p>
+</section>
+
+<section class="group" aria-labelledby="easier">
+<h3 id="easier">Easier setup</h3>
+<ul>
+  <li><strong><a href="from-tbot.html#import">Your TBot settings, imported.</a></strong> On its first start, TGoat imports TBot's <code>settings.json</code> and reports what it dropped. Your old files are never changed.</li>
+  <li><strong><a href="start.html#token">Log in with a session token.</a></strong> Sign in with your own browser, then paste the token into TGoat. It logs in without a captcha or your password.</li>
+  <li><strong><a href="interface.html#ui-assistant">A setup assistant.</a></strong> A few questions, then settings that fit your account, each with its reason. Nothing changes until you click Apply, and every change can be restored.</li>
+  <li><strong><a href="settings.html#settings-profiles">Profiles and history.</a></strong> Share settings between accounts, load a profile for a few hours, and restore an earlier version.</li>
+</ul>
+</section>
+
+<section class="group" aria-labelledby="hl-discord">
+<h3 id="hl-discord">A Discord bot of your own</h3>
+<p>Alongside Telegram, you can create your own Discord bot and invite it to your server. It has every Telegram command, suggests values as you type, puts buttons on alerts and rings your phone on an attack. Only you, and the people you allow, can command it.</p>
+<p><a href="discord.html#discord">Set up the Discord bot</a>.</p>
+</section>
+
+<section class="group" aria-labelledby="hl-control">
+<h3 id="hl-control">More control</h3>
+<ul>
+  <li><a href="interface.html#ui-mode"><strong>A play mode switch.</strong></a> Human, RAGE or Custom: one switch sets how fast TGoat plays.</li>
+  <li><a href="interface.html#ui-directives"><strong>Directives.</strong></a> TGoat collects the rewards of your finished Directives (off by default).</li>
+  <li><a href="interface.html#feature-switch"><strong>Features on and off while it runs.</strong></a> Turn any feature on or off from the Map, the palette, Telegram or Discord, without touching the settings.</li>
+  <li><a href="interface.html#ui-priorities"><strong>Priorities as lists.</strong></a> Drag features into order, with ties, instead of typing numbers.</li>
+  <li><a href="changes.html#feature-by-feature"><strong>Everything that changed from TBot, feature by feature.</strong></a></li>
+</ul>
+</section>
+
+<section class="group" aria-labelledby="hl-game">
+<h3 id="hl-game">More of the game</h3>
+<ul>
+  <li><a href="settings.html#settings-new"><strong>Lifeform research slots.</strong></a> When a slot opens, TGoat chooses its technology, the guaranteed one by default.</li>
+  <li><a href="settings.html#settings-new"><strong>Lifeforms for your planets.</strong></a> Discovery can settle a lifeform on each planet that has none, Humans first (off by default).</li>
+  <li><a href="interface.html#ui-results"><strong>What expeditions and explorations bring back.</strong></a> Read from the game's messages and shown in each feature's report.</li>
+</ul>
+</section>
+
+<section class="group" aria-labelledby="numbers">
+<h3 id="numbers">Numbers that match the game</h3>
+<p>TGoat's formulas were checked against the official data of 30 universes and against 2,100 flights in the game. Its fuel figures match the game exactly. Coming from TBot, expect the Brain and AutoFarm to choose differently: TBot's numbers were often wrong.</p>
+<p><a href="changes.html#calc">All calculation fixes</a>.</p>
+</section>
+</section>
+
+<section aria-labelledby="where">
+<h2 id="where">Where to start</h2>
+<p>Pick a route in <a href="#paths">Choose your path</a>. Also worth a look: the <a href="discord.html">Discord bot</a>, to command TGoat from your own server, and the <a href="limits.html">known limits</a>.</p>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/index.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+<a class="to-top" href="#toc">↑ On this page</a>
+</body>
+</html>

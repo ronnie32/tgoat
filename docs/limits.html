@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Known limits · TGoat</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/guide.css">
+<script src="assets/search-index.js" defer></script>
+<script src="assets/search.js" defer></script>
+<script src="assets/reading.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="site-top">
+  <nav class="site-nav" aria-label="Guide">
+    <a class="brand" href="index.html" title="TGoat"><img class="brand-mark" src="assets/favicon.svg" width="40" height="40" alt="TGoat"> <span class="alpha-badge">alpha</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="start.html">Get started</a></li>
+      <li><a href="interface.html">Web interface</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="discord.html">Discord</a></li>
+      <li><a href="commands.html">Commands</a></li>
+      <li><a href="from-tbot.html">From TBot 3.6</a></li>
+      <li><a href="changes.html">Every change</a></li>
+      <li><a href="limits.html" aria-current="page">Limits</a></li>
+    </ul>
+  </nav>
+  <aside class="alpha-banner" role="note" aria-label="Alpha warning">
+    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+  </aside>
+</div>
+
+<div class="layout no-toc">
+<main id="main">
+
+<h1 class="sr-only">Known limits</h1>
+
+<section aria-labelledby="limits">
+<h2 id="limits">Known limits</h2>
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>This page lists what TGoat does not do yet, or does only in part, and what real play has not confirmed.</li>
+  <li>For two-factor authentication or the <code>gf-pow-captcha</code>, log in with a <a href="start.html#token">session token</a>.</li>
+  <li>The web interface has no login, and <code>secrets.json</code> is plain text: keep both on your own computer.</li>
+  <li>A sleep you asked for, a planned ghost sleep, a break and pending Discord confirmations end when TGoat restarts.</li>
+  <li>If something on the <a href="#to-check">list to check</a> misbehaves for you, <a href="start.html#alpha-report">report it</a>.</li>
+</ul>
+</aside>
+<ul>
+  <li><strong>Two-factor authentication:</strong> there is no setting for the secret yet. Log in with the session token; you pass the two-factor step in your browser.</li>
+  <li><strong><code>gf-pow-captcha</code></strong> is not supported and will not be. Log in with the session token.</li>
+  <li><strong>The web interface has no login</strong>, yet it handles passwords. It listens on <code>localhost</code> only by default. Keep it that way unless you protect it yourself.</li>
+  <li><strong><code>secrets.json</code> is plain text.</strong> Only you can read it on Linux and macOS. On Windows nothing restricts it, so keep the folder private.</li>
+  <li><strong>Secret history:</strong> only the previous version is kept, in <code>secrets.json.bak</code>. A password changed in two places at once is not flagged as a conflict, so change it in one place at a time.</li>
+  <li><strong>The saved session is not tied to its account.</strong> If you change the e-mail without a new token, the old session is dropped only when the new account has no player in the universe. Give a new token with every e-mail change.</li>
+  <li><strong>Firefox and Safari devices</strong> are imitated only approximately, so new devices are never drawn with them. A device file that says Firefox or Safari keeps its browser and logs a warning. To switch, set <code>Credentials.DeviceConf.Browser</code> to Chrome or Edge, then remove the device folder.</li>
+  <li><strong>Profiles</strong> have no schedule (such as "night from 23:00 to 07:00") and no consistency rules between settings. Check yourself that Min is not above Max.</li>
+  <li><strong>Turning a feature on or off by hand</strong> is not undone if you write its <code>Active</code> setting while TGoat is stopped: TGoat cannot tell, and keeps your choice until you click <em>Follow the setting</em>.</li>
+  <li><strong>Manual mode</strong> ends 30 seconds after your last game request through the game proxy. Start it again when you need it.</li>
+  <li><strong>A sleep you asked for</strong> (<code>/sleep</code>, <em>Sleep for…</em>), a planned ghost sleep and a running break end when TGoat restarts or when you disable the instance. A new connection to the game keeps them.</li>
+  <li><strong>Directives:</strong> TGoat does only two missions itself (see <a href="settings.html#settings-new">its settings</a>). The others are done by its features as they play, or left to you: alliance, buddy, renaming, class, merchant.</li>
+  <li><strong>Rewards event tasks and Project Orion missions</strong> are not handled yet.</li>
+  <li><strong>Renaming an instance while it runs</strong> empties the AutoFarm page of the lines written under the old name. New lines fill it again. The old ones stay on the Logs page and in the files.</li>
+  <li><strong>Discord bot:</strong>
+    <ul>
+      <li>pending confirmations are lost when TGoat restarts. Run the command again.</li>
+      <li>a long Discord outage queues up to 100 notifications per instance. When the queue is full, the oldest routine notification is dropped, with a warning; attack alerts are kept.</li>
+      <li>the bot serves one server and takes no command in direct messages. Use a channel on that server.</li>
+    </ul>
+  </li>
+  <li><strong>Expedition results:</strong> the daily total in the log lives in memory, and a restart forgets it. What the game's messages say is kept 7 days.</li>
+  <li><strong>Expedition messages</strong> have not been seen in OGame 13 yet. TGoat reads them with lenient names; a result it does not recognise is kept and named in the log, not counted.</li>
+  <li><strong>Lifeforms found by an exploration</strong> have not been seen yet either, so the "species" count of the Discovery report is not confirmed.</li>
+  <li><strong>Moons on the Map</strong> show their stock but not their storage capacity yet.</li>
+  <li><strong>Harvest after an attack</strong> relies on the attack list. With the Defender off and nothing being sent, an attack on your celestial can go unseen.</li>
+  <li><strong>The Discovery budget</strong> counts only the missions TGoat sent, not yours.</li>
+  <li><strong>The Commander's build queue:</strong> the Brain still starts one build at a time.</li>
+</ul>
+
+<h3 id="to-check">Still to be checked in the game</h3>
+<p>Real play has not confirmed these yet: the login with a token or the image captcha, several formulas and game rules, what lifeforms, expeditions and Discovery read in the game, AutoFarm's report reading, and the Discord bot on a real server. If one misbehaves for you, <a href="start.html#alpha-report">report it</a>.</p>
+<details>
+<summary>Everything still to be checked (16)</summary>
+<ul>
+  <li>A full login with the image captcha solved by the built-in solver.</li>
+  <li>Assisted login:
+    <ul>
+      <li>the lobby accepts a browser's token together with TGoat's simulated device;</li>
+      <li>a refused token really gets HTTP 401 or 403;</li>
+      <li>how long a token lives (the browser cookie lasts 90 days when you stay signed in).</li>
+    </ul>
+  </li>
+  <li>The corrected formulas: the General's fuel reduction, crystal's position bonus, lifeform costs and durations.</li>
+  <li>The prerequisites of Nano Repair Bots, and five lifeform costs on which the sources disagree. TGoat keeps the highest.</li>
+  <li>Lifeforms, on an account that has one:
+    <ul>
+      <li>the production section of the bonuses page, seen only at 0%;</li>
+      <li>the population that keeps the six tier-1 research slots open. TGoat uses 1.55 million, an upper bound;</li>
+      <li>the building states "disabled" and "active", and open research slots at level 0;</li>
+      <li>the bonus per level and its cap, from the server data. TGoat uses a table from 13 November;</li>
+      <li>the gain of each production research and of the Collector enhancement, which TGoat uses to choose research. It comes from the game's descriptions;</li>
+      <li>the game's answer when a research slot's technology is chosen. TGoat trusts the research page read again.</li>
+    </ul>
+  </li>
+  <li>Expedition size: whether the pathfinder doubles finds only when aboard, and the Discoverer bonus, taken as +50%.</li>
+  <li>Expedition results: how soon after the holding time an early return can come home. A fleet seen holding, then gone, is called lost only if it vanished before it could have flown home; that bound is a guess.</li>
+  <li>The offer of the day page: price, rarity and renewal countdown. Without the countdown, TGoat tries again 24 hours later.</li>
+  <li>Discovery:
+    <ul>
+      <li>the game's refusal texts in the galaxy view, and the mission cost, taken as 5,000 metal, 1,000 crystal and 500 deuterium;</li>
+      <li>how long before an explored position can be explored again. A wait text on every position would make TGoat skip that origin for a pass;</li>
+      <li>a refusal when sending is recognised by its English words only;</li>
+      <li>the game's answer when a lifeform is chosen. TGoat trusts only the Lifeforms page read again: the one answer seen so far was "An error has occured!".</li>
+    </ul>
+  </li>
+  <li>The debris of destroyed satellites and crawlers, taken as 30%. The game does not give TGoat your universe's rate.</li>
+  <li>Game rules TGoat assumes:
+    <ul>
+      <li>the research lab cannot be raised while a research runs;</li>
+      <li>a colony ship that arrives while a colony awaits its decision finds the account full and flies back;</li>
+      <li>the arrival gate recharges like the departure gate, which TGoat reads.</li>
+    </ul>
+  </li>
+  <li>The page readers for OGame v13. The tests use pages from older versions whose code is unchanged.</li>
+  <li>Abandoning a planet: that it disappears at once from the overview. A session-token login has no password, so this cannot be tested with it. The recall and jump gate confirmations were checked in the game on 14 November 2026.</li>
+  <li>AutoFarm:
+    <ul>
+      <li>whether real reports contain the defender's lifeform bonuses (without them, a target with satellites is refused with <code>combat_defender_data_missing</code>);</li>
+      <li>the number of probes from the espionage rule;</li>
+      <li>the newbie and strong-player protection flags of the galaxy view, and banned players (skipped to be safe);</li>
+      <li>the fuel of a recalled attack, counted as lost;</li>
+      <li>deleting several reports in one request: so far it was seen with one report only.</li>
+    </ul>
+  </li>
+  <li>Signals on OGame 13 pages: the number of Directives rewards on a full page, and the attack alert while a fleet is really on its way. If full pages do not carry the number, Directives finds new rewards only at its daily full read.</li>
+  <li>The Discord bot: its tests run against a simulated Discord. A first run on a real server should confirm the slash commands and their suggestions, the buttons, the invite link, and the mention that rings on a phone.</li>
+</ul>
+</details>
+</section>
+
+<footer>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/limits.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+</footer>
+
+</main>
+</div>
+
+</body>
+</html>
