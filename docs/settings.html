@@ -70,17 +70,17 @@
 <p>A setting missing from a file takes its default. Every feature and every <code>Active</code> option is off, and lists and coordinates are empty. Other values, such as intervals and thresholds, are the recommended ones.</p>
 <p>"Reset to default" removes the key from the file. The web interface always shows the value the bot really uses.</p>
 <p>Turning a feature on or off from the Map, the Deck or the bots does not change these settings: that choice is kept in <code>data/&lt;instance&gt;/overrides.json</code>. Writing the feature's <code>Active</code> setting ends it. See <a href="interface.html#feature-switch">Turning a feature on or off</a>.</p>
-<p>Three defaults are not what you might expect: <code>Expeditions.PrimaryToKeep</code> and <code>Expeditions.MinPrimaryToSend</code> are 0, <code>General.Proxy.LoginOnly</code> is false, and <code>WebUI.Enable</code> is true.</p>
+<p>Four defaults are not what you might expect: <code>Expeditions.PrimaryToKeep</code> and <code>Expeditions.MinPrimaryToSend</code> are 0, <code>General.Proxy.LoginOnly</code> is false, <code>WebUI.Enable</code> is true, and <code>Brain.Boosters.Active</code> is true: with the Brain on, TGoat proposes booster activations.</p>
 <p>Example: this instance file turns one feature on and sets one number. Everything else is default.</p>
 <pre><code>"Settings": {
   "AutoFarm": { "Active": true, "NumProbes": 12 }
 }</code></pre>
 
 <h3 id="settings-new">New settings and options</h3>
-<p>The November 2026 reviews of the Brain, Expeditions, Harvest, Discovery and Colonize added the settings below, with a few for Directives and the logs. The Settings page shows the help of each one.</p>
+<p>TGoat added the settings below in November 2026, most of them after the reviews of each feature. The Settings page shows the help of each one.</p>
 <p>A behaviour that changes how the account plays is an option, off by default, such as the night round of expeditions, breaks, Directives, or settling a lifeform on planets that have none.</p>
 <details>
-<summary>Options off by default (10)</summary>
+<summary>Options off by default (11)</summary>
 <div class="table-wrap" role="region" aria-label="Options off by default" tabindex="0">
 <table>
   <caption class="sr-only">Options that are off by default</caption>
@@ -88,9 +88,10 @@
   <tbody>
     <tr><th scope="row"><code>Expeditions.NightRound</code></th><td>Just before bedtime, every free expedition slot leaves and comes back shortly after the wake-up. Needs sleep mode.</td></tr>
     <tr><th scope="row"><code>SleepMode.Breaks.Active</code></th><td>1 to 2 breaks a day, 30 to 90 minutes, more than 2 hours from waking up and from bedtime. No fleet leaves and no queue restarts; the Defender keeps watching. Afterwards, the features start again one by one.</td></tr>
-    <tr><th scope="row"><code>SleepMode.Breaks.DefenderAtSleepPace</code></th><td>During a break, the Defender checks at its night pace and, as at night, neither reads your fleets nor shows activity.</td></tr>
+    <tr><th scope="row"><code>SleepMode.Breaks.DefenderAtSleepPace</code></th><td>During a break, the Defender watches as at night (<code>Defender.NightWatch</code>) instead of at its day pace.</td></tr>
     <tr><th scope="row"><code>Brain.AutoMine.SpendStockUnderAttack</code></th><td>Under attack, what the fleet-save cannot carry goes into the best affordable build. Without the Defender, attacks are seen late.</td></tr>
     <tr><th scope="row"><code>AutoHarvest.HarvestOtherDF</code></th><td>Also harvests the fields your attacks leave and the other positions of your systems.</td></tr>
+    <tr><th scope="row"><code>Defender.HideResourcesInBuild.Active</code></th><td>When an attack will plunder a celestial, starts the build that keeps the most out of the plunder 1 to 4 minutes before the impact, within the Brain's maximum levels, and cancels it 20 to 90 seconds after the last wave: the game gives the cost back. Only what the fleet-save leaves counts. A build TGoat did not start is never cancelled; if the cancel fails, the build finishes.</td></tr>
     <tr><th scope="row"><code>Brain.LifeformAutoMine.BuildNonEconomic</code></th><td>Also builds lifeform buildings that produce nothing, after everything else.</td></tr>
     <tr><th scope="row"><code>Directives.Active</code></th><td>Collects the rewards of the Directives once their missions are done: Dark Matter and resources. TGoat looks at the Directives menu every 2 to 6 hours and opens the chapters only when it shows a reward. <code>Directives.Notify</code> says when you get a notice.</td></tr>
     <tr><th scope="row"><code>Directives.Missions.MetalMineOutput</code></th><td>When a directive asks for it, the Metal Mine of your first planet goes to 90%, then back to 100%. Only when it is at 100%.</td></tr>
@@ -101,7 +102,7 @@
 </div>
 </details>
 <details>
-<summary>All new settings (55)</summary>
+<summary>All new settings (79)</summary>
 <div class="table-wrap" role="region" aria-label="New settings" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Settings added by the November 2026 reviews</caption>
@@ -121,6 +122,12 @@
     <tr><th scope="row"><code>Brain.AutoMine.MaxSolarSatellites</code></th><td class="num">0</td><td>Most solar satellites per planet; 0: no limit.</td></tr>
     <tr><th scope="row"><code>Brain.AutoMine.SpendStockUnderAttack</code></th><td>false</td><td>See the options above.</td></tr>
     <tr><th scope="row"><code>Brain.LifeformAutoMine.BuildNonEconomic</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoMine.ProductionFactors.BalanceEnergyDeficit</code>, <code>FusionOnlyAsNeeded</code>, <code>CrawlersOverdrive</code></th><td>Suggest</td><td>Output percentages AutoMine may change, one planet at a time: the deuterium synthesizer or the crawlers while energy is short; the fusion reactor only as far as the planet needs; crawlers up to 150% on a Collector account while energy is left over. Off, Suggest (sent to you with its gain, made when you accept) or Automatic. Only a setting at 100% or one TGoat set, never the metal or crystal mine or an excluded planet; back to 100% once its reason is gone.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoMine.ProductionFactors.MinGainPercent</code></th><td class="num">1%</td><td>A setting other than 100% is used only if it adds at least this share to what the planet produces, at your trade rate.</td></tr>
+    <tr><th scope="row"><code>Brain.Boosters.Active</code></th><td>true</td><td>Reads the inventory now and then and handles the boosters you own, as <code>Brain.Boosters.Mode</code> says. Works with the Brain on.</td></tr>
+    <tr><th scope="row"><code>Brain.Boosters.Mode</code></th><td>Suggest</td><td>Off (the report lists the boosters waiting), Suggest (each activation sent with its reason, made when you accept, after checking the reason still holds) or Automatic. TGoat never buys a booster with Dark Matter.</td></tr>
+    <tr><th scope="row"><code>Brain.Boosters.Metal</code>, <code>Crystal</code>, <code>Deuterium</code>, <code>Energy</code></th><td>true</td><td>Which boosters TGoat handles. An energy booster goes only to a planet that lacks energy.</td></tr>
+    <tr><th scope="row"><code>Brain.Boosters.RarityOrder.*</code></th><td>1, 2, 3, 4</td><td>Order of the rarities: Platinum, Gold, Silver, Bronze. The first goes to the planet where a booster gains the most; 0 never activates that rarity. A list on the Settings page.</td></tr>
     <tr><th scope="row"><code>Brain.LifeformAutoResearch.MaxShipResearchLevel</code></th><td class="num">0</td><td>Highest level of lifeform ship technologies; 0: never.</td></tr>
     <tr><th scope="row"><code>Brain.LifeformAutoResearch.SlotChoice</code></th><td>Guaranteed</td><td>Technology of a research slot that opens: Guaranteed (the one the game guarantees), Random (a draw among every lifeform you discovered) or Never (you choose it). The choice is final unless you reset the tier.</td></tr>
     <tr><th scope="row"><code>Brain.LifeformAutoResearch.MaxHoursWithoutYield</code></th><td class="num">24 h</td><td>Largest cost of a lifeform research level without a production bonus, in hours of the planet's production; 0: never.</td></tr>
@@ -128,10 +135,18 @@
     <tr><th scope="row"><code>Brain.AutoDefence.TargetHoursOfProduction</code></th><td class="num">24 h</td><td>Defences worth this many hours of the celestial's production.</td></tr>
     <tr><th scope="row"><code>Brain.AutoDefence.Ratio.*</code></th><td class="num">25 / 15 / 10 / 25 / 0 / 25%</td><td>Share of that budget per defence type, by cost.</td></tr>
     <tr><th scope="row"><code>Brain.BuyOfferOfTheDay.MaxPriceHours</code></th><td class="num">6 h</td><td>Highest price, in hours of the account's production; 0: no limit.</td></tr>
+    <tr><th scope="row"><code>Defender.NightWatch</code></th><td>OnAlert</td><td>How the Defender watches during sleep, and during breaks with <code>SleepMode.Breaks.DefenderAtSleepPace</code>. OnAlert: no request to the game while no message comes; each new message (a spy report, your fleets' reports, a private message) brings a check 1 to 3 minutes later, and a reconnection of the game's channel at night one check too. An attack sent without a fresh espionage report is not seen. Every 20 to 40 minutes TGoat checks that the game still listens on the channel, without loading a game page; if the game ignores that check, TGoat opens a fresh connection every 20 to 40 minutes instead. Always: a check at the sleep pace (<code>Defender.SleepCheckIntervalMin</code> and <code>Max</code>, 4 to 8 minutes), so one planet looks active all night. Never: no new check; an action already planned (a fleet-save, a recheck before an impact, hiding resources in a build, a missile defence held by a passing error) still happens, then nothing is sent, and an attack only reported is not followed. When OnAlert cannot work (the game's channel fails, stops answering, or reopens too often), you get a warning and the night goes on as Always.</td></tr>
+    <tr><th scope="row"><code>Defender.HideResourcesInBuild.Active</code></th><td>false</td><td>See the options above.</td></tr>
+    <tr><th scope="row"><code>Defender.HideResourcesInBuild.MinLootAvoided</code></th><td class="num">50,000</td><td>Plunder avoided, in deuterium value, below which no build is started: each build and cancel is a visible move.</td></tr>
+    <tr><th scope="row"><code>Defender.HideResourcesInBuild.UseResearch</code></th><td>true</td><td>Also uses a research on the attacked planet when the research queue is free.</td></tr>
+    <tr><th scope="row"><code>Defender.HideResourcesInBuild.WhileAsleep</code></th><td>false</td><td>Also hides resources during sleep and during breaks at the sleep pace. Off, the account stays still, as a sleeping player would.</td></tr>
+    <tr><th scope="row"><code>Defender.NightWatchFollowUp</code></th><td>true</td><td>With OnAlert, when the check after a message sees no attack, one more check 8 to 15 minutes after the message. Most attackers send their fleet a few minutes after reading their spy report: this second look catches them, for one more request per message. A later message, not in the same burst as the first, gets its own look 8 to 15 minutes later. Later attacks are still not seen. The delays follow the attacker: the play mode does not change them.</td></tr>
     <tr><th scope="row"><code>Expeditions.CargoShare</code></th><td class="num">75%</td><td>Cargo sized for this share of the largest find.</td></tr>
     <tr><th scope="row"><code>Expeditions.MinFreeSlotsForWave</code></th><td class="num">0</td><td>Free expedition slots that start a wave; 0: a third of them.</td></tr>
     <tr><th scope="row"><code>Expeditions.NightRound</code></th><td>false</td><td>See the options above.</td></tr>
     <tr><th scope="row"><code>Expeditions.BuildFleet</code></th><td>Suggest</td><td>Ships expeditions lack. Pathfinders for a Discoverer, one for each expedition an origin sends, valued by the find model alone. More of the main ship for any class, only with every slot in use and once 7 days and 20 results show finds cut by a full hold (measured, or by the find model fitted to those finds), each added ship paying back within the limit below. Off: never. Suggest: sent to you with cost, value per day and payback, built when you accept, never more than you accepted. Automatic: one order per check. Ships are paid from the origin's surplus, never from what the Brain keeps for builds ranked before cargo ships.</td></tr>
+    <tr><th scope="row"><code>LoginBrowser</code></th><td>Auto</td><td>Browser that TGoat opens for <a href="start.html#browser-login">Sign in with your browser</a> and <code>tgoat login</code>, on the computer that runs TGoat. Auto: your default browser when it is Chrome, Edge, Brave, Chromium or Opera, else the first of them installed, and Firefox only when none is. Or the full path of a browser program.</td></tr>
+    <tr><th scope="row"><code>WebUI.AllowedHosts</code></th><td>empty</td><td>Extra host names the interface answers to, for example a LAN name or the name a reverse proxy forwards; TGoat does not listen on them. Host names only, separated by commas. The Settings page refuses an entry with <code>http://</code> or a port; one written in the file is ignored, with a warning in the log. Applies after a restart. See <a href="start.html#reverse-proxy">Reaching TGoat by a name</a>.</td></tr>
     <tr><th scope="row"><code>Expeditions.BuildFleetMaxPaybackDays</code></th><td class="num">10 days</td><td>Longest payback of a ship build for expeditions; for the main ship, of each added ship. The risk of losing the ships is counted.</td></tr>
     <tr><th scope="row"><code>Expeditions.Escort</code></th><td>Strongest</td><td>The combat ship that joins large expeditions. Strongest: the strongest one not slower than the main ships, as before. None: no combat ship leaves, so none can be lost to a black hole or a battle.</td></tr>
     <tr><th scope="row"><code>SleepMode.Breaks.Active</code></th><td>false</td><td>See the options above.</td></tr>
@@ -152,9 +167,12 @@
     <tr><th scope="row"><code>AutoFarm.BuildBreakers</code></th><td>Suggest</td><td>Combat ships for targets AutoFarm turns down for their defences or ships: Off, Suggest (TGoat proposes the cheapest fleet that pays back, with its cost, loot per day, payback and risk) or Automatic (builds it within the Brain's reserves, one order per pass, only if your AutoFarm settings would raid with it). See <a href="changes.html#breakers">Combat ships for defended targets</a>.</td></tr>
     <tr><th scope="row"><code>AutoFarm.BreakerMaxPaybackDays</code></th><td class="num">3 days</td><td>Longest payback of a combat fleet; above it, nothing is proposed or built.</td></tr>
     <tr><th scope="row"><code>Notifications.Level</code></th><td>Everything</td><td>What an instance sends to Telegram and Discord: Attacks (attacks only), Important (attacks, warnings, errors, sleep mode and proposals) or Everything. The web interface still shows everything. The <a href="interface.html#ui-assistant">setup assistant</a> asks this question.</td></tr>
+    <tr><th scope="row"><code>Notifications.OrionReward</code></th><td>true</td><td>One notification when the game shows an Orion reward waiting to be claimed (claim it within the hour). The mark TGoat reads comes from the game's script and has not yet been seen on a real Orion page. TGoat sees it only when it loads a full game page, so not at night with <code>Defender.NightWatch</code> on <code>OnAlert</code>. TGoat never claims it.</td></tr>
     <tr><th scope="row"><code>Logging.Style</code> (<code>tgoat.json</code>)</th><td>Readable</td><td>How a log line looks in the console, <code>TGoat.log</code> and the Logs page: Readable (time, instance › feature, the message), Levels (<code>[Warning]</code>) or TBot (<code>[17:56:25 INF Main|Directives]</code>). Applies at once.</td></tr>
     <tr><th scope="row"><code>Logging.Colours</code> (<code>tgoat.json</code>)</th><td>Levels and features</td><td>Levels and features, Levels only, or None. The <code>NO_COLOR</code> environment variable turns the console colours off.</td></tr>
     <tr><th scope="row"><code>Logging.FeatureColours</code> (<code>tgoat.json</code>)</th><td>empty</td><td>A feature's colour instead of the one TGoat gives it. Pick it on the Logs page, under <strong>Colours</strong>.</td></tr>
+    <tr><th scope="row"><code>Update.Mode</code> (<code>tgoat.json</code>)</th><td>Notify</td><td>New versions from GitHub: Notify (tells you once, Install button in the web interface), Install (installs by itself at a quiet moment) or Never (never contacts GitHub). See <a href="start.html#updates">Updates</a>.</td></tr>
+    <tr><th scope="row"><code>Update.Channel</code> (<code>tgoat.json</code>)</th><td>Alpha in an alpha build, else Stable</td><td>Alpha follows every version, test versions included; Stable only the stable ones.</td></tr>
   </tbody>
 </table>
 </div>
@@ -162,7 +180,7 @@
 <details>
 <summary>A changed meaning, settings that do nothing yet, changed defaults, zone checks (4)</summary>
 <p>One setting changed meaning: <code>AutoFarm.CombatPlanner.MaxFailureProbabilityPercent</code> (1%) is the risk of losing a ship that an attack may carry. It also sets the last check before sending: 773 simulated battles of the fleet that leaves, at most 3 with a ship lost.</p>
-<p>Three settings exist but do nothing yet: <code>Defender.Autofleet.UseJumpGate</code>, <code>Defender.Autofleet.ExpeditionAsLastResort</code> and <code>General.ExchangeRate</code>. TGoat already values resources at 2.5 : 1.5 : 1.</p>
+<p>Two settings exist but do nothing yet, whatever their help on the Settings page says: <code>Defender.Autofleet.UseJumpGate</code> and <code>Defender.Autofleet.ExpeditionAsLastResort</code>. <code>General.ExchangeRate</code> is read only by the production settings of AutoMine; everything else values resources at 2.5 : 1.5 : 1.</p>
 <p>Some defaults changed too, such as <code>Brain.AutoMine.MaxDaysOfInvestmentReturn</code> (60 days) and <code>Expeditions.MaxExpeditionsPerOrigin</code> (0, no limit). The full list is under <a href="from-tbot.html#defaults">Changed defaults</a>. A value you wrote stays.</p>
 <p>Colonize zones are checked when you save them. Systems or positions in the wrong order, and 0 planets wanted, are refused. A zone cannot cross the end of the galaxy: split it in two.</p>
 </details>
@@ -207,7 +225,7 @@
 <h3 id="settings-device">Simulated device</h3>
 <p>Each account signs in as its own PC: a current Windows or macOS computer with Chrome or Edge, your computer's time zone (or the universe's country behind a proxy), and the universe's language. TGoat draws it once, when the instance is created, and keeps it, like one real PC.</p>
 <p>The values are in the instance file, under <code>Credentials.DeviceConf</code>, where you can read them. The browser version moves forward by itself over time.</p>
-<p>To get a new device, remove the device folder, <code>data/&lt;id&gt;/device/tgoat-&lt;id&gt;</code>, while TGoat is stopped. Editing the values alone changes nothing. Gameforge will see a new PC, so keep a <a href="start.html#token">session token</a> at hand for the next login.</p>
+<p>To get a new device, remove the device folder, <code>data/&lt;id&gt;/device/tgoat-&lt;id&gt;</code>, while TGoat is stopped. Editing the values alone changes nothing. Gameforge will see a new PC: if it asks for a check at the next login, <a href="start.html#browser-login">sign in with your browser</a>.</p>
 
 <h3 id="settings-instances">Managing instances</h3>
 <p>Each instance is one file in <code>config/instances/</code>. Adding a file adds the instance, and removing it removes the instance, without a restart.</p>

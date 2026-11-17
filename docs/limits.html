@@ -46,15 +46,18 @@
 <aside class="in-short" aria-label="In short">
 <ul>
   <li>This page lists what TGoat does not do yet, or does only in part, and what real play has not confirmed.</li>
-  <li>For two-factor authentication or the <code>gf-pow-captcha</code>, log in with a <a href="start.html#token">session token</a>.</li>
+  <li>For two-factor authentication or the <code>gf-pow-captcha</code>, <a href="start.html#browser-login">sign in with your browser</a>.</li>
   <li>The web interface has no login, and <code>secrets.json</code> is plain text: keep both on your own computer.</li>
   <li>A sleep you asked for, a planned ghost sleep, a break and pending Discord confirmations end when TGoat restarts.</li>
   <li>If something on the <a href="#to-check">list to check</a> misbehaves for you, <a href="start.html#alpha-report">report it</a>.</li>
 </ul>
 </aside>
 <ul>
-  <li><strong>Two-factor authentication:</strong> there is no setting for the secret yet. Log in with the session token; you pass the two-factor step in your browser.</li>
-  <li><strong><code>gf-pow-captcha</code></strong> is not supported and will not be. Log in with the session token.</li>
+  <li><strong>Two-factor authentication:</strong> there is no setting for the secret yet. <a href="start.html#browser-login">Sign in with your browser</a>, where you pass the two-factor step yourself.</li>
+  <li><strong><code>gf-pow-captcha</code></strong> is not solved by TGoat and will not be. <a href="start.html#browser-login">Sign in with your browser</a> instead.</li>
+  <li><strong>Sign in with your browser</strong> is built for Windows, macOS and Linux, with Chrome, Edge, Brave, Chromium, Opera and Firefox 128 or later. Checked live on Windows with Edge, Chrome and Firefox (November 2026). Brave, Chromium, Opera, macOS and Linux are built and tested with fakes, not yet checked live. On macOS, if TGoat crashes during a sign-in, the browser window can stay open until the next sign-in or start, which closes it.</li>
+  <li><strong>The sign-in window needs a screen</strong> on the computer that runs TGoat, and while it is open, another user logged in to that computer could read the session token. Use it on a computer only you use. At most 8 sign-ins run at once.</li>
+  <li><strong>The night watch on alert</strong> (<code>Defender.NightWatch</code>, the default) checks only after a game message, usually the attacker's spy report. An attack sent without one, or more than about 15 minutes after it, is not seen until the wake-up. <code>Always</code> checks all night, at the cost of activity on one planet.</li>
   <li><strong>The web interface has no login</strong>, yet it handles passwords. It listens on <code>localhost</code> only by default. Keep it that way unless you protect it yourself.</li>
   <li><strong><code>secrets.json</code> is plain text.</strong> Only you can read it on Linux and macOS. On Windows nothing restricts it, so keep the folder private.</li>
   <li><strong>Secret history:</strong> only the previous version is kept, in <code>secrets.json.bak</code>. A password changed in two places at once is not flagged as a conflict, so change it in one place at a time.</li>
@@ -65,7 +68,7 @@
   <li><strong>Manual mode</strong> ends 30 seconds after your last game request through the game proxy. Start it again when you need it.</li>
   <li><strong>A sleep you asked for</strong> (<code>/sleep</code>, <em>Sleep for…</em>), a planned ghost sleep and a running break end when TGoat restarts or when you disable the instance. A new connection to the game keeps them.</li>
   <li><strong>Directives:</strong> TGoat does only two missions itself (see <a href="settings.html#settings-new">its settings</a>). The others are done by its features as they play, or left to you: alliance, buddy, renaming, class, merchant.</li>
-  <li><strong>Rewards event tasks and Project Orion missions</strong> are not handled yet.</li>
+  <li><strong>Rewards event tasks and Project Orion missions</strong> are not handled yet. TGoat only reads past Orion and tells you when a reward waits; it never scans, sends fleets to anomalies or claims. It protects only fleets on your planets and moons: for a fleet at an anomaly, a hostile fleet gets a notice, no fleet-save.</li>
   <li><strong>Renaming an instance while it runs</strong> empties the AutoFarm page of the lines written under the old name. New lines fill it again. The old ones stay on the Logs page and in the files.</li>
   <li><strong>Discord bot:</strong>
     <ul>
@@ -84,14 +87,13 @@
 </ul>
 
 <h3 id="to-check">Still to be checked in the game</h3>
-<p>Real play has not confirmed these yet: the login with a token or the image captcha, several formulas and game rules, what lifeforms, expeditions and Discovery read in the game, AutoFarm's report reading, and the Discord bot on a real server. If one misbehaves for you, <a href="start.html#alpha-report">report it</a>.</p>
+<p>Real play has not confirmed these yet: the image captcha, the sign-in from another computer, an update from a real release, several formulas and game rules, what lifeforms, expeditions and Discovery read in the game, AutoFarm's report reading, and the Discord bot on a real server. If one misbehaves for you, <a href="start.html#alpha-report">report it</a>.</p>
 <details>
-<summary>Everything still to be checked (16)</summary>
+<summary>Everything still to be checked (20)</summary>
 <ul>
   <li>A full login with the image captcha solved by the built-in solver.</li>
-  <li>Assisted login:
+  <li>Assisted login (a browser's token with TGoat's simulated device was accepted in the game, November 2026):
     <ul>
-      <li>the lobby accepts a browser's token together with TGoat's simulated device;</li>
       <li>a refused token really gets HTTP 401 or 403;</li>
       <li>how long a token lives (the browser cookie lasts 90 days when you stay signed in).</li>
     </ul>
@@ -138,6 +140,10 @@
       <li>deleting several reports in one request: so far it was seen with one report only.</li>
     </ul>
   </li>
+  <li>Sign in from another computer (<code>tgoat login --to</code>): tested with fakes, not yet run against a TGoat on a real server.</li>
+  <li>Updates: checking, downloading, installing and rolling back were tested against a simulated GitHub. The first real update will be the next alpha.</li>
+  <li>The night watch over a whole night. The channel's alert on a spy report and its health check were checked in the game in short tests.</li>
+  <li>Project Orion in the event list: how it shows a hostile fleet on your fleet at an anomaly. TGoat decides by the destination alone.</li>
   <li>Signals on OGame 13 pages: the number of Directives rewards on a full page, and the attack alert while a fleet is really on its way. If full pages do not carry the number, Directives finds new rewards only at its daily full read.</li>
   <li>The Discord bot: its tests run against a simulated Discord. A first run on a real server should confirm the slash commands and their suggestions, the buttons, the invite link, and the mention that rings on a phone.</li>
 </ul>

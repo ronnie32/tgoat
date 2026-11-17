@@ -10,7 +10,7 @@ bumps the alpha number (`alpha.2`, `alpha.3`, and so on).
 **Alpha builds may change settings and files between versions.** Back up the
 `config/` and `data/` folders before replacing the program. Upgrades between
 alphas are not guaranteed to migrate your files until the first stable
-release. The full guide is [online](https://ronnie32.github.io/tgoat/), and its
+release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
 
 ## [0.1.0-alpha.1] - Unreleased
@@ -20,6 +20,42 @@ Expect bugs, and try it on a secondary account first.
 
 ### Added
 
+- Sign in with your browser: TGoat opens a browser window on the Gameforge
+  login, you sign in and pass any check yourself (captcha, `gf-pow-captcha`,
+  two-factor), and TGoat keeps the session token and closes the window. Use
+  the **Sign in with your browser** button in Settings (Account) or in Add an
+  account, `tgoat login`, or the new browser choice of `tgoat setup`. The
+  window goes through the account's proxy. In Add an account, the lobby and
+  proxy are locked during the sign-in, and on a running instance Settings
+  asks before it starts. Pasting the token by hand still works.
+- `tgoat login --to <address> --code <code>`, and the **Sign in from another
+  computer** button: sign in on your own computer for a TGoat that runs on a
+  server (VPS). Its traffic leaves through the server, and the command checks
+  the address and the browser before it takes the code. See
+  [TGoat on another computer](https://ronnie32.github.io/tgoat/start.html#remote-login).
+- Setting `LoginBrowser`: `Auto` (default) or the full path of the browser
+  that opens for the sign-in.
+- Setting `WebUI.AllowedHosts`: extra host names the web interface answers to.
+  TGoat now answers only `localhost`, IP addresses and the names it knows, and
+  refuses any other with a 403 (see
+  [Reaching TGoat by a name](https://ronnie32.github.io/tgoat/start.html#reverse-proxy)).
+- Updates from GitHub: TGoat checks the releases of ronnie32/tgoat a few
+  minutes after it starts, then about every 6 hours, and tells you once about
+  each new version, in the web interface, on Telegram and on Discord. The
+  banner at the top of every page has an **Install** button, and a **Cancel**
+  button while it installs. `Update.Mode` (in `tgoat.json`): Notify (default),
+  Install (installs by itself at a quiet moment: no attack being handled, no
+  fleet-save planned or flying, no ghost sleep planned, no fleet being sent,
+  no sign-in in progress, no manual mode, no sleep you asked for; it gives up
+  after 24 hours and tells you) or Never (never contacts GitHub);
+  `Update.Channel`: Alpha or Stable. A version is installed only if its
+  signature matches the TGoat release key, its archive matches the signed
+  checksum and it is newer than yours. A release that could not be verified is
+  reported without its name or a link, and update notices are plain text with
+  no link preview. If a new version fails
+  to start twice in a row, the previous one comes back by itself.
+  `tgoat version` prints the fingerprint of the release key. See
+  [Updates](https://ronnie32.github.io/tgoat/start.html#updates).
 - Setup assistant: a few questions (six at most, each already filled in from
   your account with the reason), then a plan of settings grouped by theme,
   each with a reason built from your account's numbers. Open it from the Map
@@ -115,8 +151,30 @@ Expect bugs, and try it on a secondary account first.
   this lasts, and when it sees again (forwarded to Telegram with the other
   warnings). Its retries slow down to its normal pace after 3 minutes, so a
   night-long outage does not flood the game with requests.
-- The bedtime notice says whether the Defender keeps watching during sleep, at
-  what pace, and what stays exposed: fleets not saved, failed fleet-saves,
+- `Defender.NightWatch` (OnAlert, Always, Never; default OnAlert): how the
+  Defender watches during sleep. Every request to the game marks a planet
+  active, so OnAlert sends nothing while no message comes. TGoat keeps the
+  game's notification channel open, through your proxy, as a browser's game
+  tab does; each new message (a spy report, your fleets' reports, a private
+  message) brings a check 1 to 3 minutes later, and a reconnection of the
+  channel at night one check too; a message of the evening keeps its checks
+  after bedtime. An attack sent without a fresh espionage report is not seen.
+  Every 20 to 40 minutes TGoat checks that the game still listens, without
+  asking the game anything; if the game ignores or refuses that check, it
+  opens a fresh connection every 20 to 40 minutes instead, before closing the
+  old one. If the channel fails, stops answering, cannot be reached to be
+  checked, reopens more than 4 times in an hour or your proxy refuses its
+  port, a warning, then checks every 4 to 8 minutes until the wake-up.
+  Always checks all night; Never starts no new check, but an action already
+  planned (a fleet-save, a recheck, hiding resources, a missile defence held
+  by a passing error) still happens.
+- `Defender.NightWatchFollowUp` (default on): with OnAlert, when the check
+  after a message sees no attack, one more check 8 to 15 minutes after the
+  message, to catch an attacker who sends his fleet after reading his spy
+  report; a later message, not in the same burst as the first, gets its own
+  look. The delays follow the attacker: the play mode does not change them.
+- The bedtime notice says how the Defender watches during sleep and what that
+  costs, and what stays exposed: fleets not saved, failed fleet-saves,
   resources.
 - Anti-ballistic missiles against a missile strike are ordered again at each
   check until the game accepts them, and never twice for the same strike; a
@@ -186,8 +244,8 @@ Expect bugs, and try it on a secondary account first.
     more than 2 hours away from waking up and from bedtime, with no fleet
     sent and no queue restarted. Afterwards the features start again one by
     one, and a reconnection does not end a break. The Defender keeps
-    watching; with `SleepMode.Breaks.DefenderAtSleepPace` it checks at its
-    night pace and, as at night, reads no fleets and shows no activity.
+    watching; with `SleepMode.Breaks.DefenderAtSleepPace` it watches as at
+    night (`Defender.NightWatch`).
   - `Brain.AutoMine.SpendStockUnderAttack`: under attack, what the fleet-save
     cannot carry goes into the best affordable build.
   - `AutoHarvest.HarvestOtherDF`: harvest the fields your attacks leave and
@@ -287,8 +345,41 @@ Expect bugs, and try it on a secondary account first.
 - A warning when the game session is lost too often: after three automatic
   logins in 30 minutes, TGoat stops logging in, sends one notification with
   the time it will try again, and does not repeat it for 30 minutes.
+- Project Orion (rolled out on 30 November 2026): TGoat keeps reading the game
+  correctly and never plays Orion. Anomalies are never targets. An attack on
+  your fleet at an anomaly is told apart from an attack on a planet. A building
+  TGoat does not know in a production queue, such as the Interstellar Anomaly
+  Scanner, no longer hides the queue. One notification tells you when an Orion
+  reward waits to be claimed in the game within the hour
+  (`Notifications.OrionReward`, on by default). TGoat sees it only when it
+  loads a full page, so not at night with `Defender.NightWatch` on `OnAlert`.
+  The mark it reads comes from the game's script and has not yet been seen on
+  a real Orion page.
+- `Defender.HideResourcesInBuild` (off by default): when an attack will
+  plunder a celestial, the build that keeps the most out of the plunder
+  starts 1 to 4 minutes before the impact and is cancelled 20 to 90 seconds
+  after the last wave; the game gives its cost back. Only what the
+  fleet-save leaves counts, nothing is started below `MinLootAvoided`
+  (50,000 in deuterium value), and a build TGoat did not start is never
+  cancelled. Not during sleep unless `WhileAsleep` is on.
+- `Brain.Boosters` (Suggest by default, with the Brain on): the boosters
+  already in your inventory are proposed where and when they gain the most,
+  and activated once you accept; Automatic activates them alone. An energy
+  booster goes only to a planet that lacks energy. TGoat never buys one.
+- `Brain.AutoMine.ProductionFactors` (each Suggest by default): while energy
+  is short, AutoMine may lower the deuterium synthesizer or the crawlers; it
+  runs the fusion reactor only as far as the planet needs; on a Collector
+  account it raises crawlers up to 150% while energy is left over. Never the
+  metal or crystal mine, and back to 100% once the reason is gone.
+- Guide: a section on the home page, "How TGoat keeps its footprint small",
+  says what TGoat does to send fewer requests and look like one ordinary
+  player, and what it cannot hide.
 
 ### Changed
+
+- The messages of a refused session token, of `gf-pow-captcha` and of
+  two-factor now point at **Sign in with your browser** and `tgoat login`. An
+  instance whose login failed gets a link to it on its card.
 
 - AutoMine and the lifeform buildings read fewer game pages: at startup the
   first visit of each planet reuses what the planning has just read, and
@@ -420,6 +511,10 @@ Expect bugs, and try it on a secondary account first.
 - Defender: when a game page TGoat loads shows the attack alert, the Defender
   checks the event list 5 to 15 seconds later instead of waiting for its next
   check. One extra check per alert, no extra request otherwise.
+- Defender: the attacked planet is read only when an option uses its ships
+  (weak attack, little at stake, spying back, fleet-save), at most once per
+  check. Each read marks the planet active. At night, a check that finds no
+  attack is a single request.
 - Directives: the number of rewards waiting is read from the pages TGoat
   already loads, instead of a request for the menu. When that number goes up,
   the next collect comes forward, never less than 30 to 60 minutes after the
@@ -434,6 +529,16 @@ Expect bugs, and try it on a secondary account first.
 
 ### Fixed
 
+- Defender: when the attacked planet had no ship to save, the attack was
+  closed for an hour, so a fleet that landed there before the impact stayed
+  exposed. The ships are now read once more shortly before the impact
+  (`Defender.Autofleet.DelayedFleetSave.SafetySeconds` before it, or 2
+  minutes), and a fleet that landed meanwhile is saved.
+- Defender: a fleet-save no longer comes back too early, or gives up,
+  because your computer's clock is wrong: TGoat times it with the game's
+  arrival time and the server's clock. If the arrival time cannot be read,
+  the fleet leaves at once, you get a notice, and it leaves again each time
+  it comes back while the attack is listed.
 - AutoFarm: probes whose fleet left the fleet list more than 10 minutes
   before a pass (restart, long pass, sleep) no longer lose their espionage
   report; the inbox is read before a target is probed again.
@@ -526,6 +631,10 @@ Expect bugs, and try it on a secondary account first.
   mine's energy twice.
 - The shipyard is raised only for the defences the AutoDefence budget buys.
 - No research lab is built while AutoResearch is off.
+- On a new account, the opening research order asks for research lab 1 after
+  the first mines (metal mine 5, crystal mine 3, when AutoMine's start order
+  runs), then labs 2 and 3 as its researches need them. TBot built the first
+  lab only once it cost less than the next mine.
 - Energy built before the next mine no longer says "energy deficit".
 - A feature that was stopped kept holding its fleet slots against lower-ranked
   features. A feature turned off now holds none, and one turned on counts even
@@ -554,6 +663,11 @@ Expect bugs, and try it on a secondary account first.
 - Changing the Discord bot token or server no longer loses a notification
   sent while the bot restarts: the new bot takes over the notifications
   before the old one disconnects.
+- The settings history no longer keeps copies of `secrets.json`. TGoat
+  copied it there at startup and during `tgoat setup`, with the e-mail, the
+  proxy login and the Discord webhook in clear. The next start deletes those
+  copies, also in the folders that `tgoat import --again` set aside, and
+  logs how many it removed.
 
 ### Removed
 

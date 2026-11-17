@@ -55,6 +55,12 @@
         <li><a href="#hl-game">More of the game</a></li>
       </ol>
     </li>
+    <li><a href="#footprint">How TGoat keeps its footprint small</a>
+      <ol>
+        <li><a href="#fp-requests">Fewer requests</a></li>
+        <li><a href="#fp-player">Like one ordinary player</a></li>
+      </ol>
+    </li>
     <li><a href="#where">Where to start</a></li>
   </ol>
 </nav>
@@ -118,11 +124,8 @@
 <section class="group" aria-labelledby="safety">
 <h3 id="safety">Safety and stealth</h3>
 <ul>
-  <li><a href="settings.html#settings-device"><strong>A device of its own.</strong></a> Each account gets its own plausible PC, written in its instance file. TGoat connects like that PC's browser.</li>
-  <li><strong><a href="changes.html#requests">A human pace.</a></strong> 1.5 to 8 seconds between two requests, and a 15 to 45 second break every 30 to 70 requests.</li>
-  <li><strong><a href="changes.html#defender">A Defender that never sleeps.</a></strong> It keeps watching in sleep mode and, when every fleet slot is taken, frees one for the fleet-save. If it cannot read the attacks, it warns you, and again every 15 minutes until it sees again.</li>
-  <li><strong><a href="changes.html#requests">Fewer requests.</a></strong> Starting the Brain: 104 reads → 47 on a simulated game. A probe: 1 request instead of about 10. Deleting 15 reports: 19 requests instead of 47. The server time: no request at all.</li>
-  <li><strong><a href="start.html#login">Your real IP stays hidden.</a></strong> If the proxy is badly configured, TGoat waits for you to fix it. It never connects without it.</li>
+  <li><strong><a href="changes.html#defender">A Defender that never sleeps.</a></strong> At night it waits for the game's messages, such as a spy report, then checks. It frees a fleet slot for the fleet-save when all are taken, and warns you when it cannot read the attacks.</li>
+  <li><strong><a href="#footprint">A small footprint.</a></strong> Fewer requests, one plausible PC per account, the account's proxy for everything and a human pace. <a href="#footprint">How TGoat keeps its footprint small</a>.</li>
 </ul>
 </section>
 
@@ -131,6 +134,7 @@
 <ul>
   <li><strong><a href="changes.html#autofarm">Raids that pay.</a></strong> AutoFarm simulates the battle against any defended target, checks the player is still inactive, and attacks only when the loot is worth the fuel. The AutoFarm page gives the reason for every target.</li>
   <li><strong><a href="changes.html#expeditions">Expeditions and explorations.</a></strong> Fleets sized for the find the game allows, and the results of the last 24 hours and 7 days in the reports.</li>
+  <li><strong><a href="interface.html#ui-proposals">Ships it lacks, proposed.</a></strong> Pathfinders and cargo ships for expeditions, combat ships for defended targets, each with its cost and payback. Built when you accept.</li>
   <li><strong><a href="changes.html#brain">An economy that reasons.</a></strong> Mines, lifeform buildings and research chosen by return on investment, with a reason for each choice.</li>
 </ul>
 </section>
@@ -150,7 +154,8 @@
 <h3 id="easier">Easier setup</h3>
 <ul>
   <li><strong><a href="from-tbot.html#import">Your TBot settings, imported.</a></strong> On its first start, TGoat imports TBot's <code>settings.json</code> and reports what it dropped. Your old files are never changed.</li>
-  <li><strong><a href="start.html#token">Log in with a session token.</a></strong> Sign in with your own browser, then paste the token into TGoat. It logs in without a captcha or your password.</li>
+  <li><strong><a href="start.html#browser-login">Sign in with your browser.</a></strong> TGoat opens a browser window on the Gameforge login, you pass any captcha or two-factor yourself, and TGoat keeps the session. It works for a TGoat on a server too.</li>
+  <li><strong><a href="start.html#updates">Signed updates.</a></strong> TGoat tells you about each new version and can install it at a quiet moment, only if the TGoat release key signed it.</li>
   <li><strong><a href="interface.html#ui-assistant">A setup assistant.</a></strong> A few questions, then settings that fit your account, each with its reason. Nothing changes until you click Apply, and every change can be restored.</li>
   <li><strong><a href="settings.html#settings-profiles">Profiles and history.</a></strong> Share settings between accounts, load a profile for a few hours, and restore an earlier version.</li>
 </ul>
@@ -179,6 +184,7 @@
   <li><a href="settings.html#settings-new"><strong>Lifeform research slots.</strong></a> When a slot opens, TGoat chooses its technology, the guaranteed one by default.</li>
   <li><a href="settings.html#settings-new"><strong>Lifeforms for your planets.</strong></a> Discovery can settle a lifeform on each planet that has none, Humans first (off by default).</li>
   <li><a href="interface.html#ui-results"><strong>What expeditions and explorations bring back.</strong></a> Read from the game's messages and shown in each feature's report.</li>
+  <li><a href="changes.html#fbf-settings-reload-and-notifications"><strong>Ready for Project Orion.</strong></a> TGoat keeps reading the game past Orion's anomalies and tells you when a reward waits. It never plays Orion.</li>
 </ul>
 </section>
 
@@ -187,6 +193,69 @@
 <p>TGoat's formulas were checked against the official data of 30 universes and against 2,100 flights in the game. Its fuel figures match the game exactly. Coming from TBot, expect the Brain and AutoFarm to choose differently: TBot's numbers were often wrong.</p>
 <p><a href="changes.html#calc">All calculation fixes</a>.</p>
 </section>
+</section>
+
+<section aria-labelledby="footprint">
+<h2 id="footprint">How TGoat keeps its footprint small</h2>
+<p>The game sees a bot through what it sends: how many requests, how regular, from which address and from which browser. TGoat sends fewer requests than TBot did, spaces them like a player, and connects as one ordinary PC per account. This leaves less for Gameforge to notice. It does not make a bot invisible.</p>
+
+<section class="group" aria-labelledby="fp-requests">
+<h3 id="fp-requests">Fewer requests</h3>
+<div class="hl">
+<h4>The game's notification channel instead of polling</h4>
+<p>TGoat keeps the game's own notification channel open, as the game tab of a browser does. The channel marks no activity. At night the Defender sends no request until a message comes on it, such as a spy report. Every 20 to 40 minutes TGoat checks on the channel itself that it still works, without loading a game page.</p>
+<p>It does not avoid this: each check after a message marks your current planet active, and an attack sent without a spy report first is not seen. See <a href="interface.html#night-watch">the Defender while the instance sleeps</a>.</p>
+</div>
+<div class="hl">
+<h4>Probes from the galaxy view</h4>
+<p>AutoFarm spies with the galaxy view's spy button, as a player does: one request per target instead of a trip through the fleet pages. A 30-probe pass on a simulated game went from 309 requests to 40.</p>
+</div>
+<div class="hl">
+<h4>The whole empire in one view</h4>
+<p>The Empire view shows the stock, production, buildings, ships and defences of every planet in one page, and of every moon in another. AutoMine and the lifeform buildings start from it, and the boosters and the setup assistant reuse it, instead of opening each planet. Starting the Brain on a simulated game of 8 planets and 4 moons takes 47 reads instead of 104.</p>
+</div>
+<div class="hl">
+<h4>Every queue on one page</h4>
+<p>The production queue page lists the research queue and the building, lifeform and shipyard queues of every planet and moon, with their exact end times. TGoat reads it with the Empire view, so it knows when each build ends without visiting each planet.</p>
+</div>
+<div class="hl">
+<h4>Targets checked like the fleet page does</h4>
+<p>When you type a target on the fleet page, the game checks it (<code>checkTarget</code>). On universes whose flights skip empty or inactive systems, TGoat asks the same question without sending anything, so flight times and fuel are exact. The answer is kept 12 hours for each pair of systems and refreshed by every send; a universe that skips nothing is never asked.</p>
+</div>
+<div class="hl">
+<h4>Real loot from the return message</h4>
+<p>When an attack came back unseen, for example while TGoat was stopped, AutoFarm reads the game's "Return of a fleet" message for what it really brought home. It opens that tab at most once per pass, only when such an attack exists; as in the game, this marks those messages read, and none is deleted. The target's rest time and production then come from the real loot.</p>
+</div>
+<div class="hl">
+<h4>Battles simulated on your computer</h4>
+<p>Before a raid, AutoFarm simulates the battle hundreds of times in TGoat itself. The simulation sends nothing: no request to the game, none to an outside simulator.</p>
+</div>
+</section>
+
+<section class="group" aria-labelledby="fp-player">
+<h3 id="fp-player">Like one ordinary player</h3>
+<div class="hl">
+<h4>A plausible PC for each account</h4>
+<p>Each account gets its own computer, drawn once from real market shares: Windows or macOS, Chrome or Edge, with a time zone and a language that fit the account. TGoat's connections carry that browser's network fingerprint (TLS handshake, HTTP/2 settings, headers), checked against the real Chrome. Your accounts do not look like one program, but they share your IP address unless each has <a href="#fp-proxy">its own proxy</a>.</p>
+</div>
+<div class="hl" id="fp-proxy">
+<h4>The account's proxy for everything</h4>
+<p>With a proxy set, every connection to Gameforge and to the game goes through it: the sign-in, the window of <a href="start.html#browser-login">Sign in with your browser</a>, the game pages and the notification channel. If the proxy cannot be used, TGoat waits for you to fix it and never connects without it. <code>General.Proxy.LoginOnly</code> (off by default) sends only the sign-in through it; Telegram, Discord, the captcha service and update checks never use it.</p>
+</div>
+<div class="hl">
+<h4>A human pace</h4>
+<p>In Human mode, the default, game requests come 1.5 to 8 seconds apart, with a 15 to 45 second break every 30 to 70 requests, and features react after a few minutes, not seconds. Breaks during the day are an option, off by default. RAGE drops every delay kept only for discretion: it plays much faster and is easy to spot (<a href="interface.html#ui-mode">play mode</a>).</p>
+</div>
+</section>
+
+<div class="note" role="note" id="fp-limits">
+<p class="note-title">What TGoat cannot hide</p>
+<ul>
+  <li>Every request to the game marks your current planet active, even a look at the event list. TGoat measured it in the game.</li>
+  <li>Gameforge does not say how it detects bots, so no setting is known to be safe.</li>
+  <li>Bots break OGame's rules and can get an account banned: <a href="start.html#alpha">use a secondary account</a>.</li>
+</ul>
+</div>
 </section>
 
 <section aria-labelledby="where">

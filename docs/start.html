@@ -54,6 +54,8 @@
     <li><a href="#account">Add your account</a></li>
     <li><a href="#login">Log in</a>
       <ol>
+        <li><a href="#browser-login">Sign in with your browser</a></li>
+        <li><a href="#remote-login">TGoat on another computer (VPS)</a></li>
         <li><a href="#token">Session token</a></li>
         <li><a href="#captcha">Captcha and two-factor</a></li>
         <li><a href="#login-fails">When the login fails</a></li>
@@ -61,6 +63,14 @@
     </li>
     <li><a href="#alpha-safe">Turn on a first feature</a>
       <ol><li><a href="#assistant">Let the setup assistant suggest settings</a></li></ol>
+    </li>
+    <li><a href="#updates">Updates</a>
+      <ol>
+        <li><a href="#update-install">How an update installs</a></li>
+        <li><a href="#update-trust">How trust works</a></li>
+        <li><a href="#update-check">Check a release by hand</a></li>
+        <li><a href="#update-rollback">Roll back by hand</a></li>
+      </ol>
     </li>
   </ol>
 </nav>
@@ -74,7 +84,7 @@
   <li>TGoat is an alpha and bots break OGame's rules: try it on a secondary account, and back up <code>config/</code> and <code>data/</code> before each update.</li>
   <li>Put <code>tgoat</code> in a folder of its own and start it. Coming from TBot 3.6, put it next to your old <code>settings.json</code> first.</li>
   <li>Open <code>http://localhost:9090</code> and add your account on the Instances page.</li>
-  <li>If Gameforge asks for a captcha TGoat cannot pass, or for two-factor, log in with a <a href="#token">session token</a>.</li>
+  <li>If Gameforge asks for a captcha TGoat cannot pass, or for two-factor, <a href="#browser-login">sign in with your browser</a>: you pass the check yourself in a window TGoat opens. A <a href="#token">session token</a> pasted by hand also works.</li>
   <li>Every feature starts off. Turn them on one at a time, and watch the Logs before the next.</li>
 </ul>
 </aside>
@@ -86,10 +96,10 @@
 <p class="note-title">Warnings</p>
 <ul>
   <li><strong>Expect bugs.</strong> TGoat can crash or do what you did not want. Settings and files may change between builds.</li>
-  <li><strong>Bots break OGame's rules.</strong> Gameforge can ban an account that uses one. Try TGoat on a secondary account first.</li>
+  <li><strong>Bots break OGame's rules.</strong> Gameforge can ban an account that uses one. Try TGoat on a secondary account first. <a href="index.html#footprint">What TGoat does to stay discreet</a>, and what it cannot hide.</li>
   <li><strong>Its actions in the game are real.</strong> A bug can cost you ships or resources.</li>
   <li><strong>Back up <code>config/</code> and <code>data/</code> before you update.</strong> Until the first stable release, a new alpha may not convert your old files.</li>
-  <li><strong>The web interface has no password.</strong> By default, only your computer can reach it: keep it that way unless you protect it.</li>
+  <li><strong>The web interface has no password.</strong> By default, only your computer can reach it: keep it that way unless you protect it. To reach it from another computer, use an SSH tunnel (<a href="#remote-login">how</a>).</li>
   <li><strong>Never share <code>secrets.json</code></strong>, not even in a bug report. It holds your passwords and tokens.</li>
   <li><strong>There is no warranty.</strong> You use TGoat at your own risk.</li>
   <li><strong>Its decisions follow the author's understanding of the game.</strong> They come from my reading of the rules and of the meta. I did my best, but I cannot promise that every decision is optimal or fits every situation; the settings let you change what does not suit you.</li>
@@ -115,7 +125,7 @@
 <p><strong>Coming from TBot 3.6?</strong> Before the first start, put <code>tgoat</code> next to your old <code>settings.json</code>. TGoat <a href="from-tbot.html#import">imports it</a>, and features that were on in TBot stay on.</p>
 
 <details id="cli">
-<summary>Commands and options (17)</summary>
+<summary>Commands and options (23)</summary>
 <div class="table-wrap" role="region" aria-label="Commands and options" tabindex="0">
 <table>
   <caption class="sr-only">TGoat commands and options</caption>
@@ -124,6 +134,7 @@
     <tr class="sub"><th colspan="2" scope="colgroup">Commands</th></tr>
     <tr><th scope="row"><code>tgoat</code>, <code>tgoat run</code></th><td>Start TGoat.</td></tr>
     <tr><th scope="row"><code>tgoat setup</code></th><td>Add an account in the terminal.</td></tr>
+    <tr><th scope="row"><code>tgoat login</code></th><td>Sign in to Gameforge in a browser window. See <a href="#browser-login">Sign in with your browser</a>.</td></tr>
     <tr><th scope="row"><code>tgoat import</code></th><td>Import TBot 3.6 settings.</td></tr>
     <tr><th scope="row"><code>tgoat version</code>, <code>tgoat --version</code></th><td>Print the build line.</td></tr>
     <tr><th scope="row"><code>tgoat help</code></th><td>List every option.</td></tr>
@@ -139,22 +150,28 @@
     <tr><th scope="row"><code>--from &lt;file&gt;</code></th><td>The <code>settings.json</code> to import.</td></tr>
     <tr><th scope="row"><code>--dry-run</code></th><td>Print the report, write nothing.</td></tr>
     <tr><th scope="row"><code>--again</code></th><td>Import over an existing <code>config/</code>, kept in its history.</td></tr>
+    <tr class="sub"><th colspan="2" scope="colgroup">Login options</th></tr>
+    <tr><th scope="row"><code>--instance &lt;name&gt;</code></th><td>Account to sign in, by name or identifier. Needed when there are several.</td></tr>
+    <tr><th scope="row"><code>--browser &lt;path&gt;</code></th><td>Browser program to open instead of the <code>LoginBrowser</code> setting.</td></tr>
+    <tr><th scope="row"><code>--to &lt;address&gt;</code></th><td>Web interface of a TGoat that runs elsewhere, as this computer reaches it. See <a href="#remote-login">TGoat on another computer</a>.</td></tr>
+    <tr><th scope="row"><code>--code &lt;code&gt;</code></th><td>Pairing code shown by that web interface. Goes with <code>--to</code>.</td></tr>
     <tr class="sub"><th colspan="2" scope="colgroup">Environment</th></tr>
     <tr><th scope="row"><code>TGOAT_SECRETS</code></th><td>Another path for <code>secrets.json</code>.</td></tr>
     <tr><th scope="row"><code>NO_COLOR</code></th><td>No colours in the console.</td></tr>
+    <tr><th scope="row"><code>TGOAT_SERVICE=1</code></th><td>After an update, exit with code 75 and let the service manager restart TGoat (see <a href="#update-install">Updates</a>).</td></tr>
   </tbody>
 </table>
 </div>
 </details>
 
 <details id="files">
-<summary>Where files live (9)</summary>
+<summary>Where files live (10)</summary>
 <div class="table-wrap" role="region" aria-label="Files and folders" tabindex="0">
 <table>
   <caption class="sr-only">Files and folders</caption>
   <thead><tr><th scope="col">File or folder</th><th scope="col">What it holds</th></tr></thead>
   <tbody>
-    <tr><th scope="row"><code>config/tgoat.json</code></th><td>Web interface, Telegram, Discord bot.</td></tr>
+    <tr><th scope="row"><code>config/tgoat.json</code></th><td>Web interface, Telegram, Discord bot, updates.</td></tr>
     <tr><th scope="row"><code>config/instances/&lt;id&gt;.json</code></th><td>One instance.</td></tr>
     <tr><th scope="row"><code>config/profiles/&lt;name&gt;.json</code></th><td>One profile, shared by all instances.</td></tr>
     <tr><th scope="row"><code>config/secrets.json</code></th><td>E-mails, passwords, tokens, keys.</td></tr>
@@ -163,6 +180,7 @@
     <tr><th scope="row"><code>config/import-report.txt</code></th><td>Report of the TBot import.</td></tr>
     <tr><th scope="row"><code>data/&lt;id&gt;/</code></th><td>Simulated device, cookies, feature state.</td></tr>
     <tr><th scope="row"><code>log/TGoat.log</code>, <code>log/TGoat.csv</code></th><td>Logs, as text and CSV.</td></tr>
+    <tr><th scope="row"><code>tgoat.exe.old</code>, <code>tgoat.exe.update.json</code></th><td>Next to the program, during an <a href="#updates">update</a>: the previous version and the update's state.</td></tr>
   </tbody>
 </table>
 </div>
@@ -176,7 +194,7 @@
 <ol>
   <li>Open <code>http://localhost:9090</code>. The first time, it shows <strong>Add an account</strong> on the <strong>Instances</strong> page.</li>
   <li>Fill in <strong>Name of the instance</strong> and <strong>Community</strong> (<code>en</code>, <code>fr</code>…).</li>
-  <li>Give your Gameforge <strong>E-mail</strong> and <strong>Password</strong>, or a <a href="#token">session token</a>.</li>
+  <li>Give your Gameforge <strong>E-mail</strong> and <strong>Password</strong>, or click <strong>Sign in with your browser</strong> (<a href="#browser-login">how</a>). A <a href="#token">session token</a> works too.</li>
   <li>Click <strong>Test the login</strong>. TGoat lists your players by universe.</li>
   <li>Pick the universe, then click <strong>Create the instance</strong>. It connects with every feature off.</li>
 </ol>
@@ -188,8 +206,44 @@
 <p>TGoat tries a session token you just gave it, then the session saved at the last login, then your e-mail and password. That session survives restarts.</p>
 <p>TGoat never signs out of the lobby, so your browser stays signed in.</p>
 
+<h3 id="browser-login">Sign in with your browser</h3>
+<p>TGoat opens a browser window on the Gameforge login. You sign in and pass any check yourself, so a captcha or two-factor is no problem. TGoat keeps the session token and closes the window.</p>
+<ol>
+  <li>In Settings, open <strong>Account</strong> and click <strong>Sign in with your browser</strong>. In <strong>Add an account</strong>, the button sits under <strong>Session token</strong>. An instance whose login failed has the same button on its card in Instances. In a terminal, run <code>tgoat login</code>, or <code>tgoat setup</code> and pick <strong>3</strong> (offered when TGoat finds a browser).</li>
+  <li>Sign in to Gameforge in the window that opens.</li>
+  <li>The window closes. The panel says "Gameforge session token stored. The instance connects with it now." (for a disabled instance: "The instance uses it once you enable it."). <code>tgoat login</code> prints "Gameforge session token stored for", the account and "from a browser sign-in". In <strong>Add an account</strong>, the panel says "Signed in to Gameforge" and the token is used when you test the login or create the instance.</li>
+</ol>
+<p>TGoat waits up to 10 minutes, then closes the window. <strong>Cancel</strong> (Ctrl+C in a terminal) closes it too, which can take a few seconds. Nothing is read from your everyday browser, and the window leaves no profile behind.</p>
+<p>On a running instance, Settings asks before it starts: the new token logs the instance out and in again, which Gameforge sees as a new login.</p>
+<p>The window goes through the account's proxy, if it has one. The sign-in is tied to that proxy and to the lobby. In <strong>Add an account</strong>, the lobby and proxy fields are locked while a sign-in runs or its token is held: cancel it to change them. In Settings, if either changes before you finish, nothing is stored and you sign in again.</p>
+<p><code>LoginBrowser</code> (see <a href="settings.html#settings-new">the new settings</a>) picks the browser. With <code>Auto</code>, it is your default browser when that is Chrome, Edge, Brave, Chromium or Opera, else the first of them installed. TGoat uses Firefox (version 128 or later) only when none is installed, and warns you: Firefox tells the page it is remote-controlled, so Gameforge may treat the sign-in as automated.</p>
+<p>The window opens on the computer that runs TGoat, which needs a screen. While you sign in, another user logged in to that computer could read the session token: use it on a computer only you use. On a server, see below.</p>
+
+<h3 id="remote-login">TGoat on another computer (VPS)</h3>
+<p>When TGoat runs on a server, the browser still opens on your own computer. The sign-in leaves from the server and its proxy, so Gameforge sees the server's address.</p>
+<ol>
+  <li>On your computer, open an SSH tunnel to the web interface: <code>ssh -N -L 9090:127.0.0.1:9090 you@your-server</code> (use the port of <code>WebUI.Urls</code> in place of the second 9090).</li>
+  <li>Open <code>http://localhost:9090</code> and click <strong>Sign in from another computer</strong> (Settings, <strong>Account</strong>, or <strong>Add an account</strong>).</li>
+  <li>The page shows a command such as <code>tgoat login --to "http://localhost:9090" --code K7P2-9QXM --instance MAIN</code>, with a <strong>Copy</strong> button. Run it on your computer, quotes included. It is the same <code>tgoat</code> program, with no setup. It uses your <code>LoginBrowser</code> setting if this computer has a TGoat folder, else <code>Auto</code>.</li>
+  <li>Sign in in the window that opens. It waits about 9 minutes. The token goes to the server.</li>
+</ol>
+<p>The code lasts 10 minutes and is for one account. A new code or a new sign-in for the same account cancels the previous one. Once <code>tgoat login</code> has accepted the code, it is used up: if the sign-in then fails or you cancel, the command says "The code is now used" and you create a new one. The window closes 45 seconds before the code would end, so the token has time to arrive.</p>
+<p>Before it takes the code, <code>tgoat login</code> checks the address and finds a browser, so a typo or a missing browser does not use the code up. A computer with no screen is refused there too.</p>
+<p>The web interface must be on (not <code>--console</code>). A reverse proxy that drops <code>CONNECT</code> requests does not work: after it accepts the code, <code>tgoat login</code> says the sign-in tunnel "does not get through" and opens no browser. Create a new code and use the SSH tunnel. An <code>http://</code> address other than <code>localhost</code> or <code>127.0.0.1</code> sends the code and the token in clear text: <code>tgoat login</code> warns and prints the SSH command to use.</p>
+<details id="reverse-proxy">
+<summary>Reaching TGoat by a name, or behind a reverse proxy</summary>
+<p>TGoat answers only requests for <code>localhost</code>, an IP address, a name in <code>WebUI.Urls</code> or <code>WebUI.GameProxyUrls</code>, or a name in <code>WebUI.AllowedHosts</code>. Any other name gets a 403 <code>unknown_host</code>. This stops a web page from taking over the interface.</p>
+<ul>
+  <li>If you opened TGoat by a name yourself, such as <code>http://mypc:9090</code>, add <code>mypc</code> to <code>WebUI.AllowedHosts</code> in <code>tgoat.json</code> and restart TGoat. Write host names only, separated by commas: no <code>http://</code>, no port.</li>
+  <li><strong>If the 403 names a host you never typed, do not add it.</strong> A web page tried to use TGoat.</li>
+  <li>Behind a reverse proxy, list its public name and let it keep the browser's <code>Host</code>. Caddy does by default; in nginx, set <code>proxy_set_header Host $host;</code>.</li>
+  <li>nginx's default sends <code>Host: 127.0.0.1:&lt;port&gt;</code>, which TGoat always accepts, so it cannot see the browser's name. The proxy must then answer only for its own name (<code>server_name</code>, and a <code>default_server</code> that refuses other names). The same holds for a proxy that rewrites <code>Host</code> to <code>localhost</code> or an IP.</li>
+  <li>For the command to carry the public address, the proxy should send <code>X-Forwarded-Host</code> (a name TGoat accepts, such as one in <code>WebUI.AllowedHosts</code>) and <code>X-Forwarded-Proto: https</code>. Otherwise the command shows the address TGoat received.</li>
+</ul>
+</details>
+
 <h3 id="token">Session token</h3>
-<p>Use a session token when Gameforge asks for a check TGoat cannot pass, for two-factor authentication, or to keep your password out of TGoat.</p>
+<p>If the browser sign-in is not possible, paste a session token by hand. It also keeps your password out of TGoat.</p>
 <ol>
   <li>In your browser, sign in at <code>lobby.ogame.gameforge.com</code>.</li>
   <li>Press <kbd>F12</kbd> to open the developer tools.</li>
@@ -207,8 +261,8 @@
 <h3 id="captcha">Captcha and two-factor</h3>
 <ul>
   <li><strong>Image puzzle</strong> (<code>gf-image-drop-captcha</code>): TGoat solves it. With <code>General.CaptchaAPIKey</code> set, it asks the obot service first.</li>
-  <li><strong><code>gf-pow-captcha</code></strong>: TGoat will never solve it, so use a session token. It retries after 30 minutes to 2 hours.</li>
-  <li><strong>Two-factor authentication</strong>: no setting yet. Use a session token.</li>
+  <li><strong><code>gf-pow-captcha</code></strong>: TGoat will never solve it, so <a href="#browser-login">sign in with your browser</a>. It retries after 30 minutes to 2 hours.</li>
+  <li><strong>Two-factor authentication</strong>: no setting yet. <a href="#browser-login">Sign in with your browser</a>, where you answer it yourself.</li>
 </ul>
 
 <details id="login-fails">
@@ -233,6 +287,65 @@
 <h3 id="assistant">Let the setup assistant suggest settings</h3>
 <p>Once TGoat has read your account, the Map shows a banner that opens the <a href="interface.html#ui-assistant">setup assistant</a>. It asks a few questions, pre-filled from your account, then proposes settings grouped by theme that you apply or skip. It is most useful when your account has already grown.</p>
 <p>It never changes a value you set yourself unless you ask, and every change it makes can be restored from the settings history. You can open it again at any time from the Settings page or the command palette (Ctrl K).</p>
+</section>
+
+<section aria-labelledby="updates">
+<h2 id="updates">Updates</h2>
+<p>TGoat looks for a new version on GitHub, in the releases of <code>ronnie32/tgoat</code>, a few minutes after it starts and then about every 6 hours. It connects to github.com directly, never through an account's proxy, and sends nothing about you or your accounts. If a check fails, the log says so once and TGoat tries again at the next one.</p>
+<p>In the TGoat settings (<code>tgoat.json</code>), <code>Update.Mode</code> chooses what happens:</p>
+<ul>
+  <li><strong>Notify</strong> (the default): TGoat tells you once about each new version, in the web interface, on Telegram and on Discord. A banner at the top of every page links to the release notes and has an <strong>Install</strong> button.</li>
+  <li><strong>Install</strong>: TGoat installs each new version by itself.</li>
+  <li><strong>Never</strong>: TGoat never contacts GitHub.</li>
+</ul>
+<p><code>Update.Channel</code> chooses the versions: <strong>Alpha</strong> follows every version, test versions included, and <strong>Stable</strong> only the stable ones. An alpha build follows Alpha unless you change it.</p>
+<p><strong>During the alpha, keep Notify</strong>, and back up <code>config/</code> and <code>data/</code> before you click Install: an alpha may change your files.</p>
+
+<h3 id="update-install">How an update installs</h3>
+<ol>
+  <li>TGoat downloads the new version and checks it (see below).</li>
+  <li>It waits for a quiet moment: no attack being handled, no fleet-save planned or flying, no ghost sleep planned, no fleet being sent, no sign-in in progress, no manual mode and no sleep you asked for. The banner says what it is waiting for and has a <strong>Cancel</strong> button.</li>
+  <li>Just before it restarts, it checks the settings and the release on GitHub again. Setting <code>Update.Mode</code> to Never, or to Notify for an install that Install mode started, stops it; so does a release the owner has withdrawn.</li>
+  <li>It renames itself <code>tgoat.exe.old</code> (<code>tgoat.old</code> on Linux and macOS), puts the new version in its place and restarts with the same options.</li>
+</ol>
+<p>If no quiet moment comes for 24 hours, TGoat gives up, tells you what held it, and installs that version only when you click Install. The same goes for an install you cancel. If TGoat cannot write in its own folder (Program Files, <code>/usr/local/bin</code>), Install mode works like Notify and tells you to update by hand.</p>
+<p>If a download fails or an antivirus holds a file, Install mode tries again at the next check; after a click, click Install again. If TGoat cannot put its own program back after a failed update, it tells you which file to rename, and installs nothing more until you have renamed it and restarted TGoat.</p>
+<p>The new version is kept once it has run 2 minutes with its instances started. TGoat then deletes the <code>.old</code> file and tells you. If the new version fails to start twice in a row, the next start puts the previous one back and tells you; a start stopped by you, or by a second TGoat already using the configuration folder, does not count. If an antivirus stops that, TGoat says so and tries again at the next start; until then, it installs no update, not even from the Install button. If the new version cannot even be launched, the previous one comes back at once. TGoat then never installs that version by itself; the Install button still can.</p>
+<p>Run one TGoat per program file: a second TGoat started from the same file never updates.</p>
+<p>On Linux and macOS, TGoat restarts in the same process, so this works in a terminal, under systemd and in a container. On Windows, it starts the new version in the same console, then exits: your prompt comes back while TGoat keeps writing. If a service manager runs TGoat on Windows (NSSM, WinSW) or should do the restart itself, set the environment variable <code>TGOAT_SERVICE=1</code>: after an update, TGoat exits with code 75 and the manager must start it again. TGoat warns at start when NSSM or WinSW runs it without that variable.</p>
+
+<h3 id="update-trust">How trust works</h3>
+<p>Each release has a <code>checksums.txt</code> file with the SHA-256 of every archive, signed with the TGoat release key. TGoat installs a version only if:</p>
+<ul>
+  <li>the signature matches the public key built into TGoat;</li>
+  <li>the archive has the checksum that the signed list gives;</li>
+  <li>the version is newer than the one running (never an older one);</li>
+  <li>the new program starts and gives that version.</li>
+</ul>
+<p>If anything else happens, nothing is installed. TGoat takes the highest release that passes these checks, so a broken newer one does not hide it, even after a restart. A release that is not signed with that key, or whose signed list belongs to another version, may come from someone who took over the GitHub account: TGoat only says "A release that could not be verified appeared on the TGoat GitHub page: do not install it by hand", never its name or a link. Do not download it. A signed release with no download for your system is mentioned once, and nothing is installed; if its download is only missing from the page (still uploading), TGoat looks again at each check. TGoat's update notices are plain text, shown as written on Telegram and Discord, with no link preview.</p>
+
+<h3 id="update-check">Check a release by hand</h3>
+<p><code>tgoat version</code> prints the fingerprint of the release key built into your TGoat. It must be:</p>
+<pre><code>Release key SHA-256: 9918d9c3ebba3283d19cc048395047f11f24756c6a1ea0abfebd63236b68dfdf</code></pre>
+<p>The release public key:</p>
+<pre><code>-----BEGIN PUBLIC KEY-----
+MCowBQYDK2VwAyEAJqTZcwxwgqfnDlIxRMFkuQUjV943CFRAdmui/BHT66U=
+-----END PUBLIC KEY-----</code></pre>
+<p>Save it as <code>tgoat-release.pub</code>, download the archive, <code>checksums.txt</code> and <code>checksums.txt.sig</code>, then run (OpenSSL 3; the one in Git for Windows works):</p>
+<pre><code>openssl pkey -pubin -in tgoat-release.pub -outform DER -out tgoat-release.der
+sha256sum tgoat-release.der
+base64 -d checksums.txt.sig &gt; checksums.sig.bin
+openssl pkeyutl -verify -pubin -inkey tgoat-release.pub -rawin -in checksums.txt -sigfile checksums.sig.bin
+sha256sum --ignore-missing -c checksums.txt</code></pre>
+<p>The second command gives the fingerprint above, the fourth prints <code>Signature Verified Successfully</code> and the last <code>OK</code> for your archive. On macOS, use <code>shasum -a 256</code>. On Windows, <code>Get-FileHash tgoat-release.der</code> gives the fingerprint, <code>certutil -decode checksums.txt.sig checksums.sig.bin</code> replaces the third command and <code>Get-FileHash</code> gives an archive's SHA-256.</p>
+
+<h3 id="update-rollback">Roll back by hand</h3>
+<ol>
+  <li>Stop TGoat.</li>
+  <li>If <code>tgoat.exe.old</code> is still there, delete <code>tgoat.exe</code> and rename <code>tgoat.exe.old</code> to <code>tgoat.exe</code>. Otherwise, download the version you want from the releases page.</li>
+  <li>Set <code>Update.Mode</code> to Notify or Never, so the newer version is not installed again.</li>
+  <li>Start TGoat.</li>
+</ol>
 </section>
 
 <footer>

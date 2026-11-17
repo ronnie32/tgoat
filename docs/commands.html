@@ -153,6 +153,15 @@
 </div>
 </section>
 
+<section aria-labelledby="terminal">
+<h2 id="terminal">In the terminal: tgoat login</h2>
+<p><code>tgoat login</code> opens a browser window on the Gameforge login. You sign in and pass any check yourself, and TGoat keeps the session token.</p>
+<ul>
+  <li><code>tgoat login [--instance &lt;name&gt;] [--browser &lt;path&gt;]</code> signs in on the computer that runs TGoat. A running TGoat picks the token up and connects. <code>--instance</code> is needed when there are several accounts. With no account yet, it tells you to run <code>tgoat setup</code>. See <a href="start.html#browser-login">Sign in with your browser</a>.</li>
+  <li><code>tgoat login --to "&lt;address&gt;" --code &lt;code&gt; [--instance &lt;name&gt;]</code> signs in on this computer for a TGoat that runs elsewhere. Copy the whole command from the web interface. Ctrl+C cancels. See <a href="start.html#remote-login">TGoat on another computer</a>.</li>
+</ul>
+</section>
+
 <footer>
   <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/commands.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>

@@ -151,8 +151,8 @@
 </ul>
 <p>A button clicked twice or too late gets a plain answer, such as "The bot is already awake."</p>
 <details>
-<summary>New notifications, and when the session is lost too often (4)</summary>
-<p>Three notifications come from the November 2026 reviews:</p>
+<summary>New notifications: the reviews, a session lost too often, and Project Orion (6)</summary>
+<p>Three notifications come from the November 2026 reviews, and three more are described below them:</p>
 <ul>
   <li><strong>Expedition lost</strong> (orange): a fleet disappeared before its planned return. "Probably lost" when you may have recalled it yourself in the game.</li>
   <li><strong>Colonize</strong>, once per pass: a new colony (green; choose its lifeform), a colony abandoned, or a zone's try limit reached (orange, with the draws).</li>
@@ -160,6 +160,8 @@
 </ul>
 <p><strong>Session lost too often</strong> (orange, from TGoat itself): after three automatic logins in 30 minutes, TGoat stops logging in until the oldest one is 30 minutes old, and says until when: "The game session was lost 4 times in 30 minutes; TGoat waits until 21:45 before logging in again." It comes once, not for every failed request, and not again for 30 minutes.</p>
 <p>If it repeats, open the account in a browser: someone, or another program, may be using it.</p>
+<p><strong>Orion reward waiting</strong> (orange, from TGoat itself): "An Orion reward is waiting: claim it in the game within the hour." TGoat looks for the mark the game puts on the Orion entry of its menu when a reward can be claimed, on the pages it loads anyway. That mark comes from the game's own script and has not yet been seen on a real Orion page: if TGoat never warns you, check for rewards in the game. It comes once, and again only after the reward has been claimed and a new one waits. TGoat sees it only when it loads a full page, so not at night with <code>Defender.NightWatch</code> on <code>OnAlert</code>, when nothing is loaded. TGoat never claims the reward. <code>Notifications.OrionReward</code> (on by default) turns it off.</p>
+<p><strong>Hostile fleet heading for your fleet</strong> (red, from the Defender): it gives where the hostile fleet goes and when it arrives, and says "TGoat only protects fleets on your planets and moons." It comes once per event when a hostile fleet aims at something that is none of your planets or moons, such as your fleet at an Orion anomaly: no fleet-save, no alarm. As an attack notice, it mentions you like one.</p>
 <p>Colonize has its own switches: <code>AutoColonize.DiscordWebhook.Active</code> (on by default) and <code>AutoColonize.TelegramMessenger.Active</code>.</p>
 </details>
 <p>Each feature's <strong>Notify on Discord</strong> switch (such as <code>Defender.DiscordWebhook.Active</code>, on by default) covers both the bot and the instance's webhook.</p>

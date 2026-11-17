@@ -75,14 +75,14 @@
   <li>Check that your file says <code>General.SlotPriorityLevel.AutoColonize</code>, not <code>Colonize</code>.</li>
   <li>If your old file sets <code>Expeditions.MinPrimaryToSend</code>, it now takes effect. Check the value.</li>
   <li>Values equal to TBot's old defaults take TGoat's <a href="#defaults">new defaults</a>; the report lists them under "Moved or transformed". Write a value again to keep it.</li>
-  <li>Keep a <a href="start.html#token">session token</a> at hand for the first login.</li>
+  <li>Expect a new login on the first start, perhaps with a captcha: <a href="start.html#browser-login">sign in with your browser</a> if TGoat cannot pass it.</li>
   <li>Expect a busy first day: AutoFarm starts from an empty database.</li>
 </ol>
 
 <h3 id="surprises">What changes most</h3>
 <ul>
   <li>Your old values stay, except TBot's old defaults: they take TGoat's new defaults, and the report says so. <a href="#import">The import</a></li>
-  <li>The Defender checks every 1 to 5 minutes and keeps watching in sleep mode. <a href="changes.html#defender">Defender</a></li>
+  <li>The Defender checks every 1 to 5 minutes. In sleep mode it keeps watching, by default without a request until a game message comes. <a href="changes.html#defender">Defender</a></li>
   <li>The Brain builds mines by payback over 60 days and picks the cheapest energy. <a href="changes.html#brain">Brain</a></li>
   <li>Expeditions have no limit per origin and leave in waves. <a href="changes.html#expeditions">Expeditions</a></li>
   <li>No fleet delivers resources to a celestial an attack is heading for. <a href="changes.html#fleet-sends">Fleet sends</a></li>
@@ -105,7 +105,7 @@
   <li><strong>Converted, defences:</strong> your <code>Brain.AutoDefence.DefenceToReach</code> quantities become <code>Brain.AutoDefence.Ratio</code> and stay as maxima. TBot's sample quantities give TGoat's mix.</li>
   <li><strong>Moved:</strong> account, proxy and device go to the top of the instance file. Passwords, proxy login, captcha key, Discord webhook and Telegram token go to <code>secrets.json</code>.</li>
   <li><strong>Renamed:</strong> <code>Brain.Transports.DeutToLeave</code> becomes <code>Brain.Transports.DeutToLeaveOnMoons</code>.</li>
-  <li><strong>Sample device replaced.</strong> TBot's sample values are drawn again and the old device folder is set aside. Gameforge sees a new device: expect a new login, possibly a captcha. The session token avoids it.</li>
+  <li><strong>Sample device replaced.</strong> TBot's sample values are drawn again and the old device folder is set aside. Gameforge sees a new device: expect a new login, possibly a captcha. <a href="start.html#browser-login">Sign in with your browser</a> to pass it yourself.</li>
   <li><strong>Dropped:</strong> removed settings, unknown keys, and account data or secrets found in a profile. Each is listed in <code>config/import-report.txt</code>.</li>
   <li><strong>Safety check.</strong> If the effective settings differ from what the old files gave, nothing is written and the report is shown.</li>
 </ul>
@@ -126,7 +126,7 @@
 </div>
 
 <h3 id="removed">Removed settings</h3>
-<p>A removed setting in a file does nothing. It is reported once and listed as "obsolete" on the Settings page.</p>
+<p>These TBot settings no longer exist in TGoat. One left in a file does nothing: it is reported once and listed as "obsolete" on the Settings page.</p>
 <details>
 <summary>Settings removed (26)</summary>
 <div class="table-wrap" role="region" aria-label="Removed settings" tabindex="0">
@@ -134,25 +134,25 @@
   <caption class="sr-only">Removed settings</caption>
   <thead><tr><th scope="col">Old setting</th><th scope="col">What replaces it</th></tr></thead>
   <tbody>
-    <tr><th scope="row"><code>General.Host</code>, <code>General.Port</code></th><td>Gone with ogamed. Game proxy address: <code>WebUI.GameProxyUrls</code>.</td></tr>
-    <tr><th scope="row"><code>Credentials.BasicAuth</code></th><td>Protected ogamed's API only.</td></tr>
-    <tr><th scope="row"><code>Brain.Transports.DeutToLeave</code></th><td>Renamed <code>Brain.Transports.DeutToLeaveOnMoons</code>.</td></tr>
-    <tr><th scope="row"><code>Expeditions.SecondaryShip</code>, <code>Expeditions.MinSecondaryToSend</code>, <code>Expeditions.SecondaryToPrimaryRatio</code></th><td>The escort is automatic: one probe, one pathfinder and, on a large expedition, your strongest combat ship that is not slower than the main ships. Use <code>Expeditions.ManualShips</code> to choose the fleet.</td></tr>
-    <tr><th scope="row"><code>AutoFarm.MaxWaitTime</code></th><td>AutoFarm no longer waits for a slot; targets stay pending until a fleet returns.</td></tr>
-    <tr><th scope="row"><code>AutoFarm.CargoDiagnostics</code></th><td>Replaced by the reason shown per target.</td></tr>
-    <tr><th scope="row"><code>AutoFarm.CombatPlanner.DefenderTechnologyMargin</code>, <code>AutoFarm.CombatPlanner.DefenderLifeformBonus</code></th><td>Only bonuses read in the espionage report count.</td></tr>
-    <tr><th scope="row"><code>AutoDiscovery.MaxFailures</code>, <code>AutoDiscovery.RandomizeDestination</code></th><td>Discovery explores nearest first. A position it explored is not tried again for 7 days while TGoat runs. A refused origin costs at most one system view a pass.</td></tr>
-    <tr><th scope="row"><code>SleepMode.LogoutOnSleep</code></th><td>Never read in TBot. Dropped as unknown.</td></tr>
-    <tr><th scope="row"><code>Expeditions.CheckIntervalMin</code>, <code>Expeditions.CheckIntervalMax</code></th><td>Not read. Expeditions leave in waves (<code>Expeditions.MinFreeSlotsForWave</code>) and wait for the return that frees their slots. Dropped as unknown.</td></tr>
-    <tr><th scope="row"><code>Brain.AutoMine.BuildDepositIfFull</code></th><td>Storage is raised before a build it could not hold.</td></tr>
-    <tr><th scope="row"><code>Brain.LifeformAutoMine.StartFromCrystalMineLvl</code></th><td>A lifeform building starts when it pays back fast enough.</td></tr>
-    <tr><th scope="row"><code>Brain.AutoResearch.PrioritizeEnergyTechnology</code></th><td>Energy technology is weighed against solar plant, satellites and fusion.</td></tr>
-    <tr><th scope="row"><code>Brain.AutoResearch.ForceResearchWhateverTheLabLevel</code></th><td>Research no longer waits for the lab.</td></tr>
-    <tr><th scope="row"><code>Expeditions.FuelToCarry</code></th><td>No deuterium on board; it emptied the origin moon.</td></tr>
-    <tr><th scope="row"><code>Expeditions.IgnoreSleep</code></th><td>Nothing was sent during sleep. See <code>Expeditions.NightRound</code>.</td></tr>
-    <tr><th scope="row"><code>Expeditions.MinWaitNextRound</code>, <code>Expeditions.MaxWaitNextRound</code></th><td>Waves at a human pace: <code>Expeditions.MinFreeSlotsForWave</code>.</td></tr>
-    <tr><th scope="row"><code>AutoColonize.Abandon.MinFields</code></th><td>Per zone: <code>AutoColonize.Targets[].MinFields</code>. The import copies it into each zone when abandon was on.</td></tr>
-    <tr><th scope="row"><code>AutoColonize.IntensiveResearch</code></th><td><code>AutoColonize.ParallelTries</code>. The import keeps the number of ships when the mode was on.</td></tr>
+    <tr><th scope="row"><code>General.Host</code>, <code>General.Port</code> (TBot only, removed)</th><td>Gone with ogamed. Game proxy address: <code>WebUI.GameProxyUrls</code>.</td></tr>
+    <tr><th scope="row"><code>Credentials.BasicAuth</code> (TBot only, removed)</th><td>Protected ogamed's API only.</td></tr>
+    <tr><th scope="row"><code>Brain.Transports.DeutToLeave</code> (TBot name, renamed)</th><td>Renamed <code>Brain.Transports.DeutToLeaveOnMoons</code>.</td></tr>
+    <tr><th scope="row"><code>Expeditions.SecondaryShip</code>, <code>Expeditions.MinSecondaryToSend</code>, <code>Expeditions.SecondaryToPrimaryRatio</code> (TBot only, removed)</th><td>The escort is automatic: one probe, one pathfinder and, on a large expedition, your strongest combat ship that is not slower than the main ships. Use <code>Expeditions.ManualShips</code> to choose the fleet.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.MaxWaitTime</code> (TBot only, removed)</th><td>AutoFarm no longer waits for a slot; targets stay pending until a fleet returns.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.CargoDiagnostics</code> (TBot only, removed)</th><td>Replaced by the reason shown per target.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.CombatPlanner.DefenderTechnologyMargin</code>, <code>AutoFarm.CombatPlanner.DefenderLifeformBonus</code> (TBot only, removed)</th><td>Only bonuses read in the espionage report count.</td></tr>
+    <tr><th scope="row"><code>AutoDiscovery.MaxFailures</code>, <code>AutoDiscovery.RandomizeDestination</code> (TBot only, removed)</th><td>Discovery explores nearest first. A position it explored is not tried again for 7 days while TGoat runs. A refused origin costs at most one system view a pass.</td></tr>
+    <tr><th scope="row"><code>SleepMode.LogoutOnSleep</code> (TBot only, removed)</th><td>Never read in TBot. Dropped as unknown.</td></tr>
+    <tr><th scope="row"><code>Expeditions.CheckIntervalMin</code>, <code>Expeditions.CheckIntervalMax</code> (TBot only, removed)</th><td>Not read. Expeditions leave in waves (<code>Expeditions.MinFreeSlotsForWave</code>) and wait for the return that frees their slots. Dropped as unknown.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoMine.BuildDepositIfFull</code> (TBot only, removed)</th><td>Storage is raised before a build it could not hold.</td></tr>
+    <tr><th scope="row"><code>Brain.LifeformAutoMine.StartFromCrystalMineLvl</code> (TBot only, removed)</th><td>A lifeform building starts when it pays back fast enough.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoResearch.PrioritizeEnergyTechnology</code> (TBot only, removed)</th><td>Energy technology is weighed against solar plant, satellites and fusion.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoResearch.ForceResearchWhateverTheLabLevel</code> (TBot only, removed)</th><td>Research no longer waits for the lab.</td></tr>
+    <tr><th scope="row"><code>Expeditions.FuelToCarry</code> (TBot only, removed)</th><td>No deuterium on board; it emptied the origin moon.</td></tr>
+    <tr><th scope="row"><code>Expeditions.IgnoreSleep</code> (TBot only, removed)</th><td>Nothing was sent during sleep. See <code>Expeditions.NightRound</code>.</td></tr>
+    <tr><th scope="row"><code>Expeditions.MinWaitNextRound</code>, <code>Expeditions.MaxWaitNextRound</code> (TBot only, removed)</th><td>Waves at a human pace: <code>Expeditions.MinFreeSlotsForWave</code>.</td></tr>
+    <tr><th scope="row"><code>AutoColonize.Abandon.MinFields</code> (TBot only, removed)</th><td>Per zone: <code>AutoColonize.Targets[].MinFields</code>. The import copies it into each zone when abandon was on.</td></tr>
+    <tr><th scope="row"><code>AutoColonize.IntensiveResearch</code> (TBot only, removed)</th><td><code>AutoColonize.ParallelTries</code>. The import keeps the number of ships when the mode was on.</td></tr>
   </tbody>
 </table>
 </div>
@@ -204,7 +204,7 @@
   <tbody>
     <tr><th scope="row"><code>Credentials.GameforgeToken</code></th><td>empty</td><td>Session token, kept in <code>secrets.json</code>. See <a href="start.html#token">Session token</a>.</td></tr>
     <tr><th scope="row"><code>WebUI.GameProxyUrls</code></th><td>empty: interface port + 1</td><td>Game proxy address, on its own origin.</td></tr>
-    <tr><th scope="row"><code>Defender.SleepCheckIntervalMin</code>, <code>Defender.SleepCheckIntervalMax</code></th><td class="num">4 and 8 min</td><td>Defender pace in sleep mode.</td></tr>
+    <tr><th scope="row"><code>Defender.SleepCheckIntervalMin</code>, <code>Defender.SleepCheckIntervalMax</code></th><td class="num">4 and 8 min</td><td>Defender pace in sleep mode with <code>Defender.NightWatch</code> set to Always, while an attack is followed, or when the game's channel fails.</td></tr>
     <tr><th scope="row"><code>Defender.Autofleet.DeutToLeave</code></th><td class="num">200,000</td><td>Deuterium left on the attacked celestial.</td></tr>
     <tr><th scope="row"><code>Defender.Autofleet.Recall</code></th><td>true</td><td>Recall the fleet-save soon after the attack.</td></tr>
     <tr><th scope="row"><code>Defender.Autofleet.DefaultMission</code></th><td>Deploy</td><td>First mission tried for the fleet-save.</td></tr>
@@ -271,7 +271,7 @@
 <h3 id="behaviour">Feature by feature</h3>
 <p>What a TBot user notices first, in a line or two per feature. Each name opens the full comparison on <a href="changes.html">Every change</a>.</p>
 <ul>
-  <li><a href="changes.html#defender"><strong>Defender</strong></a>. Checks every 1 to 5 minutes, and keeps watching in sleep mode and while you play by hand (it then only alerts). When every fleet slot is taken, it frees one for the fleet-save. If it cannot read the attacks, it warns you, and again every 15 minutes.</li>
+  <li><a href="changes.html#defender"><strong>Defender</strong></a>. Checks every 1 to 5 minutes, and keeps watching in sleep mode (on alert: a check only after a game message, such as a spy report) and while you play by hand (it then only alerts). When every fleet slot is taken, it frees one for the fleet-save. If it cannot read the attacks, it warns you, and again every 15 minutes.</li>
   <li><a href="changes.html#sleep"><strong>Sleep mode</strong></a>. Bedtime and wake-up shift by up to 15 minutes a day. While sleep waits for fleets, no new fleet leaves. The wake-up reuses the saved session, and features start again one by one. A night round of expeditions and breaks during the day are options, off by default.</li>
   <li><a href="changes.html#fbf-human-pace"><strong>Human pace and play mode</strong></a>. Queues restart after a human delay, not 5 to 15 seconds after each build. One switch, Human (default), RAGE or Custom, sets how fast TGoat plays.</li>
   <li><a href="changes.html#requests"><strong>Game requests</strong></a>. 1.5 to 8 seconds between requests, with a short break every 30 to 70, so the logs look slower. The Defender and your own pages go first. Far fewer requests overall: starting the Brain, 104 reads become 47.</li>

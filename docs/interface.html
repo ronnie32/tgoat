@@ -82,7 +82,7 @@
   <li>In <strong>Name of the instance</strong>, type a name for this account.</li>
   <li>In <strong>Community</strong>, type the two letters of your game community, such as <code>en</code>.</li>
   <li>Enter the <strong>E-mail</strong> and <strong>Password</strong> of your Gameforge account.</li>
-  <li>If Gameforge asks for a captcha TGoat can't pass, paste a <strong>Session token</strong> instead of the password (<a href="start.html#token">how</a>).</li>
+  <li>If Gameforge asks for a captcha, or for two-factor, click <strong>Sign in with your browser</strong> under <strong>Session token</strong> (<a href="start.html#browser-login">how</a>). On a server, click <strong>Sign in from another computer</strong> (<a href="start.html#remote-login">how</a>). Or paste a <strong>Session token</strong> (<a href="start.html#token">how</a>). While a browser sign-in runs, the lobby and proxy fields are locked: cancel it to change them.</li>
   <li>Tick <strong>Pioneers test lobby</strong> only if you play there.</li>
   <li>For a proxy, tick <strong>Connect through a proxy</strong> and fill in its fields. Tick <strong>Login only</strong> to use it just for signing in.</li>
   <li>Click <strong>Test the login</strong>. With a captcha, this can take a minute. Nothing is saved yet.</li>
@@ -155,6 +155,17 @@
 <details>
 <summary>A sleep you ask for, and bedtime</summary>
 <p>Bedtime still happens at its time, with its fleet-save, and the instance stays asleep. If the sleep ends during the night, it sleeps on until the wake-up time. A new connection to the game keeps the sleep; disabling the instance or restarting TGoat ends it.</p>
+</details>
+<details id="night-watch">
+<summary>The Defender while the instance sleeps</summary>
+<p>Every request to the game marks your current planet active, even a look at the event list. So by default the Defender watches on alert (<code>Defender.NightWatch</code> set to OnAlert). TGoat keeps the game's notification channel open, as the game tab of a browser does, day and night; it marks no activity. At night the Defender sends nothing while no message comes.</p>
+<ul>
+  <li>A new message, a spy report for example, brings a check 1 to 3 minutes later. If it sees no attack, one more check comes 8 to 15 minutes after the message (<code>Defender.NightWatchFollowUp</code>): most attackers send their fleet a few minutes after reading their report. A later message, not in the same burst as the first, gets its own look 8 to 15 minutes later. Any message counts: your fleets' reports and private messages too. The Defender listens by day as well, so a message just before bedtime keeps its checks at night.</li>
+  <li>A reconnection of the channel at night brings one check: a message may have come while it was not listening.</li>
+  <li>An attack it sees is followed until it is handled or gone.</li>
+  <li>Every 20 to 40 minutes, TGoat checks that the game still listens, without asking the game anything. If the game ignores or refuses that check, TGoat opens a fresh connection every 20 to 40 minutes instead, before closing the old one, so nothing is missed.</li>
+</ul>
+<p>An attack sent without a fresh espionage report, or after these checks, is not seen. If the channel cannot open, stays down, stops answering, reopens more than 4 times in an hour, or your proxy refuses its port, you get a warning and the Defender checks at its sleep pace (every 4 to 8 minutes by default) until the wake-up. Always does that all night, so one planet looks active. Never starts no new check; an action already planned (a fleet-save, a recheck, hiding resources, a missile defence held by a passing error) still happens. The bedtime notice says which one applies.</p>
 </details>
 <div class="figs">
 <figure>
@@ -366,6 +377,14 @@
   <figcaption><strong>Test the login</strong> in the Account section. <strong>play this one</strong> switches the universe in the form.</figcaption>
 </figure>
 <p>In <strong>Account</strong>, <strong>Test the login</strong> signs in with the form's values without starting anything, and lists your players.</p>
+<p>Under <strong>Gameforge session token</strong>, the sign-in panel has two buttons: <strong>Sign in with your browser</strong> and <strong>Sign in from another computer</strong>. <a href="start.html#browser-login">Sign in with your browser</a> and <a href="start.html#remote-login">TGoat on another computer</a> explain them.</p>
+<ul>
+  <li><strong>Sign in with your browser</strong> says "Opening a browser on the computer that runs TGoat…", then "A browser window is open: sign in to Gameforge there. Waiting…". <strong>Cancel</strong> closes the window and the panel says "Sign-in cancelled."</li>
+  <li><strong>Sign in from another computer</strong> says "On the computer where you want to sign in, run this command within 10 minutes:", shows the command with <strong>Copy</strong>, then "Waiting for tgoat login…". Once the command has opened its window: "tgoat login opened a browser on the other computer: sign in to Gameforge there. Waiting…".</li>
+  <li>When the token arrives, the panel says "Gameforge session token stored. The instance connects with it now." For a disabled instance: "The instance uses it once you enable it."</li>
+  <li>On a running instance, a confirm box comes first: the new token logs it out and in again.</li>
+  <li>After 10 minutes the panel says "No sign-in within 10 minutes: the browser window was closed." (or "The pairing code expired."), with <strong>Try again</strong>. A failure says "The browser sign-in failed:" and the cause, with <strong>Try again</strong>. If TGoat stops answering, it says "TGoat does not answer right now: trying again." and gives up after about 10 seconds.</li>
+</ul>
 
 <h4 id="ui-priorities">Priority lists</h4>
 <p>Slot priority (<code>General.SlotPriorityLevel</code>) and spending priority (<code>Brain.SpendingPriority</code>) are lists, not number fields. The list shows the effective order, first at the top.</p>
@@ -507,10 +526,10 @@
 <p>Each pass of a feature ends with a reason code. It shows in the feature's panel and as a chip in the logs, and the detail names the setting that decided.</p>
 <p><code>slots_reserved</code> means fleet slots are free, but kept for higher-priority features (<code>General.SlotPriorityLevel</code>). The detail gives each feature's share. <code>no_fleet_slot</code> means no slot is free at all.</p>
 <details>
-<summary>Reason codes new or changed in the reviews (62)</summary>
+<summary>Reason codes new or changed in the reviews (78)</summary>
 <div class="table-wrap" role="region" aria-label="New reason codes" tabindex="0">
 <table class="wide">
-  <caption class="sr-only">Reason codes new or changed in the November 2026 reviews</caption>
+  <caption class="sr-only">Reason codes new or changed in November 2026</caption>
   <thead><tr><th scope="col">Code</th><th scope="col">Feature</th><th scope="col">Meaning</th></tr></thead>
   <tbody>
     <tr><th scope="row"><code>storage_for_the_next_build</code></th><td>AutoMine</td><td>A storage is raised before a build that would take more than 90&nbsp;% of it, which leaves room for the other spending of the planet. As a refusal: the storage cap blocks it.</td></tr>
@@ -524,6 +543,9 @@
     <tr><th scope="row"><code>attack_incoming</code></th><td>Brain</td><td>No supply flight, satellite or crawler while an attack is coming. Tried again after the impact.</td></tr>
     <tr><th scope="row"><code>reserved_for_builds</code></th><td>Brain</td><td>The stock is kept for the Brain's next builds.</td></tr>
     <tr><th scope="row"><code>research_lab_waiting</code></th><td>AutoResearch</td><td>A lab level is wanted and the building queue is busy. It is built when the queue frees.</td></tr>
+    <tr><th scope="row"><code>no_research_lab</code></th><td>AutoResearch</td><td>"No research lab yet" on this planet. On a new account, AutoMine's opening order asks for lab 1 after metal mine 5 and crystal mine 3.</td></tr>
+    <tr><th scope="row"><code>queue_page_stale</code></th><td>Brain</td><td>A build still shows as in progress after its end, 3 checks in a row: the game page seems stale, or your computer's clock is ahead of the server. Said once; the next checks wait the usual delay.</td></tr>
+    <tr><th scope="row"><code>computed_stop_averted</code>, <code>negative_delay_averted</code></th><td>Brain, any feature</td><td>A pass computed a wait of zero or less without being done. It runs again later (about 10 minutes for a planet's Brain worker, 30 to 90 seconds otherwise) instead of stopping. Report it if it repeats.</td></tr>
     <tr><th scope="row"><code>lifeform_energy_needed</code></th><td>Lifeforms</td><td>The next level needs more energy than available, and AutoMine does not supply this planet.</td></tr>
     <tr><th scope="row"><code>waiting_for_energy</code>, <code>waiting_for_population</code>, <code>waiting_for_research</code></th><td>Lifeforms</td><td>Retried later, not a stop.</td></tr>
     <tr><th scope="row"><code>waiting_for_tech_building</code></th><td>Lifeforms</td><td>Research waits for the technology building upgrade to end.</td></tr>
@@ -552,12 +574,18 @@
     <tr><th scope="row"><code>directives_disabled</code></th><td>Directives</td><td>The feature was turned off while it ran.</td></tr>
     <tr><th scope="row"><code>directives_menu_seen</code></th><td>Directives</td><td>A game page showed more rewards waiting: the next collect comes sooner, never less than 30 to 60 minutes after the previous one.</td></tr>
     <tr><th scope="row"><code>attack_alert_seen</code></th><td>Defender</td><td>A game page showed the attack alert: the Defender checks the event list 5 to 15 seconds later.</td></tr>
+    <tr><th scope="row"><code>game_message_alert</code>, <code>game_channel_listening</code></th><td>Defender</td><td>During sleep: a new game message arrived, the Defender checks 1 to 3 minutes later (and 8 to 15 minutes after it if nothing was seen); or the game's channel listens again, one check soon.</td></tr>
+    <tr><th scope="row"><code>waiting_for_message</code>, <code>night_watch_off</code></th><td>Defender</td><td>During sleep: it waits on alert with no request; or <code>Defender.NightWatch</code> is Never.</td></tr>
+    <tr><th scope="row"><code>night_watch_unavailable</code></th><td>Defender</td><td>The game's channel cannot open, stays down, stops answering, or your proxy blocks its port: a warning, then a check every 4 to 8 minutes until the wake-up.</td></tr>
+    <tr><th scope="row"><code>hostile_fleet_not_on_celestial</code></th><td>Defender</td><td>A hostile fleet is heading for something that is none of your planets or moons, after the celestial list was read again. No fleet-save, no alarm; one notice per event.</td></tr>
+    <tr><th scope="row"><code>event_mission_unknown</code></th><td>Instance</td><td>The event list shows a mission TGoat does not know (Project Orion adds some). A hostile one aimed at your celestials is handled as an attack. Said once per mission.</td></tr>
     <tr><th scope="row"><code>galaxy_view_dispatch_failed</code></th><td>AutoFarm</td><td>The galaxy view's spy button was refused; that target's probes went through the fleet page. A warning the first time.</td></tr>
     <tr><th scope="row"><code>combat_rejected_at_confirmation</code></th><td>AutoFarm</td><td>The last check before sending refused the plan. The detail says why, such as "4 of 773 final battle simulations failed", a report too old, or ships gone.</td></tr>
     <tr><th scope="row"><code>breaker_fleet_proposed</code>, <code>breaker_fleet_ordered</code>, <code>no_breaker_fleet</code>, <code>breaker_order_failed</code></th><td>AutoFarm</td><td>A combat fleet for turned-down targets was proposed or, in Automatic mode, ordered; none pays back within <code>AutoFarm.BreakerMaxPaybackDays</code> or the Brain's reserves cannot pay it (the detail says which); the game refused the order (a warning).</td></tr>
     <tr><th scope="row"><code>mode_at_start</code>, <code>mode_changed</code></th><td>Instance</td><td>The play mode at start-up, or its change, with what it does.</td></tr>
     <tr><th scope="row"><code>break_started</code>, <code>break_ended</code>, <code>break_resumed</code></th><td>Instance</td><td>A break began, ended, or goes on after a new connection (<code>SleepMode.Breaks.Active</code>).</td></tr>
     <tr><th scope="row"><code>relogin_limit_notified</code></th><td>Instance</td><td>The game session was lost too often: automatic logins wait, and you got one notification with the time of the next try.</td></tr>
+    <tr><th scope="row"><code>orion_reward_waiting</code></th><td>Instance</td><td>A game page showed an Orion reward waiting to be claimed: you got one notification.</td></tr>
   </tbody>
 </table>
 </div>
@@ -592,7 +620,7 @@
   <tbody>
     <tr><th scope="row">Starting</th><td>Signing in.</td></tr>
     <tr><th scope="row">Running</th><td>Connected, or "Running, in manual mode".</td></tr>
-    <tr><th scope="row">Sleeping, wakes up at 06:30</th><td>Only the Defender keeps watch.</td></tr>
+    <tr><th scope="row">Sleeping, wakes up at 06:30</th><td>The Defender watches as <code>Defender.NightWatch</code> says.</td></tr>
     <tr><th scope="row">Waiting to retry</th><td>A passing problem. TGoat retries by itself.</td></tr>
     <tr><th scope="row">Stopped until its settings are fixed</th><td>Fix its settings; any change restarts it.</td></tr>
     <tr><th scope="row">Waiting for its account details</th><td>No e-mail, password or token yet.</td></tr>
@@ -607,6 +635,7 @@
   <li><strong>Base profiles…</strong> picks the profiles applied under this instance's own settings.</li>
   <li><strong>Remove…</strong> asks you to confirm. If you also delete its data folder, Gameforge then sees a new device.</li>
 </ul>
+<p>When an instance's login failed with a problem the browser sign-in can solve, and it is not running or disabled, its card links <strong>Sign in with your browser</strong> to the panel in its settings.</p>
 <p>Below come <strong>Add an account</strong> (the <a href="#ui-first-run">first-run form</a>), <strong>Discord bot (optional)</strong> and <strong>Profiles</strong>. Each profile card says where it is used; <strong>Edit</strong> opens it in Settings.</p>
 <p>To share settings between accounts, create a profile under <strong>New profile</strong> and set it in Settings. Then tick it under <strong>Base profiles…</strong> on each card.</p>
 
@@ -644,6 +673,9 @@
   <li><strong>Commands</strong> (<kbd>Ctrl</kbd> <kbd>K</kbd>) opens the command palette.</li>
   <li><strong>Day chart</strong> or <strong>Night chart</strong> switches the theme.</li>
 </ul>
+
+<h4>The update banner</h4>
+<p>When a new version of TGoat is out, a banner under the top bar gives its number, a link to its release notes and an <strong>Install</strong> button. While it installs, the banner says what TGoat is waiting for before it restarts and has a <strong>Cancel</strong> button; the page reloads once the new version runs. <strong>Hide</strong> hides it until the next version. A release that could not be verified shows only that, in red: never its name or a link, and it must not be installed by hand. See <a href="start.html#updates">Updates</a>.</p>
 
 <h4>The attack alert</h4>
 <figure>

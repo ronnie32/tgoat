@@ -26,7 +26,31 @@ Nearly every behaviour is a setting. A setup assistant reads your account and su
 
 ## Downloads
 
-Builds will be published on the [Releases](https://github.com/ronnie32/tgoat/releases) page. The history of each version is in [CHANGELOG.md](CHANGELOG.md).
+Download TGoat from the [Releases](https://github.com/ronnie32/tgoat/releases) page: one archive per system (Windows, Linux, macOS; amd64 or arm64). Unpack it in a folder of its own and start `tgoat` (`tgoat.exe` on Windows); [Get started](https://ronnie32.github.io/tgoat/start.html#install) has the rest. Once it runs, TGoat tells you about new versions and can install them itself (see [Updates](https://ronnie32.github.io/tgoat/start.html#updates)). The history of each version is in [CHANGELOG.md](CHANGELOG.md).
+
+## Signed releases
+
+Every release is signed. `checksums.txt` lists the SHA-256 of each archive, and `checksums.txt.sig` is its ed25519 signature (base64) by the TGoat release key. TGoat installs an update only if both check out, and never an older version.
+
+To check a release by hand (OpenSSL 3; the one shipped with Git for Windows works), save the public key below as `tgoat-release.pub`, download the archive, `checksums.txt` and `checksums.txt.sig`, then run:
+
+```
+base64 -d checksums.txt.sig > checksums.sig.bin
+openssl pkeyutl -verify -pubin -inkey tgoat-release.pub -rawin -in checksums.txt -sigfile checksums.sig.bin
+sha256sum --ignore-missing -c checksums.txt
+```
+
+The second command must print `Signature Verified Successfully`, the third `OK` for your archive. On macOS use `shasum -a 256 --ignore-missing -c checksums.txt`. On Windows, `certutil -decode checksums.txt.sig checksums.sig.bin` replaces the first command, and `Get-FileHash <archive>` gives the SHA-256 to compare.
+
+Release public key:
+
+```
+-----BEGIN PUBLIC KEY-----
+MCowBQYDK2VwAyEAJqTZcwxwgqfnDlIxRMFkuQUjV943CFRAdmui/BHT66U=
+-----END PUBLIC KEY-----
+```
+
+`tgoat version` prints the SHA-256 of the key built into your copy: `9918d9c3ebba3283d19cc048395047f11f24756c6a1ea0abfebd63236b68dfdf`. `openssl pkey -pubin -in tgoat-release.pub -outform DER | sha256sum` gives the same value for the key above.
 
 ## A note from the author
 
