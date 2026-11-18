@@ -13,6 +13,16 @@ alphas are not guaranteed to migrate your files until the first stable
 release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
 
+## [0.1.0-alpha.3] - 2026-11-18
+
+### Fixed
+
+- AutoDiscovery works again on servers older than one year, where OGame
+  removed the daily limit on discoveries in November 2026: the galaxy view's
+  counter now reads "used/∞", which TGoat read as unreadable and sent no
+  discovery. Your Discovery settings and its daily budget still limit what it
+  sends.
+
 ## [0.1.0-alpha.2] - 2026-11-18
 
 ### Added
