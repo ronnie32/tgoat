@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.3).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.4).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -229,10 +229,11 @@
 <h4 id="ui-mode">Play mode: Human, RAGE, Custom</h4>
 <p>One switch sets how fast TGoat plays. It sits under the instance name on the Map, on each card of the Instances page and at the top of the instance's Settings. In Telegram or Discord, <code>/mode</code> shows it and <code>/mode rage</code> sets it.</p>
 <ul>
-  <li><strong>Human</strong> (default) plays like a player: reactions of a few minutes, short pauses, expeditions and discoveries in waves, pages 1.5 to 8 seconds apart, and the breaks you set.</li>
+  <li><strong>Human</strong> (default) plays like a player: reactions of a few minutes, short pauses, each free expedition or exploration slot filled at the next check, pages 1.5 to 8 seconds apart, and the breaks you set.</li>
   <li><strong>RAGE</strong> drops every delay kept only for discretion, for the most yield. TGoat reacts within 1 to 3 seconds, fills every free slot at once, checks ten times as often (at most once a minute), loads pages 0.3 to 1.5 seconds apart and takes no break. It is easy to spot.</li>
-  <li><strong>Custom</strong> applies the <code>Pace.*</code> settings one by one. Left at their defaults they play like Human. Under Human and RAGE they are greyed out.</li>
+  <li><strong>Custom</strong> applies the <code>Pace.*</code> settings one by one. Left at their defaults they play like Human. Under Human and RAGE they are greyed out, except <code>Pace.Waves</code>.</li>
 </ul>
+<p><code>Pace.Waves</code> (off by default) sends expeditions and explorations in waves, like a player who comes back now and then: expeditions once a third of their slots are free or the oldest free slot has waited 20 to 60 minutes, explorations once half of them are back. It costs yield, since a slot can stay empty up to an hour. It works in Human and Custom; RAGE ignores it.</p>
 <p>Switching applies at once: nothing restarts, and features waiting on a long delay move forward. Game rules and safety do not change with the mode: the Defender's pace, the attack guard, fuel reserves, slot ranks, sleep and fleet-save times.</p>
 
 <h4 id="ui-directives">Directives</h4>
@@ -295,6 +296,7 @@
 <ul>
   <li>its notification has an <strong>Accept</strong> button;</li>
   <li>the command deck lists every proposal waiting, each with its button;</li>
+  <li>on the <a href="#log-links">Logs</a> page, a line that names it has an <strong>Accept</strong> button;</li>
   <li>the command palette (<kbd>Ctrl</kbd> <kbd>K</kbd>) offers "Accept proposal N";</li>
   <li>on Telegram, send <code>/accept N</code>, or <code>/accept</code> alone for all of them; <code>/proposals</code> lists them;</li>
   <li>Discord has <code>/proposals list</code>, <code>/proposals accept</code> and an Accept button under the notification.</li>
@@ -343,7 +345,7 @@
 </figure>
 <ul>
   <li><strong>Left</strong>: the file to edit, the <strong>Form</strong>, <strong>Advanced</strong> and <strong>History</strong> tabs, <strong>Find a setting</strong>, and the sections.</li>
-  <li><strong>Top</strong>: banners, such as a profile overriding some settings (<strong>Show them</strong> lists them).</li>
+  <li><strong>Top</strong>: banners, such as a profile overriding some settings (<strong>Show them</strong> lists them). A profile has <strong>Export…</strong> and <strong>Share…</strong> there (see <a href="#ui-sharing">Sharing profiles</a>); they send the saved file, not unsaved changes.</li>
   <li>A feature's on/off switch sits in its section title, such as <strong>Watch for attacks</strong> for the Defender.</li>
 </ul>
 <figure>
@@ -417,6 +419,7 @@
   <li><strong>…go back to the default value?</strong> Click <strong>Use the default</strong> under the setting, then save.</li>
   <li><strong>…undo yesterday's change?</strong> Open <strong>History</strong>, then <strong>Restore</strong> the revision before it.</li>
   <li><strong>…edit a profile?</strong> Pick it at the bottom of the file list.</li>
+  <li><strong>…give a profile to a friend?</strong> Open it, then <strong>Export…</strong> at the top.</li>
 </ul>
 </details>
 
@@ -445,17 +448,18 @@
 </details>
 
 <h4>The questions</h4>
-<p>At most six, one per screen, about your goal, presence, risk, expeditions, expansion and notifications. Each answer is already filled in from your account, with the reason in small print. A question that does not apply is skipped.</p>
+<p>At most seven, one per screen, about your goal, presence, sleep, risk, expeditions, expansion and notifications. Each answer is already filled in from your account, with the reason in small print. A question that does not apply is skipped.</p>
 <details>
-<summary>The six questions and what each one drives (6)</summary>
-<p>Each screen has <strong>Back</strong> and <strong>Next</strong> and the step. The plan counts as the last step: with six questions, the third reads "Step 3 of 7". A choice you made yourself is the answer filled in, for example expeditions you turned off or your notification level ("You chose Attacks only").</p>
+<summary>The seven questions and what each one drives (7)</summary>
+<p>Each screen has <strong>Back</strong> and <strong>Next</strong> and the step. The plan counts as the last step: with seven questions, the third reads "Step 3 of 8". A choice you made yourself is the answer filled in, for example expeditions you turned off or your notification level ("You chose Attacks only").</p>
 <div class="table-wrap" role="region" aria-label="The assistant's questions" tabindex="0">
 <table>
   <caption class="sr-only">The questions of the setup assistant</caption>
   <thead><tr><th scope="col">Question</th><th scope="col">What it drives</th></tr></thead>
   <tbody>
     <tr><th scope="row">Goal: grow the economy, raid inactive players, or both with the economy first</th><td>Whether AutoFarm is turned on, and the research profile.</td></tr>
-    <tr><th scope="row">Presence: when you are away for long (nights, work hours)</th><td>Sleep mode and its hours, the night fleet-save, breaks.</td></tr>
+    <tr><th scope="row">Presence: when you are away for long (nights, work hours)</th><td>Sleep mode's hours (when you give them), breaks, and whether the sleep question is asked.</td></tr>
+    <tr><th scope="row">Sleep: should TGoat sleep too while you are away at night? Yes or no</th><td>Asked only when you are away at night (night, both, away most of the time, or your own hours), and filled in from your current Sleep mode setting. <em>Yes</em>: Sleep mode on, the night fleet-save, and the night round of expeditions if you chose <em>A lot</em>. <em>No</em>: TGoat keeps playing all night, which gives more yield but looks less like a player; the plan turns Sleep mode off if it is on and proposes none of those. The Defender stays on either way.</td></tr>
     <tr><th scope="row">Risk: careful, balanced or bold</th><td>Which targets AutoFarm attacks, whether expeditions take a combat ship, whether the Defender hides resources in a build.</td></tr>
     <tr><th scope="row">Expeditions: none, some or a lot</th><td>How much expeditions matter next to the Brain's flights and raids. <em>Some</em>: they use the fleet slots left after the Brain and raids. <em>A lot</em>: first in line, and a night round when you are away. The fleet of each expedition is always calculated, whatever you answer. Asked only when you have astrophysics and a ship that can fly.</td></tr>
     <tr><th scope="row">Expansion: fill the free planet slots or not</th><td>Colonize on or off. Asked only when slots are free.</td></tr>
@@ -497,15 +501,22 @@
 <h3 id="ui-logs">Logs</h3>
 <p>The Logs page shows everything TGoat writes, live, and narrows it down to the lines that matter.</p>
 <figure>
-  <img src="img/logs.jpg" width="800" height="500" alt="The Logs page, paused: a filter bar with the Colours button, a strip of coloured bars showing the volume of lines over time, then the lines: time, instance › feature in the feature's colour, a ⚠ or ✖ sign for warnings and errors, the message and small chips; below, the detail of a warning with its fields and Filter links.">
+  <img src="img/logs.jpg" width="800" height="500" alt="The Logs page: a filter bar with the Attributes and Colours buttons, a strip of bars showing the volume of lines over time, then the lines: time, instance › feature in the feature's colour, a ⚠ or ✖ sign for warnings and errors, and the message across the whole width; below, the detail of a warning with its attributes, Filter links, Open the setting and Show on the map.">
   <figcaption>Live logs, paused, with one warning open in the detail panel.</figcaption>
 </figure>
 <ul>
   <li><strong>The filter bar</strong>: search, lowest level, instance, sender, <strong>Colours</strong>, <strong>Filter by…</strong>, <strong>Pause</strong> and <strong>Follow</strong>.</li>
   <li><strong>The volume strip</strong>: lines over time, gold for warnings, red for errors. Click it to jump there.</li>
-  <li><strong>The lines</strong>: time, instance › feature, a ⚠ for a warning or a ✖ for an error, the message and its chips. A pink "×3" means three identical lines in a row.</li>
+  <li><strong>The lines</strong>: time, feature (with the instance in front when there are several), a ⚠ for a warning or a ✖ for an error, then the message across the whole width. A pink "×3" means three identical lines in a row.</li>
 </ul>
-<p>The lines look like the console and <code>log/TGoat.log</code>. <code>Logging.Style</code> picks the layout: <strong>Readable</strong> (the default), <strong>Levels</strong> (<code>[Info]</code>, <code>[Warning]</code>) or <strong>TBot</strong> (<code>[17:56:25 INF Main|Directives]</code>). Changes apply at once.</p>
+<p>The lines look like the console and <code>log/TGoat.log</code>. In a terminal, the console (Readable style) wraps a long message to the window, with the action first and each reason on its own line:</p>
+<pre><code>03:12:48  AutoMine      Started MetalMine level 27 on planète mère [P:1:446:4]
+                          ↳ best return on investment (9.70 days)
+                          ↳ production settings unchanged: the current settings already give the
+                            most with this energy
+03:15:16  Instance    ⚠ You act in the game (a queue change on G1-Noname [P:3:447:4], not ordered by
+                          TGoat): the features that build or send fleets wait until 03:25:16</code></pre>
+<p>Every message starts at the same column: long feature names are shortened there (<strong>LF Research</strong>, <strong>LF Mine</strong>, <strong>Research</strong>, <strong>Discovery</strong>, <strong>Repatriate</strong>, <strong>Scheduler</strong>, <strong>DailyOffer</strong>, <strong>JumpGate</strong>), and the instance name (<code>Main › AutoMine</code>) shows only when more than one instance runs. With colours, coordinates, numbers, durations, times and setting names are in bold. The Logs page uses the same short names and instance rule (point at a name to see it in full) and keeps one line per message; <code>TGoat.log</code> and a redirected console (a file, Docker without a terminal) keep one line per message with full names. <code>Logging.Style</code> picks the layout: <strong>Readable</strong> (the default), <strong>Levels</strong> (<code>[Info]</code>, <code>[Warning]</code>) or <strong>TBot</strong> (<code>[17:56:25 INF Main|Directives]</code>). Changes apply at once.</p>
 <p id="log-colours">Each feature's name has its own colour, in the console and on this page. <strong>Colours</strong> changes them.</p>
 <details>
 <summary>Changing a feature's colour, or turning colours off</summary>
@@ -516,8 +527,9 @@
 </ol>
 <p>The choice is saved in <code>tgoat.json</code> (<code>Logging.FeatureColours</code>) and applies at once; the panel marks it "yours". To colour only the levels, or nothing at all, set <code>Logging.Colours</code> to <strong>Levels only</strong> or <strong>None</strong> (the panel's <strong>Log settings</strong> link opens it). The <code>NO_COLOR</code> environment variable turns the console's colours off.</p>
 </details>
-<p>Chips are what a line is about, such as a planet (<code>1:214:8</code>) or a reason code (<code>no_free_slot</code>). Click one to keep only the lines that have it. Click its <strong>×</strong> under the bar to remove the filter.</p>
+<p>Attributes are what a line is about, such as a planet (<code>1:214:8</code>) or a reason code (<code>no_free_slot</code>). Click a line: its detail lists them, each with <strong>Filter</strong> to keep only the lines that have it. <strong>Attributes</strong> in the bar also shows them as chips at the end of every line, which you click the same way. Click a filter's <strong>×</strong> under the bar to remove it.</p>
 <p>Click a line to open its detail. <strong>Show on the map</strong> or <strong>Open the setting</strong> appear where they apply, and <strong>Copy line</strong> copies it.</p>
+<p id="log-links">In a message, coordinates, setting names, durations such as "in 19m25s", clock times and proposal numbers are underlined with dots. Point at one, reach it with <kbd>Tab</kbd>, or tap it once on a phone, and a card shows what TGoat already knows. A planet or moon of yours shows its resources, docked ships and what it is building, with the end time; anyone else's shows "Not yours" and what the line says. A setting shows its value on that instance and its help. A duration or a clock time shows the time it stands for, counting down. Click a coordinate to open the map on it, or a setting to open it in Settings. A line that names a proposal still waiting has an <strong>Accept</strong> button. There is no Refuse: a proposal you leave expires on its own.</p>
 <ul>
   <li><strong>Pause</strong> freezes the list until you click <strong>Resume</strong>.</li>
   <li><strong>Follow</strong> keeps the newest line in view; scrolling up turns it off.</li>
@@ -527,14 +539,14 @@
 <details class="tips">
 <summary class="tips-title">How do I… find why something didn't happen, follow one planet</summary>
 <ul>
-  <li><strong>…find out why something didn't happen?</strong> Pick the feature in <strong>Every sender</strong> and <strong>Warnings and errors</strong>, or click a line's reason chip.</li>
-  <li><strong>…follow one planet?</strong> Click its coordinates chip on any line.</li>
+  <li><strong>…find out why something didn't happen?</strong> Pick the feature in <strong>Every sender</strong> and <strong>Warnings and errors</strong>, or click a line and <strong>Filter</strong> on its reason.</li>
+  <li><strong>…follow one planet?</strong> Click a line about it and <strong>Filter</strong> on its celestial.</li>
   <li><strong>…change the setting a warning talks about?</strong> Open the line, then click <strong>Open the setting</strong>.</li>
 </ul>
 </details>
 
 <h3 id="ui-reasons">Reason codes</h3>
-<p>Each pass of a feature ends with a reason code. It shows in the feature's panel and as a chip in the logs, and the detail names the setting that decided.</p>
+<p>Each pass of a feature ends with a reason code. It shows in the feature's panel and in the detail of the log line, which also names the setting that decided.</p>
 <p><code>slots_reserved</code> means fleet slots are free, but kept for higher-priority features (<code>General.SlotPriorityLevel</code>). The detail gives each feature's share. <code>no_fleet_slot</code> means no slot is free at all.</p>
 <details>
 <summary>Reason codes new or changed in the reviews (130)</summary>
@@ -572,7 +584,7 @@
     <tr><th scope="row"><code>jump_gate_recharging</code></th><td>Jump gate</td><td>The gate recharges. The next pass follows the recharge.</td></tr>
     <tr><th scope="row"><code>jump_target_attacked</code>, <code>jump_attacks_unreadable</code></th><td>Jump gate</td><td>No jump: an attack is heading for the target, or the event list could not be read.</td></tr>
     <tr><th scope="row"><code>no_usable_fleet</code></th><td>Expeditions</td><td>The origin has no usable main ship.</td></tr>
-    <tr><th scope="row"><code>waiting_for_wave</code></th><td>Expeditions</td><td>Too few slots are free for a wave yet.</td></tr>
+    <tr><th scope="row"><code>waiting_for_wave</code></th><td>Expeditions</td><td>Too few slots are free yet: <code>MinFreeSlotsForWave</code>, or a third of the slots with <code>Pace.Waves</code>.</td></tr>
     <tr><th scope="row"><code>waiting_for_night_round</code>, <code>night_round_sent</code></th><td>Expeditions</td><td>The next expedition would return during sleep; the night round left.</td></tr>
     <tr><th scope="row"><code>harvest_not_worth_fuel</code></th><td>Harvest</td><td>Every field costs more than 10% of its value in fuel.</td></tr>
     <tr><th scope="row"><code>origin_refused</code>, <code>no_origin_surplus</code>, <code>daily_budget_spent</code></th><td>Discovery</td><td>The game refused the origins (its text is quoted); no origin has the surplus; the day's budget is spent. They replace <code>no_ships</code>.</td></tr>
@@ -624,7 +636,7 @@
 <p>Changed meaning: <code>max_level_reached</code> and <code>return_too_slow</code> no longer stop a planet; it is checked again in 11 to 13 hours. For lifeform research, <code>max_level_reached</code> stops it only once all 18 research slots are open. <code>more_expensive_than_mine</code> compares paybacks in days. <code>energy_deficit</code> also covers energy built ahead of a mine.</p>
 </details>
 <details>
-<summary>Every other reason code (252)</summary>
+<summary>Every other reason code (283)</summary>
 <div class="table-wrap" role="region" aria-label="Other reason codes" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Every other reason code, by feature</caption>
@@ -768,6 +780,23 @@
     <tr><th scope="row"><code>update_rolled_back</code>, <code>update_rollback_failed</code>, <code>update_undo_failed</code></th><td>Updates</td><td>The new version did not start and the old one came back; the old one could not be put back; or TGoat could not restore its program (an error: rename it back by hand).</td></tr>
     <tr><th scope="row"><code>update_abandoned</code>, <code>update_shared</code></th><td>Updates</td><td>An unfinished update is forgotten; or another TGoat process runs the same program and handles the updates.</td></tr>
     <tr><th scope="row"><code>update_state_unreadable</code>, <code>update_state_unsaved</code></th><td>Updates</td><td>The update state could not be read, or saved, so a failed update may not roll back.</td></tr>
+    <tr><th scope="row"><code>share_invalid</code>, <code>share_not_profile</code>, <code>share_bad_request</code></th><td>Profile sharing</td><td>What you pasted or chose is not a TGoat profile code or file, or a name or text was refused.</td></tr>
+    <tr><th scope="row"><code>share_damaged</code></th><td>Profile sharing</td><td>The code was cut or changed while it was copied: copy it again, in full.</td></tr>
+    <tr><th scope="row"><code>share_too_large</code>, <code>share_too_many</code></th><td>Profile sharing</td><td>The profile is over 64 KiB or 2000 settings, or the code over 24 KiB: share the file, or remove settings.</td></tr>
+    <tr><th scope="row"><code>share_not_read</code></th><td>Profile sharing</td><td>A place was given one of your celestials before TGoat read this account: try again in a minute.</td></tr>
+    <tr><th scope="row"><code>share_format_unknown</code></th><td>Profile sharing</td><td>The profile was made by a newer TGoat: update TGoat to import it.</td></tr>
+    <tr><th scope="row"><code>share_empty</code>, <code>share_no_instance</code></th><td>Profile sharing</td><td>Nothing can be shared or imported: every setting is a default, personal or left out; or the instance chosen for the preview is unknown.</td></tr>
+    <tr><th scope="row"><code>not_in_this_version</code>, <code>retired</code></th><td>Profile sharing</td><td>In an import preview: a setting this version of TGoat does not know, or one TGoat removed. It is left out.</td></tr>
+    <tr><th scope="row"><code>personal</code>, <code>secret</code>, <code>not_a_profile</code></th><td>Profile sharing</td><td>Left out of an export or an import: a personal setting (places, players, hours, notification channels), a secret, or part of an instance's account, proxy or device.</td></tr>
+    <tr><th scope="row"><code>not_placed</code></th><td>Profile sharing</td><td>Left out of an export: a coordinate beyond the 10 places a profile can share, or a farming range or excluded position with no shared place in it.</td></tr>
+    <tr><th scope="row"><code>invalid</code></th><td>Profile sharing</td><td>In an import preview: a value this version refuses, such as one out of range. It is left out, never changed to fit.</td></tr>
+    <tr><th scope="row"><code>community_off</code>, <code>community_url</code></th><td>Community library</td><td><code>Community.Mode</code> is Off, so TGoat does not contact the library; or <code>Community.URL</code> is not an HTTPS address.</td></tr>
+    <tr><th scope="row"><code>community_unreachable</code>, <code>community_unavailable</code></th><td>Community library</td><td>The library cannot be reached or is down: try again later.</td></tr>
+    <tr><th scope="row"><code>community_too_large</code>, <code>community_bad_answer</code>, <code>community_redirect</code></th><td>Community library</td><td>The library answered too much, something unreadable, or sent TGoat to another address. Nothing is used.</td></tr>
+    <tr><th scope="row"><code>community_bad_request</code>, <code>community_refused</code></th><td>Community library</td><td>A search or a request was refused, by TGoat before sending it or by the library.</td></tr>
+    <tr><th scope="row"><code>community_not_found</code>, <code>community_forbidden</code>, <code>community_conflict</code></th><td>Community library</td><td>The profile is gone or hidden, the library refused this TGoat, or the request clashes with what the library holds.</td></tr>
+    <tr><th scope="row"><code>community_limit</code></th><td>Community library</td><td>The library gets too many requests: try again in a moment.</td></tr>
+    <tr><th scope="row"><code>community_no_key</code></th><td>Community library</td><td>This TGoat's publisher key in <code>secrets.json</code> cannot be read or created.</td></tr>
   </tbody>
 </table>
 </div>
@@ -815,11 +844,36 @@
   <li><strong>Settings</strong> opens the instance's file in Settings.</li>
   <li><strong>Disable</strong> stops the instance and keeps it configured. <strong>Enable</strong> connects it again.</li>
   <li><strong>Base profiles…</strong> picks the profiles applied under this instance's own settings.</li>
+  <li><strong>Export settings…</strong> gives what this account plays with now to another player, as one profile (see <a href="#ui-sharing">Sharing profiles</a>).</li>
   <li><strong>Remove…</strong> asks you to confirm. If you also delete its data folder, Gameforge then sees a new device.</li>
 </ul>
 <p>When an instance's login failed with a problem the browser sign-in can solve, and it is not running or disabled, its card links <strong>Sign in with your browser</strong> to the panel in its settings.</p>
-<p>Below come <strong>Add an account</strong> (the <a href="#ui-first-run">first-run form</a>), <strong>Discord bot (optional)</strong> and <strong>Profiles</strong>. Each profile card says where it is used; <strong>Edit</strong> opens it in Settings.</p>
+<p>Below come <strong>Add an account</strong> (the <a href="#ui-first-run">first-run form</a>), <strong>Discord bot (optional)</strong>, <strong>Profiles</strong> and <strong>Community profiles</strong>. Each profile card says where it is used; <strong>Edit</strong> opens it in Settings.</p>
 <p>To share settings between accounts, create a profile under <strong>New profile</strong> and set it in Settings. Then tick it under <strong>Base profiles…</strong> on each card.</p>
+
+<h4 id="ui-sharing">Sharing profiles</h4>
+<p>What is shared, and how places stand in for coordinates, is in <a href="settings.html#sharing-profiles">Sharing profiles</a>. Here is where to click.</p>
+<ul>
+  <li><strong>Export…</strong> on a profile card: pick the instance whose class and universe speeds describe the profile (optional), add a note to each place ("my main moon"), then <strong>Copy code</strong> or <strong>Download file</strong>. The window lists every setting that goes, and what stays on your computer and why.</li>
+  <li><strong>Share…</strong> publishes the profile in the community library: a name, a description, an author name (optional; not your in-game name) and the same list. It is public.</li>
+  <li><strong>Import a profile…</strong>, next to <strong>New profile</strong>: paste a code, choose a file, or drop the file on the window, and pick the instance to preview on.</li>
+</ul>
+<p>The preview reads from top to bottom:</p>
+<ol>
+  <li>Who made it and for what account, with a warning when that does not match your instance.</li>
+  <li><strong>Your places</strong>: one row per place ("Place A — a moon — used for: AutoFarm: Departure points"), with the author's note. Pick one of your planets or moons; TGoat's pick is marked "(suggested)", and celestials of the other type come last. <strong>Leave automatic</strong> keeps that setting empty and says what will not work as the author meant.</li>
+  <li>What would change on the instance: current value → imported value, by feature. Past 10, <strong>Show all</strong>.</li>
+  <li><strong>Left out</strong>, with the reason for each setting.</li>
+  <li>What the setup assistant would suggest for this account. Nothing of it is applied.</li>
+</ol>
+<p>At the bottom, name the new profile (a name already taken is flagged at once) and click <strong>Import</strong>. <strong>Use it now on …</strong>, off by default, also makes it an active profile of that instance. The new card lights up in the list.</p>
+<p><strong>Community profiles</strong> stays closed until you click <strong>Open the community library</strong>; only then does TGoat contact the library. Search by name or description, filter by class, universe speed and places needed, sort by <strong>Top</strong>, <strong>New</strong> or <strong>Most downloaded</strong>, and <strong>Load more</strong> for the next ones. A card gives the author, the account it was made for, the places it needs ("Needs 2 places: 1 moon, 1 planet"), votes, downloads and the last update.</p>
+<ul>
+  <li><strong>Open</strong> shows the same preview as an import.</li>
+  <li><strong>▲</strong> and <strong>▼</strong> vote; <strong>Report…</strong> asks what is wrong.</li>
+  <li><strong>My shared profiles</strong> lists yours and your publisher id. <strong>Update…</strong> replaces one with the current version of a local profile; <strong>Delete</strong> removes it.</li>
+</ul>
+<p>A refusal of the library shows in plain words, with when to try again. With <code>Community.Mode</code> Off, the section is hidden and a line under Profiles says how to turn it on.</p>
 
 <h4 id="ui-discord">The Discord bot section</h4>
 <p><strong>Discord bot (optional)</strong> sets up and watches the <a href="discord.html#discord">Discord bot</a>. The full steps are in <a href="discord.html#discord-setup">Setting it up</a>.</p>
@@ -873,7 +927,7 @@
 <p>A red banner under the top bar says when sign-in is off (<code>WebUI.SignIn</code> is Never) while TGoat listens on the network: anyone who reaches the address controls your accounts.</p>
 
 <h4>The update banner</h4>
-<p>When a new version of TGoat is out, a banner under the top bar gives its number, a link to its release notes and an <strong>Install</strong> button. While it installs, the banner says what TGoat is waiting for before it restarts and has a <strong>Cancel</strong> button; the page reloads once the new version runs. <strong>Hide</strong> hides it until the next version. A release that could not be verified shows only that, in red: never its name or a link, and it must not be installed by hand. If Install mode has paused a version after repeated failures, the banner says why and when it tries again. If TGoat could not put its own program back after a failed update, the banner says which file to rename until you restart TGoat; <strong>Hide</strong> hides that too, and the log keeps it. In the Docker image, the banner has no Install button: it says to pull the new image. See <a href="start.html#updates">Updates</a>.</p>
+<p>When a new version of TGoat is out, a banner under the top bar gives its number, a link to its release notes and an <strong>Install</strong> button. While it installs, the banner says what TGoat is waiting for before it restarts and has a <strong>Cancel</strong> button; the page reloads once the new version runs. <strong>Hide</strong> hides it until the next version. <strong>Check for updates now</strong>, in the banner, in the Updates section of the TGoat settings and in the Commands palette, asks GitHub straight away instead of waiting for the next check (at most once a minute; hidden when <code>Update.Mode</code> is Never). A release that could not be verified shows only that, in red: never its name or a link, and it must not be installed by hand. If Install mode has paused a version after repeated failures, the banner says why and when it tries again. If TGoat could not put its own program back after a failed update, the banner says which file to rename until you restart TGoat; <strong>Hide</strong> hides that too, and the log keeps it. In the Docker image, the banner has no Install button: it says to pull the new image. See <a href="start.html#updates">Updates</a>.</p>
 
 <h4>The attack alert</h4>
 <figure>
@@ -895,7 +949,7 @@
 <details>
 <summary>What the palette offers, page by page</summary>
 <ul>
-  <li><strong>Everywhere</strong>: pages, instances, theme, sleep, settings reload, profiles, and starting or stopping a feature.</li>
+  <li><strong>Everywhere</strong>: pages, instances, theme, sleep, settings reload, profiles (load, import, export), the community library, and starting or stopping a feature.</li>
   <li><strong>Map</strong>: go to a planet or moon, show or board a fleet, toggle the layers.</li>
   <li><strong>Deck</strong>: camera, time, alarm sound, lock on a body or fleet.</li>
   <li><strong>Settings</strong>: open another file, jump to a setting by name.</li>
@@ -922,7 +976,7 @@
     <tr><th scope="row">Map chart</th><td>Arrows move (further with <kbd>Shift</kbd>), <kbd>+</kbd> and <kbd>−</kbd> zoom, <kbd>0</kbd> fits.</td></tr>
     <tr><th scope="row">Command deck</th><td><kbd>V</kbd> camera, <kbd>T</kbd> time speed, <kbd>M</kbd> alarm sound, <kbd>P</kbd> back to the Map, <kbd>Esc</kbd> release the lock.</td></tr>
     <tr><th scope="row">Settings</th><td><kbd>/</kbd> find a setting, <kbd>[</kbd> and <kbd>]</kbd> previous and next section, <kbd>T</kbd> back to top, <kbd>Ctrl</kbd> <kbd>S</kbd> save.</td></tr>
-    <tr><th scope="row">Logs</th><td>Arrows, <kbd>Page Up</kbd>, <kbd>Page Down</kbd>, <kbd>Home</kbd> and <kbd>End</kbd> move between lines. <kbd>Esc</kbd> closes the detail.</td></tr>
+    <tr><th scope="row">Logs</th><td>Arrows, <kbd>Page Up</kbd>, <kbd>Page Down</kbd>, <kbd>Home</kbd> and <kbd>End</kbd> move between lines. <kbd>Tab</kbd> goes to the links of the chosen line. <kbd>Esc</kbd> closes a link's card, then the detail.</td></tr>
   </tbody>
 </table>
 </div>
@@ -940,7 +994,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/interface.html</code> in the project. Build 0.1.0-alpha.3 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/interface.html</code> in the project. Build 0.1.0-alpha.4 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

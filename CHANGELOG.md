@@ -13,6 +13,68 @@ alphas are not guaranteed to migrate your files until the first stable
 release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
 
+## [0.1.0-alpha.4] - 2026-11-18
+
+### Added
+
+- Share profiles. Export a profile, or an instance's current settings, as a
+  `TGOAT1-` code or a `.tgoat-profile.json` file; `/profile export <name>` on
+  Telegram and Discord sends the code. Only settings that differ from the
+  defaults are shared. Coordinates become places (A, B, …: "a moon, used for
+  AutoFarm departure"), and a farming range becomes "50 systems around place
+  A". Sleep times, trusted players, titles and anything of your account are
+  never shared.
+- Import a profile from a code or a file, with a preview first: pick one of
+  your celestials for each place (one is suggested), what it would change on
+  the instance you pick, what is left out and why, warnings when it
+  was made for another class or speed, and what the setup assistant would
+  change. It creates a new profile and never changes an instance unless you
+  ask to use it now.
+- Community library of shared profiles, with no account: browse, search,
+  vote, report and publish your own. TGoat contacts it only when you use it.
+  New settings `Community.Mode` (On) and `Community.URL`.
+- Web interface for sharing: Export…, Share… and Import a profile… on the
+  Instances page (and Export… and Share… at the top of a profile in
+  Settings), Export settings… on each account card, the Community profiles
+  section under Profiles, and the same in the Commands palette.
+- Check for updates now: a button in the update banner, in the Updates section
+  of the TGoat settings and in the Commands palette looks for a new version
+  straight away, instead of waiting up to 6 hours. It runs the same signed
+  check, at most once a minute.
+- Logs page: coordinates, setting names, durations, clock times and proposal
+  numbers in a message can be pointed at, tapped or reached with Tab. A card
+  shows what TGoat knows (a planet's resources, ships and builds; a setting's
+  value and help; the time a duration stands for, counting down). A click
+  opens the map or the setting, and a line with a waiting proposal has an
+  Accept button.
+
+### Changed
+
+- Setup assistant: a new question asks whether TGoat should sleep while you
+  are away at night, filled in from your Sleep mode setting. Answer No and it
+  turns Sleep mode off and suggests no sleep hours, night fleet-save or night
+  round; before, being away at night always meant sleeping.
+- Expeditions and explorations no longer wait for a wave by default: a free
+  slot is filled at the next check, in Human mode too, instead of staying
+  empty for up to an hour. Waves are now an option, off by default: turn
+  `Pace.Waves` on to keep them (Human and Custom modes; Rage never waits).
+  A settings file that already sets `Pace.Waves` to true keeps its waves.
+- A readable console: long messages wrap to the window instead of running
+  under the time, with the action first and each reason below it (↳). Every
+  message starts at the same column, long feature names are shortened
+  (LF Research, DailyOffer…), the instance name shows only when more than
+  one instance runs, and coordinates, numbers, durations and setting names
+  are in bold. `TGoat.log`, a redirected console and the Logs page keep one
+  line per message. The Logs page uses the same short names, names the
+  instance only when there are several, and its sender column is no wider
+  than they need. Its attribute chips moved to the detail of a line, so the
+  message takes the whole width; **Attributes** in the bar brings them back.
+
+### Fixed
+
+- The Deck page opens again: since 0.1.0-alpha.1 it stayed empty, because
+  the update notice had no place to go on that page.
+
 ## [0.1.0-alpha.3] - 2026-11-18
 
 ### Fixed

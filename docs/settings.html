@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.3).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.4).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -45,6 +45,7 @@
     <li><a href="#settings-fleetsave">Fleet-save options</a></li>
     <li><a href="#settings-edit">Three ways to edit</a></li>
     <li><a href="#settings-profiles">Profiles</a></li>
+    <li><a href="#sharing-profiles">Sharing profiles</a></li>
     <li><a href="#settings-secrets">Secrets</a></li>
     <li><a href="#settings-device">Simulated device</a></li>
     <li><a href="#settings-instances">Managing instances</a></li>
@@ -81,12 +82,13 @@
 <p>TGoat added the settings below in November 2026, most of them after the reviews of each feature. The Settings page shows the help of each one.</p>
 <p>A behaviour that changes how the account plays is an option, off by default, such as the night round of expeditions, breaks, Directives, or settling a lifeform on planets that have none.</p>
 <details>
-<summary>Options off by default (12)</summary>
+<summary>Options off by default (13)</summary>
 <div class="table-wrap" role="region" aria-label="Options off by default" tabindex="0">
 <table>
   <caption class="sr-only">Options that are off by default</caption>
   <thead><tr><th scope="col">Option</th><th scope="col">What it does when on</th></tr></thead>
   <tbody>
+    <tr><th scope="row"><code>Pace.Waves</code></th><td>Expeditions leave in waves (a third of their slots free, or the oldest free slot waiting 20 to 60 minutes) and explorations when half of them are back, like a player who comes back now and then. A free slot can stay empty up to an hour. Human and Custom modes; Rage never sends in waves. Off, each free slot is filled at the next check.</td></tr>
     <tr><th scope="row"><code>Expeditions.NightRound</code></th><td>Just before bedtime, every free expedition slot leaves and comes back shortly after the wake-up. Needs sleep mode.</td></tr>
     <tr><th scope="row"><code>SleepMode.Breaks.Active</code></th><td>1 to 2 breaks a day, 30 to 90 minutes, more than 2 hours from waking up and from bedtime. No fleet leaves and no queue restarts; the Defender keeps watching. Afterwards, the features start again one by one.</td></tr>
     <tr><th scope="row"><code>SleepMode.Breaks.DefenderAtSleepPace</code></th><td>During a break, the Defender watches as at night (<code>Defender.NightWatch</code>) instead of at its day pace.</td></tr>
@@ -104,7 +106,7 @@
 </div>
 </details>
 <details>
-<summary>All new settings (90)</summary>
+<summary>All new settings (92)</summary>
 <div class="table-wrap" role="region" aria-label="New settings" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Settings added by the November 2026 reviews</caption>
@@ -112,7 +114,7 @@
   <tbody>
     <tr><th scope="row"><code>Brain.ReserveHours</code></th><td class="num">6 h</td><td>A celestial keeps the resources of its next Brain build when it pays it within this time. While its queue is busy, the time counts from the end of the running build.</td></tr>
     <tr><th scope="row"><code>Mode</code></th><td>Human</td><td>How fast TGoat plays: Human, RAGE or Custom. See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
-    <tr><th scope="row"><code>Pace.Reaction</code>, <code>Pace.Pauses</code>, <code>Pace.Waves</code>, <code>Pace.Checks</code>, <code>Pace.Requests</code></th><td>Human, Human, true, Human, Human</td><td>The fine settings of Custom mode: reactions (Human, Quick, Instant), pauses (Human, Short), waves, checks (Human, Frequent), requests (Human, Fast). Used in Custom mode only; the defaults play like Human.</td></tr>
+    <tr><th scope="row"><code>Pace.Reaction</code>, <code>Pace.Pauses</code>, <code>Pace.Waves</code>, <code>Pace.Checks</code>, <code>Pace.Requests</code></th><td>Human, Human, false, Human, Human</td><td>The fine settings of Custom mode: reactions (Human, Quick, Instant), pauses (Human, Short), waves, checks (Human, Frequent), requests (Human, Fast). Used in Custom mode only, except <code>Pace.Waves</code>, which applies in Human mode too; the defaults play like Human.</td></tr>
     <tr><th scope="row"><code>Directives.Active</code>, <code>Directives.Missions.*</code></th><td>false</td><td>See the options above.</td></tr>
     <tr><th scope="row"><code>Directives.CheckIntervalMin</code>, <code>Directives.CheckIntervalMax</code></th><td class="num">120 and 360 min</td><td>Time between two looks at the Directives menu.</td></tr>
     <tr><th scope="row"><code>Directives.Notify</code></th><td>DarkMatterOnly</td><td>When a Directives collect sends a notice naming the missions: EveryReward, DarkMatterOnly or Never.</td></tr>
@@ -148,7 +150,7 @@
     <tr><th scope="row"><code>Defender.HideResourcesInBuild.WhileAsleep</code></th><td>false</td><td>Also hides resources during sleep and during breaks at the sleep pace. Off, the account stays still, as a sleeping player would.</td></tr>
     <tr><th scope="row"><code>Defender.NightWatchFollowUp</code></th><td>true</td><td>With OnAlert, when the check after a message sees no attack, one more check 8 to 15 minutes after the message. Most attackers send their fleet a few minutes after reading their spy report: this second look catches them, for one more request per message. A later message, not in the same burst as the first, gets its own look 8 to 15 minutes later. Later attacks are still not seen. The delays follow the attacker: the play mode does not change them.</td></tr>
     <tr><th scope="row"><code>Expeditions.CargoShare</code></th><td class="num">75%</td><td>Cargo sized for this share of the largest find.</td></tr>
-    <tr><th scope="row"><code>Expeditions.MinFreeSlotsForWave</code></th><td class="num">0</td><td>Free expedition slots that start a wave; 0: a third of them.</td></tr>
+    <tr><th scope="row"><code>Expeditions.MinFreeSlotsForWave</code></th><td class="num">0</td><td>Free expedition slots that start a wave; 0: one, or a third of them with <code>Pace.Waves</code>.</td></tr>
     <tr><th scope="row"><code>Expeditions.NightRound</code></th><td>false</td><td>See the options above.</td></tr>
     <tr><th scope="row"><code>Expeditions.BuildFleet</code></th><td>Suggest</td><td>Ships expeditions lack. Pathfinders for a Discoverer, one for each expedition an origin sends, valued by the find model alone. More of the main ship for any class, only with every slot in use and once 7 days and 20 results show finds cut by a full hold (measured, or by the find model fitted to those finds), each added ship paying back within the limit below. Off: never. Suggest: sent to you with cost, value per day and payback, built when you accept, never more than you accepted. Automatic: one order per check. Ships are paid from the origin's surplus, never from what the Brain keeps for builds ranked before cargo ships.</td></tr>
     <tr><th scope="row"><code>LoginBrowser</code></th><td>Auto</td><td>Browser that TGoat opens for <a href="start.html#browser-login">Sign in with your browser</a> and <code>tgoat login</code>, on the computer that runs TGoat. Auto: your default browser when it is Chrome, Edge, Brave, Chromium or Opera, else the first of them installed, and Firefox only when none is. Or the full path of a browser program.</td></tr>
@@ -179,10 +181,12 @@
     <tr><th scope="row"><code>General.YieldWhenYouPlay.Active</code>, <code>General.YieldWhenYouPlay.QuietMinutes</code></th><td>true and 10 min</td><td>When you start, cancel or speed up something in a queue of the game yourself, the features that build or send fleets wait until you have done nothing in the game for this many minutes (1 to 120), then start again one by one. The Defender keeps watching. Off: they carry on. See <a href="interface.html#ui-you-play">While you play</a>.</td></tr>
     <tr><th scope="row"><code>Notifications.Level</code></th><td>Everything</td><td>What an instance sends to Telegram and Discord: Attacks (attacks only), Important (attacks, warnings, errors, sleep mode and proposals) or Everything. The web interface still shows everything. The <a href="interface.html#ui-assistant">setup assistant</a> asks this question.</td></tr>
     <tr><th scope="row"><code>Notifications.OrionReward</code></th><td>true</td><td>One notification when the game shows an Orion reward waiting to be claimed (claim it within the hour). The mark TGoat reads comes from the game's script and has not yet been seen on a real Orion page. TGoat sees it only when it loads a full game page, so not at night with <code>Defender.NightWatch</code> on <code>OnAlert</code>. TGoat never claims it.</td></tr>
-    <tr><th scope="row"><code>Logging.Style</code> (<code>tgoat.json</code>)</th><td>Readable</td><td>How a log line looks in the console, <code>TGoat.log</code> and the Logs page: Readable (time, instance › feature, the message), Levels (<code>[Warning]</code>) or TBot (<code>[17:56:25 INF Main|Directives]</code>). Applies at once.</td></tr>
+    <tr><th scope="row"><code>Logging.Style</code> (<code>tgoat.json</code>)</th><td>Readable</td><td>How a log line looks in the console, <code>TGoat.log</code> and the Logs page: Readable (time, instance › feature, the message; in a terminal, long messages wrap with their reasons below), Levels (<code>[Warning]</code>) or TBot (<code>[17:56:25 INF Main|Directives]</code>). Applies at once.</td></tr>
     <tr><th scope="row"><code>Logging.Colours</code> (<code>tgoat.json</code>)</th><td>Levels and features</td><td>Levels and features, Levels only, or None. The <code>NO_COLOR</code> environment variable turns the console colours off.</td></tr>
     <tr><th scope="row"><code>Logging.FeatureColours</code> (<code>tgoat.json</code>)</th><td>empty</td><td>A feature's colour instead of the one TGoat gives it. Pick it on the Logs page, under <strong>Colours</strong>.</td></tr>
     <tr><th scope="row"><code>Update.Mode</code> (<code>tgoat.json</code>)</th><td>Notify</td><td>New versions from GitHub: Notify (tells you once, Install button in the web interface), Install (installs by itself at a quiet moment) or Never (never contacts GitHub). In the Docker image, Install works as Notify: pull the new image (<a href="start.html#docker-update">how</a>). See <a href="start.html#updates">Updates</a>.</td></tr>
+    <tr><th scope="row"><code>Community.Mode</code> (<code>tgoat.json</code>)</th><td>On</td><td>The online library of shared profiles. On: the Community view lists them and you can publish yours. Off: the view is hidden and TGoat never contacts the library; sharing by code or file still works. See <a href="#sharing-profiles">Sharing profiles</a>.</td></tr>
+    <tr><th scope="row"><code>Community.URL</code> (<code>tgoat.json</code>)</th><td>TGoat's library</td><td>HTTPS address of the library. Change it only for a library you host yourself.</td></tr>
     <tr><th scope="row"><code>Update.Channel</code> (<code>tgoat.json</code>)</th><td>Alpha in an alpha build, else Stable</td><td>Alpha follows every version, test versions included; Stable only the stable ones.</td></tr>
   </tbody>
 </table>
@@ -243,6 +247,19 @@
 }</code></pre>
 <p>To use it for the next 4 hours, send <code>/profile load night 4h</code>. When the time is up, the instance goes back to its own settings. <code>/profile reset</code> ends it earlier.</p>
 
+<h3 id="sharing-profiles">Sharing profiles</h3>
+<p>You can give a profile to another player, and take one, as a code, as a file, or through the Community library.</p>
+<p><strong>What is shared:</strong> the profile's settings that differ from the defaults. Export an instance and you share its current settings the same way, never its name.</p>
+<p><strong>Places instead of coordinates:</strong> a coordinate never leaves your computer. Each celestial a profile names becomes a place, A, B, C… (10 at most), with its type (planet or moon) and the settings that use it, such as "AutoFarm: Departure points". You can add a short note to each place, such as "my main moon". A range of <code>AutoFarm.ScanRange</code> becomes "50 systems around place A" when it contains a place; an excluded system of <code>AutoFarm.Exclude</code> is shared when it is a place's own system. Other ranges and excluded positions stay home.</p>
+<p><strong>What never is:</strong> colonization zones, sleep and wake-up times, trusted players, messages to attackers, titles and Discord names, which notifications go to Telegram or Discord, and anything of the account: e-mail, passwords, tokens, proxy, device, Telegram and Discord settings. The export lists what it leaves out, and refuses a name, description, author or note that holds coordinates.</p>
+<ul>
+  <li><strong>Code:</strong> one line that starts with <code>TGOAT1-</code>. A code that was cut or changed is refused. Over 24 KiB, use the file.</li>
+  <li><strong>File:</strong> <code>&lt;name&gt;.tgoat-profile.json</code>, plain JSON, 64 KiB at most.</li>
+  <li><strong>Chat:</strong> <code>/profile export &lt;name&gt;</code> sends the code; a long one comes as a file.</li>
+</ul>
+<p><strong>Import:</strong> paste a code or choose a file, pick an instance, and read the preview before anything is written. For each place, pick one of your planets or moons: TGoat suggests one (a moon for a moon; for a departure, the one with the most ships; for a destination, the planet with the most storage; else your main planet or its moon). "Leave automatic" keeps that setting empty, and the preview says what will not work as the author meant. Only your own planets and moons can be picked; until TGoat has read the account, places can only stay automatic. A name or description that cites coordinates is not kept: the profile gets "Imported from" and the name instead. The preview shows each setting the profile would change on that instance, what is left out and why (unknown in this version, personal, a secret, a value out of range), a warning when the profile was made for another class or other universe speeds, and what the setup assistant would change for this account. Import then creates a new profile; your instances stay as they are unless you tick "use it now". To undo, delete the profile.</p>
+<p><strong>Community library:</strong> browse, search, vote, report and publish, with no account. TGoat contacts it only when you open the Community view or click something there. Your TGoat signs what it publishes with its own key, kept in <code>secrets.json</code>; the web interface shows its short fingerprint as your publisher id. Anyone can download what you publish, so keep your in-game name out of the name, description and author. You can update or delete your own profiles. A profile reported by 3 different players is hidden until the library's owner looks at it. Limits a day: 5 publications or updates, 50 votes, 10 reports; votes and reports work from the day after your first publication or vote. <code>Community.Mode</code> Off turns all of it off.</p>
+
 <h3 id="settings-secrets">Secrets</h3>
 <p>Secrets are write-only. You can set, replace or clear one, but never read it back. The web interface, Telegram and Discord only say whether it is set.</p>
 <p>They live in <code>secrets.json</code>, which the web interface never serves. The web interface password is kept there too, as an Argon2id hash under <code>WebUI</code>, never the password itself. Example: in <code>secrets.json</code>, the e-mail and password of an instance sit under its id.</p>
@@ -266,7 +283,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/settings.html</code> in the project. Build 0.1.0-alpha.3 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/settings.html</code> in the project. Build 0.1.0-alpha.4 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

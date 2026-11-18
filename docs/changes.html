@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.3).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.4).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -84,7 +84,7 @@
 <h2 id="every">Every change from TBot 3.6</h2>
 <aside class="in-short" aria-label="In short">
 <ul>
-  <li>Every difference between TBot 3.6 and TGoat that a player can notice: 350 rows in 29 features.</li>
+  <li>Every difference between TBot 3.6 and TGoat that a player can notice: 351 rows in 29 features.</li>
   <li>Each row gives a topic, what TBot did and what TGoat does now.</li>
   <li>Type a few words in the filter to keep only the rows that contain them.</li>
   <li>For the short version, read <a href="from-tbot.html">What changes for you</a>.</li>
@@ -96,7 +96,7 @@
   <label for="change-filter-input" style="display:block;font-weight:600;margin-bottom:.35rem">Filter the rows</label>
   <input id="change-filter-input" type="search" autocomplete="off" spellcheck="false" placeholder="for example: deuterium, fleet-save, MinFields" aria-describedby="change-filter-status" style="box-sizing:border-box;width:100%;max-width:30rem;font:inherit;padding:.5rem .7rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)">
   <button type="button" id="change-filter-all" style="font:inherit;margin:.5rem 0 0;padding:.4rem .8rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer">Open all</button>
-  <p id="change-filter-status" aria-live="polite" style="margin:.5rem 0 0;color:var(--muted)">Showing all 350 rows. Every word you type must appear in a row.</p>
+  <p id="change-filter-status" aria-live="polite" style="margin:.5rem 0 0;color:var(--muted)">Showing all 351 rows. Every word you type must appear in a row.</p>
 </div>
 <p>"Before" is what TBot 3.6 did. "Now" is what TGoat does. A dash means the behaviour did not exist.</p>
 
@@ -180,7 +180,7 @@
     <tr><th scope="row">After a return, an arrival, enough production</th><td>20 to 50 s, or a fixed delay depending on the feature.</td><td>The same routine delay, 5 s to 1 h.</td></tr>
     <tr><th scope="row">After an impact on one of your celestials</th><td>The next pass.</td><td>20 to 90 s (Harvest, Brain under attack).</td></tr>
     <tr><th scope="row">Decision on a colony</th><td>1 to 5 s after the arrival.</td><td>3 to 20 min after the colony is first seen.</td></tr>
-    <tr><th scope="row">Expeditions and Discovery</th><td>Each return re-sent within seconds or minutes.</td><td>Waves: enough free slots, or the first free one waiting 20 to 60 min.</td></tr>
+    <tr><th scope="row">Expeditions and Discovery</th><td>Each return re-sent within seconds or minutes.</td><td>Each free slot re-sent at the next check, after the routine delay. In waves only with <code>Pace.Waves</code> (off by default): enough free slots, or the first free one waiting 20 to 60 min.</td></tr>
     <tr><th scope="row">Breaks</th><td>—</td><td>Optional, see <a href="#sleep">Sleep mode</a>.</td></tr>
     <tr><th scope="row">Play mode</th><td>One imposed human rhythm.</td><td>A switch: Human (default, the same rhythm), Rage (every delay kept only for discretion dropped, no breaks) or Custom (the <code>Pace.*</code> settings one by one). See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
     <tr><th scope="row">You play in the game yourself</th><td>The bot played on beside you; only manual mode, through its own proxy, paused it.</td><td>When you start, cancel or speed up something in a queue that TGoat did not order in the 30 s before, the game's channel says so, without any request: the features that build or send fleets wait until you have done nothing for 10 min (<code>General.YieldWhenYouPlay</code>, on by default), then start again one by one. The Defender keeps watching and still answers an attack. See <a href="interface.html#ui-you-play">While you play</a>.</td></tr>
@@ -420,7 +420,7 @@
     <tr><th scope="row"><code>Expeditions.MinPrimaryToSend</code></th><td>Never read.</td><td>Read: a smaller fleet is raised to it; an origin that cannot provide it after <code>Expeditions.PrimaryToKeep</code> sends nothing (<code>below_min_primary_to_send</code>).</td></tr>
     <tr><th scope="row">Deuterium loaded on board (TBot only, removed)</th><td>20,000 per expedition (<code>FuelToCarry</code>): 2 expeditions out of 7 from a moon with 30,000.</td><td>Setting removed: TGoat loads no deuterium as cargo; the only deuterium used is the fuel the game takes for the flight, as when you send an expedition by hand.</td></tr>
     <tr><th scope="row">Automatic origin (no <code>Expeditions.Origin</code> set)</th><td>Any planet before any moon, even an empty one.</td><td>The celestial that lines up the largest expedition, a moon on a tie. A planet set as origin gets an information line (phalanx).</td></tr>
-    <tr><th scope="row">Pace (TBot settings removed)</th><td>Each return re-sent 30 s to 5 min later (<code>Min/MaxWaitNextRound</code>).</td><td>Waves: once a third of the slots are free (<code>MinFreeSlotsForWave</code>) or the first free slot has waited 20 to 60 min, after a human delay. At start-up, every free slot leaves.</td></tr>
+    <tr><th scope="row">Pace (TBot settings removed)</th><td>Each return re-sent 30 s to 5 min later (<code>Min/MaxWaitNextRound</code>).</td><td>Each free slot re-sent at the next check, after the reaction delay of the <code>Mode</code>. With <code>Pace.Waves</code> (off by default), waves: once a third of the slots are free (<code>MinFreeSlotsForWave</code>) or the first free slot has waited 20 to 60 min. At start-up, every free slot leaves.</td></tr>
     <tr><th scope="row">Wake-ups and reads</th><td>Research read on every pass; a pass every 4 to 6 min when nothing could leave.</td><td>Astrophysics from the cache. Woken by an expedition return, or by ships coming back to an origin (30 to 60 min at most). With the automatic origin and nothing able to leave, only celestials where ships may have arrived are read again (a fleet landed or came back, a shipyard at work for 3 h, or 6 h without a read), instead of every celestial every 3 h.</td></tr>
     <tr><th scope="row">Size</th><td>Cargo for 100% of the largest find.</td><td>For <code>CargoShare</code> (75%) of that find.</td></tr>
     <tr><th scope="row">Doubled find</th><td>The cargo was sized for a doubled find on every fleet, with a pathfinder or not.</td><td>The doubling counts only with a pathfinder in the fleet. Without one, about half as many large cargo ships are sent.</td></tr>
@@ -502,7 +502,7 @@
     <tr><th scope="row">Research not unlocked, origin without resources</th><td>The whole galaxy read: 499 system views a pass, about 10,000 a day.</td><td>The origin's stock read before any view. A refused origin costs one view; at most 3 views without a discovery per origin and pass. The game's text is a warning, once per revision.</td></tr>
     <tr><th scope="row">Order of positions (TBot setting removed)</th><td>Random order possible (<code>AutoDiscovery.RandomizeDestination</code>).</td><td>Nearest first. A position explored is not tried again for 7 days while TGoat runs. Discovery starts empty after the import.</td></tr>
     <tr><th scope="row">Spending</th><td>No limit, taken even from a stock waiting for a build.</td><td>At most 5% of the account's production over 24 h (<code>MaxShareOfProduction</code>) and <code>MaxMissionsPerDay</code> missions (0: no cap). Each origin pays from its surplus.</td></tr>
-    <tr><th scope="row">Pace</th><td>A discovery re-sent 20 to 50 s after each return.</td><td>Slots full: half the discoveries back, or the first one back waiting 20 to 60 min, then a human delay. Budget spent: waits for the 24 h to pass.</td></tr>
+    <tr><th scope="row">Pace</th><td>A discovery re-sent 20 to 50 s after each return.</td><td>Slots full: the first return, then a human delay. With <code>Pace.Waves</code> (off by default): half the discoveries back, or the first one back waiting 20 to 60 min. Budget spent: waits for the 24 h to pass.</td></tr>
     <tr><th scope="row">Positions of one system</th><td>One view, then per position another view, the fleets and two slot reads.</td><td>One series: about 26 requests become 9 to 13 for 5 positions.</td></tr>
     <tr><th scope="row">Reason <code>no_ships</code></th><td>"No origin has the ships": wrong, a discovery uses no ship.</td><td><code>origin_refused</code> (with the game's text), <code>no_origin_surplus</code>, <code>daily_budget_spent</code>.</td></tr>
     <tr><th scope="row">Artifact pause (<code>StopAt</code>)</th><td>Fixed at 3,600; 0 turned the check off.</td><td>0 (default) follows the limit read in the game.</td></tr>
@@ -669,7 +669,7 @@
     <tr><th scope="row">Deploy and Switch</th><td>Announced success even when it failed.</td><td>Report the real result.</td></tr>
     <tr><th scope="row"><code>/build</code></th><td>Did not work for defences.</td><td>Works for defences.</td></tr>
     <tr><th scope="row"><code>/wakeup</code> on an awake instance, <code>/cancelghostsleep</code> with nothing to cancel</th><td>An error.</td><td>A plain answer.</td></tr>
-    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-alpha.3". The regular sign of life also gives the version.</td></tr>
+    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-alpha.4". The regular sign of life also gives the version.</td></tr>
     <tr><th scope="row">Discord webhook (<code>DiscordWebhook.Active</code>)</th><td>—</td><td>Posts as "TGoat" unless you set <code>DiscordWebhook.Username</code>.</td></tr>
     <tr><th scope="row">Discord bot</th><td>None.</td><td>Every Telegram command. See <a href="discord.html#discord">Discord bot</a>.</td></tr>
   </tbody>
@@ -684,7 +684,7 @@
   <caption class="sr-only">Log lines: TBot 3.6 compared with TGoat</caption>
   <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
   <tbody>
-    <tr><th scope="row">Console line</th><td><code>[17:56:25.123 INF Main|Defender] No attack in progress</code>, the whole line in the level's colour.</td><td><code>17:56:25  Main › Defender    No attack in progress</code>: ⚠ for a warning, ✖ for an error, debug dimmed, each feature's name in its own colour. <code>Logging.Style</code> gives the Levels or TBot layout, <code>Logging.Colours</code> fewer colours or none.</td></tr>
+    <tr><th scope="row">Console line</th><td><code>[17:56:25.123 INF Main|Defender] No attack in progress</code>, the whole line in the level's colour.</td><td><code>17:56:25  Defender      No attack in progress</code>: ⚠ for a warning, ✖ for an error, debug dimmed, each feature's name in its own colour; long messages wrap to the window with their reasons below; the instance name only when several run; data in bold. <code>Logging.Style</code> gives the Levels or TBot layout, <code>Logging.Colours</code> fewer colours or none.</td></tr>
     <tr><th scope="row">Message that starts with its feature's name</th><td>The name twice.</td><td>Shown once: the console, <code>TGoat.log</code> and the Logs page drop the prefix; <code>TGoat.csv</code> and the API keep the message as logged.</td></tr>
     <tr><th scope="row">Windows console</th><td>Colours only; symbols never checked.</td><td>⚠ ✖ › · where the console shows them (Windows Terminal, Windows 11 console, UTF-8 terminals), <code>! x &gt; .</code> elsewhere; <code>NO_COLOR</code> turns colours off.</td></tr>
     <tr><th scope="row"><code>TGoat.log</code></th><td>Old TBot line with date.</td><td>The chosen style with date and zone; the TBot style keeps the old line. A style change keeps the file.</td></tr>
@@ -716,7 +716,7 @@
   <caption class="sr-only">Setup assistant: TBot 3.6 compared with TGoat</caption>
   <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
   <tbody>
-    <tr><th scope="row">Settings of an account that has grown</th><td>TBot had no setup assistant: the defaults, written for a new account, stayed until the player changed them one by one.</td><td>At most six questions filled in from the account, then a plan by theme with a reason built from the account's numbers. Each theme is applied or skipped with one click, and nothing is written without a click.</td></tr>
+    <tr><th scope="row">Settings of an account that has grown</th><td>TBot had no setup assistant: the defaults, written for a new account, stayed until the player changed them one by one.</td><td>At most seven questions filled in from the account, then a plan by theme with a reason built from the account's numbers. Each theme is applied or skipped with one click, and nothing is written without a click.</td></tr>
     <tr><th scope="row">Your values and profiles</th><td>—</td><td>A value you set yourself changes only if you tick "Use the proposed value". A setting decided by an active profile is left alone.</td></tr>
     <tr><th scope="row">Going back</th><td>—</td><td>Each Apply is one settings-history revision with the source "assistant": restore the previous version.</td></tr>
   </tbody>
@@ -806,7 +806,7 @@
 <p>How it works and how to roll back by hand: <a href="start.html#updates">Updates</a>.</p>
 </details>
 <details class="feature" id="fbf-webui">
-<summary>Web interface (2)</summary>
+<summary>Web interface (3)</summary>
 <div class="table-wrap" role="region" aria-label="Web interface, before and now" tabindex="0">
 <table class="bn">
   <caption class="sr-only">Web interface: TBot 3.6 compared with TGoat</caption>
@@ -814,6 +814,7 @@
   <tbody>
     <tr><th scope="row">Sign-in</th><td>None: whoever reached the port controlled the accounts.</td><td>A password (and optionally an authenticator app or passkeys, or a passkey alone with <code>WebUI.PasskeyAlone</code>) as soon as another computer can reach the interface or the game proxy (<code>WebUI.SignIn</code> Auto), set with <code>tgoat webui password</code>; never a default password. See <a href="start.html#webui-signin">Sign-in to the web interface</a>.</td></tr>
     <tr><th scope="row">Docker</th><td>—</td><td>An image, <code>ghcr.io/ronnie32/tgoat</code> (amd64 and arm64), built from the signed release archives, with a <code>docker-compose.yml</code> to copy and an optional Caddy service for HTTPS on your domain. In it, the interface always asks for a password, and new versions are announced, never installed. See <a href="start.html#docker">Run TGoat in Docker</a>.</td></tr>
+    <tr><th scope="row">Profile sharing</th><td>—</td><td>A profile, or an instance's current settings, is shared as a <code>TGOAT1-</code> code or a <code>.tgoat-profile.json</code> file (<code>/profile export</code> on Telegram and Discord), never with a coordinate: each celestial it names becomes a place (A, B…, a moon or a planet, with the settings that use it and the author's note), and an AutoFarm range becomes "N systems around place A"; never the personal settings (sleep times, trusted players, colonization zones, titles) or anything of the account. Import has you pick a celestial for each place (a suggestion is preselected, or "automatic") and first shows what it would change on the chosen instance, what is left out and why, the fit to the class and speeds, and what the assistant would change; it creates a new profile. An online library, with no account, lets you search, vote, report and publish (<code>Community.Mode</code>, <code>Community.URL</code>). See <a href="settings.html#sharing-profiles">Sharing profiles</a>.</td></tr>
   </tbody>
 </table>
 </div>
@@ -821,7 +822,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-alpha.3 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-alpha.4 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

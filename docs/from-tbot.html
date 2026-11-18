@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.3).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.4).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -84,7 +84,7 @@
   <li>Your old values stay, except TBot's old defaults: they take TGoat's new defaults, and the report says so. <a href="#import">The import</a></li>
   <li>The Defender checks every 1 to 5 minutes. In sleep mode it keeps watching, by default without a request until a game message comes. <a href="changes.html#defender">Defender</a></li>
   <li>The Brain builds mines by payback over 60 days and picks the cheapest energy. <a href="changes.html#brain">Brain</a></li>
-  <li>Expeditions have no limit per origin and leave in waves. <a href="changes.html#expeditions">Expeditions</a></li>
+  <li>Expeditions have no limit per origin; each free slot is filled at the next check, or in waves with <code>Pace.Waves</code>. <a href="changes.html#expeditions">Expeditions</a></li>
   <li>No fleet delivers resources to a celestial an attack is heading for. <a href="changes.html#fleet-sends">Fleet sends</a></li>
   <li>AutoFarm never attacks a player back from inactivity. <a href="changes.html#autofarm">AutoFarm</a></li>
   <li>AutoFarm sends at most 20 probes and ranks targets by profit per hour. <a href="changes.html#autofarm">AutoFarm</a></li>
@@ -145,14 +145,14 @@
     <tr><th scope="row"><code>AutoFarm.CombatPlanner.DefenderTechnologyMargin</code>, <code>AutoFarm.CombatPlanner.DefenderLifeformBonus</code> (TBot only, removed)</th><td>Only bonuses read in the espionage report count.</td></tr>
     <tr><th scope="row"><code>AutoDiscovery.MaxFailures</code>, <code>AutoDiscovery.RandomizeDestination</code> (TBot only, removed)</th><td>Discovery explores nearest first. A position it explored is not tried again for 7 days while TGoat runs. A refused origin costs at most one system view a pass.</td></tr>
     <tr><th scope="row"><code>SleepMode.LogoutOnSleep</code> (TBot only, removed)</th><td>Never read in TBot. Dropped as unknown.</td></tr>
-    <tr><th scope="row"><code>Expeditions.CheckIntervalMin</code>, <code>Expeditions.CheckIntervalMax</code> (TBot only, removed)</th><td>Not read. Expeditions leave in waves (<code>Expeditions.MinFreeSlotsForWave</code>) and wait for the return that frees their slots. Dropped as unknown.</td></tr>
+    <tr><th scope="row"><code>Expeditions.CheckIntervalMin</code>, <code>Expeditions.CheckIntervalMax</code> (TBot only, removed)</th><td>Not read. Expeditions wait for the return that frees a slot (or the slots of a wave: <code>Expeditions.MinFreeSlotsForWave</code>, <code>Pace.Waves</code>). Dropped as unknown.</td></tr>
     <tr><th scope="row"><code>Brain.AutoMine.BuildDepositIfFull</code> (TBot only, removed)</th><td>Storage is raised before a build it could not hold.</td></tr>
     <tr><th scope="row"><code>Brain.LifeformAutoMine.StartFromCrystalMineLvl</code> (TBot only, removed)</th><td>A lifeform building starts when it pays back fast enough.</td></tr>
     <tr><th scope="row"><code>Brain.AutoResearch.PrioritizeEnergyTechnology</code> (TBot only, removed)</th><td>Energy technology is weighed against solar plant, satellites and fusion.</td></tr>
     <tr><th scope="row"><code>Brain.AutoResearch.ForceResearchWhateverTheLabLevel</code> (TBot only, removed)</th><td>Research no longer waits for the lab.</td></tr>
     <tr><th scope="row"><code>Expeditions.FuelToCarry</code> (TBot only, removed)</th><td>No deuterium on board; it emptied the origin moon.</td></tr>
     <tr><th scope="row"><code>Expeditions.IgnoreSleep</code> (TBot only, removed)</th><td>Nothing was sent during sleep. See <code>Expeditions.NightRound</code>.</td></tr>
-    <tr><th scope="row"><code>Expeditions.MinWaitNextRound</code>, <code>Expeditions.MaxWaitNextRound</code> (TBot only, removed)</th><td>Waves at a human pace: <code>Expeditions.MinFreeSlotsForWave</code>.</td></tr>
+    <tr><th scope="row"><code>Expeditions.MinWaitNextRound</code>, <code>Expeditions.MaxWaitNextRound</code> (TBot only, removed)</th><td>Each free slot leaves after a reaction delay set by the <code>Mode</code>; waves on request: <code>Pace.Waves</code>, <code>Expeditions.MinFreeSlotsForWave</code>.</td></tr>
     <tr><th scope="row"><code>AutoColonize.Abandon.MinFields</code> (TBot only, removed)</th><td>Per zone: <code>AutoColonize.Targets[].MinFields</code>. The import copies it into each zone when abandon was on.</td></tr>
     <tr><th scope="row"><code>AutoColonize.IntensiveResearch</code> (TBot only, removed)</th><td><code>AutoColonize.ParallelTries</code>. The import keeps the number of ships when the mode was on.</td></tr>
     <tr><th scope="row"><code>Defender.Autofleet.DelayedFleetSave.Active</code></th><td><code>Defender.Autofleet.Departure</code>: true becomes Delayed, false is Now. <code>DelaySeconds</code> and <code>SafetySeconds</code> stay.</td></tr>
@@ -281,7 +281,7 @@
   <li><a href="changes.html#fbf-brain-lifeforms"><strong>Brain: lifeforms</strong></a>. Buildings and research chosen by payback, with no start level. When a research slot opens, TGoat chooses its technology, the guaranteed one by default.</li>
   <li><a href="changes.html#fbf-brain-repatriation-cargo-ships-defences-offer"><strong>Repatriation, cargo ships, defences, offer</strong></a>. Repatriation ships only the surplus, once it reaches a threshold, and leaves the fleet-save fuel. Defences come from a budget of 24 hours of production, split by a ratio. The offer of the day is bought once, under a price.</li>
   <li><a href="changes.html#fbf-jump-gate"><strong>Jump gate</strong></a>. It jumps now (threshold 1,000 points), waits for the recharge, and never jumps to or from a moon under attack.</li>
-  <li><a href="changes.html#expeditions"><strong>Expeditions</strong></a>. No limit per origin, waves at a human pace, cargo for 75% of the largest find, results read from the game's messages. TGoat can propose the ships your expeditions lack.</li>
+  <li><a href="changes.html#expeditions"><strong>Expeditions</strong></a>. No limit per origin, each free slot refilled at a human pace (waves are an option), cargo for 75% of the largest find, results read from the game's messages. TGoat can propose the ships your expeditions lack.</li>
   <li><a href="changes.html#harvest"><strong>Harvest</strong></a>. A field whose fuel costs more than 10% of what it brings is left. Your fields are read 20 to 90 seconds after an attack, and position 16 where your expeditions went.</li>
   <li><a href="changes.html#colonize"><strong>Colonization</strong></a>. One fields threshold per zone, zones filled in list order, at most 10 failed colonies per zone, and an abandon 3 to 20 minutes after the colony is seen. With session-token login, abandon counts as off.</li>
   <li><a href="changes.html#fbf-discovery"><strong>Discovery</strong></a>. Explores nearest first, within 5% of the account's production a day, paid from surpluses. It can settle a lifeform on each planet that has none (off by default).</li>
@@ -297,7 +297,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/from-tbot.html</code> in the project. Build 0.1.0-alpha.3 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/from-tbot.html</code> in the project. Build 0.1.0-alpha.4 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>
