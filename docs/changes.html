@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.2).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -84,7 +84,7 @@
 <h2 id="every">Every change from TBot 3.6</h2>
 <aside class="in-short" aria-label="In short">
 <ul>
-  <li>Every difference between TBot 3.6 and TGoat that a player can notice: 347 rows in 28 features.</li>
+  <li>Every difference between TBot 3.6 and TGoat that a player can notice: 350 rows in 29 features.</li>
   <li>Each row gives a topic, what TBot did and what TGoat does now.</li>
   <li>Type a few words in the filter to keep only the rows that contain them.</li>
   <li>For the short version, read <a href="from-tbot.html">What changes for you</a>.</li>
@@ -96,25 +96,26 @@
   <label for="change-filter-input" style="display:block;font-weight:600;margin-bottom:.35rem">Filter the rows</label>
   <input id="change-filter-input" type="search" autocomplete="off" spellcheck="false" placeholder="for example: deuterium, fleet-save, MinFields" aria-describedby="change-filter-status" style="box-sizing:border-box;width:100%;max-width:30rem;font:inherit;padding:.5rem .7rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)">
   <button type="button" id="change-filter-all" style="font:inherit;margin:.5rem 0 0;padding:.4rem .8rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer">Open all</button>
-  <p id="change-filter-status" aria-live="polite" style="margin:.5rem 0 0;color:var(--muted)">Showing all 347 rows. Every word you type must appear in a row.</p>
+  <p id="change-filter-status" aria-live="polite" style="margin:.5rem 0 0;color:var(--muted)">Showing all 350 rows. Every word you type must appear in a row.</p>
 </div>
 <p>"Before" is what TBot 3.6 did. "Now" is what TGoat does. A dash means the behaviour did not exist.</p>
 
 <h3 id="feature-by-feature">Feature by feature</h3>
 <details class="feature" id="fbf-defender">
-<summary id="defender">Defender (22)</summary>
+<summary id="defender">Defender (23)</summary>
 <div class="table-wrap" role="region" aria-label="Defender, before and now" tabindex="0">
 <table class="bn">
   <caption class="sr-only">Defender: TBot 3.6 compared with TGoat</caption>
   <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
   <tbody>
     <tr><th scope="row">During sleep</th><td>Stopped all night: a night attack was neither seen nor countered.</td><td>By default it watches on alert (<code>Defender.NightWatch</code>): no request to the game while no message comes. Each new message (a spy report, but also your fleets' reports or a private message) brings a check 1 to 3 min later and, if it saw no attack, one more 8 to 15 min after the message (<code>Defender.NightWatchFollowUp</code>); each check marks the current planet active. An attack sent without a fresh espionage report, or after these checks, is not seen. Every 20 to 40 min TGoat checks that the channel still works, without loading a game page. If the channel fails, you get a warning and it checks every 4 to 8 min until the wake-up, as with <code>Always</code>. <code>Never</code> starts no new check. It fleet-saves if <code>Defender.Autofleet.Active</code> is on, and neither spies on nor writes to the attacker.</td></tr>
-    <tr><th scope="row">Manual mode</th><td>Stopped.</td><td>It only alerts: nothing is sent or built, anti-ballistic missiles included.</td></tr>
+    <tr><th scope="row">Manual mode</th><td>Stopped.</td><td>It only alerts a new attack: nothing is sent or built against it, anti-ballistic missiles included. A fleet-save planned before still leaves at its time.</td></tr>
     <tr><th scope="row">Settings reload, exclusive command</th><td>Stopped or suspended it: no watch while features restarted or the command ran.</td><td>No longer stop it: it reads its settings again at the next check.</td></tr>
     <tr><th scope="row">After a panic</th><td>Resumed after 5 to 10 min.</td><td>Resumes after 30 to 60 s.</td></tr>
     <tr><th scope="row">On wake-up</th><td>Waited for its next check.</td><td>Checks at once.</td></tr>
     <tr><th scope="row">Default interval</th><td>1 to 22 min: about 30% of attacks with a 10-minute flight were seen too late.</td><td>1 to 5 min. A value written in the settings file is kept; a file still at TBot's 22 takes 5 at import, unless its minimum is 5 or more.</td></tr>
-    <tr><th scope="row">Order of actions</th><td>Synchronous notification (up to 60 s with two channels), then spying and the message, then the fleet-save.</td><td>Spying, the fleet-save, then the message. The notification is sent in the background.</td></tr>
+    <tr><th scope="row">Order of actions</th><td>Synchronous notification (up to 60 s with two channels), then spying and the message, then the fleet-save.</td><td>Spying, then, with <code>Defender.Autofleet.Departure</code> Now (the default), the fleet-save and the message; with Delayed or LastMoment, the message at once and the fleet-save later. The notification is sent in the background.</td></tr>
+    <tr><th scope="row">Fleet-save: speed, destination, recall</th><td>Full speed, the cheapest destination first, even one of your moons under attack; the moon or planet at the same position only as the last resort, with all the deuterium; recalled at half the flight, so its return could be predicted from a phalanx.</td><td>Never one of your planets or moons that a hostile fleet targets (a warning if none is left); the last resort leaves <code>DeutToLeave</code> behind. Five options: departure at the last moment (<code>Departure</code>), the cheapest speed (<code>Speed</code>), the moon or planet first when no hostile fleet targets it (<code>SwitchFirst</code>), a fixed destination (<code>Target</code>, <code>TargetMission</code>). The recall moment is drawn at random so the fleet lands back only after the hostile arrivals known on its planet or moon, plus the safety margin; a warning when no moment is safe.</td></tr>
     <tr><th scope="row">Alarm (<code>Defender.Alarm.Active</code>) and "ENEMY ACTIVITY!!!"</th><td>On every check while the attack lasted.</td><td>Once per new attack.</td></tr>
     <tr><th scope="row">Attack composition</th><td>From cached research.</td><td>From the report.</td></tr>
     <tr><th scope="row">Fleet-save settings</th><td>The sleep mode's (<code>SleepMode.AutoFleetSave</code>).</td><td>Its own: <code>Defender.Autofleet.DeutToLeave</code>, <code>Recall</code> and <code>DefaultMission</code>.</td></tr>
@@ -122,7 +123,7 @@
     <tr><th scope="row">All fleet slots in use</th><td>The fleet-save failed ("no fleet slot") and the fleet stayed exposed: nothing was freed.</td><td>Each planned fleet-save gets a slot reserved until impact. The Defender waits for a fleet that is back before then. Otherwise it recalls the bot fleet (AutoFarm, harvest, expedition, discovery) that would be back soonest. Otherwise it warns the player at once to free a slot.</td></tr>
     <tr><th scope="row">Celestial with no ship when the fleet-save is due</th><td>"Nothing to save": the attack was closed for an hour; a fleet that landed there before the impact stayed exposed.</td><td>The ships are read once more shortly before the impact (<code>Defender.Autofleet.DelayedFleetSave.SafetySeconds</code> before it, or 2 min); a fleet that landed meanwhile is saved.</td></tr>
     <tr><th scope="row">Reads of the attacked celestial</th><td>Its ships were read again at every check, for each attack, until the impact, even when nothing used them.</td><td>Read only when an option uses them (weak attack, little at stake, spying back, fleet-save), at most once per check: two waves on one planet, one read. Each read marks the planet active, and the attacker may be watching it. At night, a check that finds no attack is a single request.</td></tr>
-    <tr><th scope="row">Computer clock ahead of the server</th><td>The fleet-save was timed with the computer's clock: it left too early, and a clock ahead by more than the time left gave it up, leaving the fleet exposed.</td><td>Timed with the game's arrival time and the server's clock. If the arrival time cannot be read, the fleet leaves at once, you get a notice, and it leaves again each time it comes back while the attack is listed.</td></tr>
+    <tr><th scope="row">Computer clock ahead of the server</th><td>The fleet-save was timed with the computer's clock: it left too early, and a clock ahead by more than the time left gave it up, leaving the fleet exposed.</td><td>Timed with the game's arrival time and the server's clock. If the arrival time cannot be read, the fleet leaves at once, you get a notice, and it leaves again each time it comes back while the attack is listed. If the server time cannot be read, nothing is timed on the computer's clock: the fleet leaves at once, for at least an hour.</td></tr>
     <tr><th scope="row">Watch stops and resumes</th><td>Stop on request, turned off, end of session: one Debug line, invisible to the player.</td><td>One Information line at each stop, with its reason, and at each resume. The Defender itself says when sleep and manual mode begin and end, with its pace.</td></tr>
     <tr><th scope="row">Event list unreadable (lost session, game unreachable)</th><td>One warning, then Debug: hours of blind watch went unnoticed. A retry every 5 to 15 s all night.</td><td>A warning on the first failure, then every 15 min while it lasts, with how long, and when it sees again (Telegram too). Retries every 5 to 15 s for 3 min, then less and less often, down to the normal pace.</td></tr>
     <tr><th scope="row">Missile attack</th><td>Marked handled before the anti-ballistic missiles were ordered: a failure (busy shipyard, resources) was never retried. Silo capacity wrong (3 places at level 3, not 30).</td><td>Alerted once. Handled once the order is accepted, or when nothing more can be built (silo full of anti-ballistic missiles, below level 2); otherwise retried at the next check. An order that came back with an error is checked before any other: never two orders against the same strike. Silo capacity correct.</td></tr>
@@ -169,7 +170,7 @@
 </div>
 </details>
 <details class="feature" id="fbf-human-pace">
-<summary>Human pace and play mode (7)</summary>
+<summary>Human pace and play mode (8)</summary>
 <div class="table-wrap" role="region" aria-label="Human pace and play mode, before and now" tabindex="0">
 <table class="bn">
   <caption class="sr-only">Human pace and play mode: TBot 3.6 compared with TGoat</caption>
@@ -182,6 +183,7 @@
     <tr><th scope="row">Expeditions and Discovery</th><td>Each return re-sent within seconds or minutes.</td><td>Waves: enough free slots, or the first free one waiting 20 to 60 min.</td></tr>
     <tr><th scope="row">Breaks</th><td>—</td><td>Optional, see <a href="#sleep">Sleep mode</a>.</td></tr>
     <tr><th scope="row">Play mode</th><td>One imposed human rhythm.</td><td>A switch: Human (default, the same rhythm), Rage (every delay kept only for discretion dropped, no breaks) or Custom (the <code>Pace.*</code> settings one by one). See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
+    <tr><th scope="row">You play in the game yourself</th><td>The bot played on beside you; only manual mode, through its own proxy, paused it.</td><td>When you start, cancel or speed up something in a queue that TGoat did not order in the 30 s before, the game's channel says so, without any request: the features that build or send fleets wait until you have done nothing for 10 min (<code>General.YieldWhenYouPlay</code>, on by default), then start again one by one. The Defender keeps watching and still answers an attack. See <a href="interface.html#ui-you-play">While you play</a>.</td></tr>
   </tbody>
 </table>
 </div>
@@ -207,7 +209,7 @@
 <p>AutoFarm needs far fewer requests too: one per probe through the galaxy view (a 30-probe pass: 309 requests → 40), one per inbox page to delete read reports (15 reports: 47 requests → 19), and every page of espionage messages is read. See <a href="#autofarm">AutoFarm</a>.</p>
 </details>
 <details class="feature" id="fbf-autofarm">
-<summary id="autofarm">AutoFarm (44)</summary>
+<summary id="autofarm">AutoFarm (42)</summary>
 <div class="table-wrap" role="region" aria-label="AutoFarm, before and now" tabindex="0">
 <table class="bn">
   <caption class="sr-only">AutoFarm: TBot 3.6 compared with TGoat</caption>
@@ -225,18 +227,16 @@
     <tr><th scope="row">Position exclusions (<code>AutoFarm.Exclude</code>)</th><td>Excluded the whole system.</td><td>Excludes the position; position 0 excludes the system.</td></tr>
     <tr><th scope="row">Moon reports with <code>AutoFarm.ProcessAllReports</code></th><td>Always "target gone".</td><td>Read normally.</td></tr>
     <tr class="sub"><th colspan="3" scope="colgroup">Espionage</th></tr>
-    <tr><th scope="row">Probes for the first espionage</th><td><code>NumProbes</code> (52) per target.</td><td>The fewest that show research, from the espionage gap: 7 at equal level, 3 two levels ahead, 11 two levels behind; capped by <code>NumProbes</code> (20).</td></tr>
-    <tr><th scope="row">Incomplete report</th><td>3× then 9× <code>NumProbes</code> (156, then 468 probes).</td><td>Recomputed from the hidden sections (for example 7, 16, 23), at most three espionages.</td></tr>
-    <tr><th scope="row">Target's espionage level</th><td>Ignored.</td><td>Read or deduced from reports, kept, and shared across the same player's celestials.</td></tr>
-    <tr><th scope="row">Too many probes needed</th><td>—</td><td>Skipped without sending (<code>probes_above_limit</code>).</td></tr>
+    <tr><th scope="row">Probes for the first espionage</th><td><code>NumProbes</code> (52) per target.</td><td>The probe count of your game options, sent with the galaxy view's spy button, like a player. <code>NumProbes</code> is removed.</td></tr>
+    <tr><th scope="row">Incomplete report</th><td>3× then 9× <code>NumProbes</code> (156, then 468 probes).</td><td>Research hidden on a target with units (solar satellites and crawlers count), or fleet or defences hidden: one second espionage from the fleet page with 3× your count, or every probe at home if fewer, never built for it. Still hidden, or no more probes at home than your count: the target waits for its report to expire (<code>research_hidden</code>, <code>probes_exhausted</code>, <code>no_extra_probes</code>). No units: attacked without the research.</td></tr>
     <tr><th scope="row">Technology at level 0 in a report</th><td>Read as hidden: useless re-probing.</td><td>Read as level 0 when research is visible.</td></tr>
     <tr><th scope="row">Probe sent just before a stop</th><td>A second probe at the next pass.</td><td>Target marked before the dispatch; fleet and report attached.</td></tr>
     <tr><th scope="row">Target that triggered probe building</th><td>Never spied.</td><td>Spied.</td></tr>
     <tr><th scope="row">Probe report after a restart or a long pause</th><td>The target was probed a second time and its report stayed in the inbox.</td><td>Reports that arrived are read first; only a target with no report is probed again.</td></tr>
-    <tr><th scope="row">Reading espionage reports</th><td>Waited for the last probe to return, without limit.</td><td>Waits for its arrival (the report is written on arrival), 5 min at most.</td></tr>
+    <tr><th scope="row">Reading espionage reports</th><td>Waited for the last probe to return, without limit.</td><td>Waits for its arrival (the report is written on arrival), 5 min at most. With the game's channel listening, the reports are read a few seconds after the game announces the new message, not at the computed time.</td></tr>
     <tr><th scope="row">Espionage report pages</th><td>Only the first page was read, because the game ignores the page field TBot sends.</td><td>Every page up to the first known report; if the game ignores the page number, the reading stops and the log says so.</td></tr>
-    <tr><th scope="row">How probes are sent</th><td>Fleet page for each target: about ten requests.</td><td>The galaxy view's spy button, like a player: one request per target. Same checks first (fuel and reserve, sleep, attack guard, slots). A refusal sends that target through the fleet page. On a simulated game, a 30-probe pass goes from 309 requests to 40.</td></tr>
-    <tr><th scope="row">Deleting read reports</th><td>One report at a time, after an inbox read for a token: two requests per report.</td><td>The read reports of a page go in one request, with the token of the page just read, like a player who ticks them and deletes them. A pass that clears 15 reports: 47 requests → 19. If that fails, they are deleted one by one, and the log says so once. Reports it did not use, and those kept for a manual attack (<code>AutoFarm.KeepReportsWithDefense</code>), stay in your inbox.</td></tr>
+    <tr><th scope="row">How probes are sent</th><td>Fleet page for each target: about ten requests.</td><td>The galaxy view's spy button, like a player: one request per target. Same checks first (fuel and reserve, sleep, attack guard, slots). A refusal sends that target through the fleet page, and so does a second espionage, which needs another count. On a simulated game, a 30-probe pass goes from 309 requests to 40.</td></tr>
+    <tr><th scope="row">Deleting read reports</th><td>One report at a time, after an inbox read for a token: two requests per report.</td><td>The read reports of a page go in one request, with the token of the page just read, like a player who ticks them and deletes them. A pass that clears 15 reports: 47 requests → 19. If that fails, they are deleted one by one, and the log says so once. Reports it did not use, and those kept for a manual attack (<code>AutoFarm.KeepReportsWithDefense</code>), stay in your inbox. With <code>AutoFarm.DeleteReports</code> off, none is deleted, and the reading stops at the first report already handled or expired.</td></tr>
     <tr class="sub"><th colspan="3" scope="colgroup">Is the attack worth it</th></tr>
     <tr><th scope="row">Solar satellites and crawlers on the target</th><td>Ignored: cargo ships sent alone, a draw, no loot.</td><td>Simulated like any combat unit. A target guarded only by them gets the extra cargo ships, already at the origin, needed to win: they cannot destroy a cargo ship.</td></tr>
     <tr><th scope="row">Target with ships or defences (classic path)</th><td>Escorts in fixed ratios, victory never checked.</td><td>Sent only if the fleet wins every simulation without loss (otherwise <code>classic_fleet_not_safe</code>). Defender technologies, class and lifeform bonuses must be in the report.</td></tr>
@@ -278,7 +278,7 @@
 <p><strong>Splitting big raids</strong> (off by default). With <code>AutoFarm.SplitAcrossOrigins.Active</code>, a target with no defence or fleet, whose loot no single origin can carry, is raided from up to <code>AutoFarm.SplitAcrossOrigins.MaxOrigins</code> origins, one slot each, each with at least <code>AutoFarm.MinCargosToSend</code> cargo ships. No effect with the combat planner on.</p>
 </details>
 <details class="feature" id="fbf-brain-buildings-and-research">
-<summary id="brain">Brain: buildings and research (35)</summary>
+<summary id="brain">Brain: buildings and research (36)</summary>
 <div class="table-wrap" role="region" aria-label="Brain: buildings and research, before and now" tabindex="0">
 <table class="bn">
   <caption class="sr-only">Brain: buildings and research: TBot 3.6 compared with TGoat</caption>
@@ -289,6 +289,7 @@
     <tr><th scope="row">Storage without supply flights</th><td>Sized for 6 h of production: the planet ended up stuck for good (metal 14 at speed 1).</td><td>The storage the build does not fit in (over 90% of its capacity) is raised first. Default caps 20/20/20 instead of 13/12/11, now upper bounds only.</td></tr>
     <tr><th scope="row">Energy source</th><td>Fixed order: solar plant, fusion, then satellites.</td><td>The cheapest per unit: a solar plant level, satellites (price × <code>SatelliteRiskFactor</code>, 2) or fusion (with 30 days of deuterium). The <code>Max*</code> levels are caps; <code>MaxSolarSatellites</code> caps satellites (0: no cap).</td></tr>
     <tr><th scope="row">Energy before the mine</th><td>Built once energy was negative, with the mines running slow meanwhile.</td><td>Built before the mine when the shortfall would cost more than the mine brings meanwhile. Builds in progress count: while a mine is being built, its energy counts once, and the energy bought is for the next mine.</td></tr>
+    <tr><th scope="row">Build finished early (sped up in the browser)</th><td>The queue waited for the build's planned end.</td><td>The game announces the end on its channel: the Brain reads that celestial's queues again and picks the next build after a usual reaction (about 3 min), without any request before.</td></tr>
     <tr><th scope="row">Crawlers</th><td>Hundreds at once, energy ignored: a planet at about 22% production.</td><td>50 energy each, counted in their payback. In batches the stock pays (8 at least), the batch's energy first.</td></tr>
     <tr><th scope="row">Facilities</th><td>Any facility cheaper than the next mine, the dock first.</td><td>By use: shipyard at the level its builds need (crawlers once they pay back within the longest payback accepted, AutoCargo, the defences the AutoDefence budget buys), one level when it costs less than the next mine; robotics up to 10, nanites when a queue is the bottleneck, a lab only with AutoResearch on (research planet, or a colony that counts in the network). A new colony builds its mines first. Without supply flights, never a facility the planet cannot pay (deuterium it does not produce). Dock and phalanx 0 by default.</td></tr>
     <tr><th scope="row">Jump gate</th><td>Built on every moon.</td><td>Only on the jump gate target, or with at least two moons.</td></tr>
@@ -431,7 +432,7 @@
     <tr><th scope="row">Origin out of deuterium</th><td>A warning on every pass.</td><td>An information line. For a moon, it says that only repatriation refills it.</td></tr>
     <tr><th scope="row">Destination (<code>SplitExpeditionsBetweenSystems</code>, off by default)</th><td>A random system, memory reset every pass, galaxy edge crossed.</td><td>The least visited system (in flight and over 24 h), never beyond <code>Range</code>, yours on a tie.</td></tr>
     <tr><th scope="row">Results</th><td>Nothing measured; a lost fleet went unnoticed.</td><td>Each expedition is judged on its return (found, lost, net), with a daily total in the log; a lost fleet is notified. A fleet is called lost for certain only if neither a recall nor an unseen early return can explain its absence; otherwise the message says "lost, or returned early". An early return seen on its way home counts as a return, not a recall. In memory only, no extra request.</td></tr>
-    <tr><th scope="row">Expedition and exploration results</th><td>Never read: no gains, no losses, no artifacts.</td><td>Read from the game's messages: only the messages not seen yet, usually one page, nothing deleted, 7 days kept. The Expedition report gives the last 24 h and 7 days (resources, dark matter, ships found, fleets lost); the Discovery report gives the last 24 h (explorations, artifacts, ships lost, lifeforms found).</td></tr>
+    <tr><th scope="row">Expedition and exploration results</th><td>Never read: no gains, no losses, no artifacts.</td><td>Read from the game's messages: only the messages not seen yet, usually one page, nothing deleted (opening the tab marks them read), 7 days kept. The Expedition report gives the last 24 h and 7 days (resources, dark matter, ships found, fleets lost); the Discovery report gives the last 24 h (explorations, artifacts, ships lost, lifeforms found).</td></tr>
     <tr><th scope="row">Ships for expeditions (<code>Expeditions.BuildFleet</code>)</th><td>TBot never built combat ships or pathfinders for expeditions.</td><td>TGoat proposes (Suggest, the default) what is missing, with its cost, value per day, payback and risk. For a Discoverer, one pathfinder per slot served at each origin, valued by the find model alone. For any class, more of the main ship, only with every slot in use and once 7 days and 20 results show finds cut by a full hold (measured, or by the find model fitted to those finds), and only the ships that each pay back within <code>Expeditions.BuildFleetMaxPaybackDays</code> (10 days). An order waits for 20 results flown with the new hold before the next, and accepting never builds more than you accepted. The proposal says which figures are measured and which come from the find model. Ships are paid from the origin's surplus, never from what the Brain keeps for builds ranked before cargo ships; Automatic places one order per check.</td></tr>
   </tbody>
 </table>
@@ -668,7 +669,7 @@
     <tr><th scope="row">Deploy and Switch</th><td>Announced success even when it failed.</td><td>Report the real result.</td></tr>
     <tr><th scope="row"><code>/build</code></th><td>Did not work for defences.</td><td>Works for defences.</td></tr>
     <tr><th scope="row"><code>/wakeup</code> on an awake instance, <code>/cancelghostsleep</code> with nothing to cancel</th><td>An error.</td><td>A plain answer.</td></tr>
-    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-alpha.1". The regular sign of life also gives the version.</td></tr>
+    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-alpha.2". The regular sign of life also gives the version.</td></tr>
     <tr><th scope="row">Discord webhook (<code>DiscordWebhook.Active</code>)</th><td>—</td><td>Posts as "TGoat" unless you set <code>DiscordWebhook.Username</code>.</td></tr>
     <tr><th scope="row">Discord bot</th><td>None.</td><td>Every Telegram command. See <a href="discord.html#discord">Discord bot</a>.</td></tr>
   </tbody>
@@ -677,7 +678,7 @@
 <p>How notifications are sent, named and limited: see <a href="#fbf-settings-reload-and-notifications">Settings reload, start and stop, notifications</a>.</p>
 </details>
 <details class="feature" id="fbf-log-lines">
-<summary>Log lines (8)</summary>
+<summary>Log lines (12)</summary>
 <div class="table-wrap" role="region" aria-label="Log lines, before and now" tabindex="0">
 <table class="bn">
   <caption class="sr-only">Log lines: TBot 3.6 compared with TGoat</caption>
@@ -804,10 +805,23 @@
 </div>
 <p>How it works and how to roll back by hand: <a href="start.html#updates">Updates</a>.</p>
 </details>
+<details class="feature" id="fbf-webui">
+<summary>Web interface (2)</summary>
+<div class="table-wrap" role="region" aria-label="Web interface, before and now" tabindex="0">
+<table class="bn">
+  <caption class="sr-only">Web interface: TBot 3.6 compared with TGoat</caption>
+  <thead><tr><th scope="col">Topic</th><th scope="col">Before: TBot 3.6</th><th scope="col">Now: TGoat</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Sign-in</th><td>None: whoever reached the port controlled the accounts.</td><td>A password (and optionally an authenticator app or passkeys, or a passkey alone with <code>WebUI.PasskeyAlone</code>) as soon as another computer can reach the interface or the game proxy (<code>WebUI.SignIn</code> Auto), set with <code>tgoat webui password</code>; never a default password. See <a href="start.html#webui-signin">Sign-in to the web interface</a>.</td></tr>
+    <tr><th scope="row">Docker</th><td>—</td><td>An image, <code>ghcr.io/ronnie32/tgoat</code> (amd64 and arm64), built from the signed release archives, with a <code>docker-compose.yml</code> to copy and an optional Caddy service for HTTPS on your domain. In it, the interface always asks for a password, and new versions are announced, never installed. See <a href="start.html#docker">Run TGoat in Docker</a>.</td></tr>
+  </tbody>
+</table>
+</div>
+</details>
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-alpha.2 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

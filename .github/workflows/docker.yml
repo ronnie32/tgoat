@@ -1,0 +1,319 @@
+# Docker image of TGoat, built from the signed release archives only.
+#
+# 1. build: download the release's Linux archives, checksums.txt and
+#    checksums.txt.sig; verify the signature with the release public key and
+#    the checksums (docker/verify-release.sh) before anything uses them; build
+#    linux/amd64 and linux/arm64 and push the image by digest, without a tag.
+# 2. smoke: on an amd64 and an arm64 runner, start that exact image with
+#    docker/docker-compose.yml, set the password through docker compose exec,
+#    and check /ping, the sign-in and the API.
+# 3. publish: only then tag it <version>, alpha, and latest for a stable
+#    version (alpha follows every version, latest only stable ones, like
+#    Update.Channel).
+#
+# Actions are pinned by full commit SHA; only actions/checkout is used, the
+# rest is the docker CLI already on the runners. Every image input is pinned
+# by digest (Dockerfile, the BuildKit image below, the Caddy image of the
+# compose file), the tag in a comment. The four digests in place (distroless
+# static-debian12:latest, docker/dockerfile:1, moby/buildkit:buildx-stable-1,
+# caddy:2) are multi-arch index digests fetched from their registries on
+# 2026-11-18; the first run's build log shows the ones actually pulled. To
+# refresh one:
+#   docker buildx imagetools inspect <image>:<tag>   (the "Digest:" line)
+# or merge the Dependabot pull request (.github/dependabot.yml).
+#
+# Which files a run uses:
+# - A release run takes this workflow from the tagged commit (GitHub's rule),
+#   so tag releases on main once this file is there. The Docker files
+#   (docker/: verifier, key, Dockerfile, compose) always come from the
+#   default branch, never from an older tag.
+# - A manual run builds any release tag, and moves alpha/latest only when
+#   its "aliases" box is checked (off by default): rebuilding an old release
+#   must not move them backwards. A release run always moves them.
+
+name: Docker image
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to build, such as v0.1.0-alpha.2
+        required: true
+        type: string
+      aliases:
+        description: Also move alpha (and latest for a stable version) to it; only for the newest release
+        required: false
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: docker-image
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/ronnie32/tgoat
+  # SHA-256 of the release public key, as printed by tgoat version.
+  KEY_SHA256: 9918d9c3ebba3283d19cc048395047f11f24756c6a1ea0abfebd63236b68dfdf
+
+jobs:
+  build:
+    name: Verify the release and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+      version: ${{ steps.release.outputs.version }}
+      aliases: ${{ steps.release.outputs.aliases }}
+      digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - name: Check out the Docker files
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Read the release
+        id: release
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_TAG: ${{ github.event.release.tag_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_ALIASES: ${{ inputs.aliases }}
+        run: |
+          set -euo pipefail
+          tag="${EVENT_TAG:-$INPUT_TAG}"
+          if ! [[ "$tag" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::$tag is not a TGoat version tag (vX.Y.Z or vX.Y.Z-pre.N)"
+            exit 1
+          fi
+          version="${tag#v}"
+          aliases="alpha"
+          if [[ "$version" != *-* ]]; then aliases="alpha latest"; fi
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && "$INPUT_ALIASES" != "true" ]]; then aliases=""; fi
+          {
+            echo "tag=$tag"
+            echo "version=$version"
+            echo "aliases=$aliases"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Self-test of the verifier
+        run: bash docker/verify-release.test.sh
+
+      - name: Download the archives and the signed list
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          files=(checksums.txt checksums.txt.sig "tgoat-$VERSION-linux-amd64.tar.gz" "tgoat-$VERSION-linux-arm64.tar.gz")
+          patterns=()
+          for f in "${files[@]}"; do patterns+=(--pattern "$f"); done
+          # A release can be published while its files still upload: wait up to 10 minutes.
+          for try in $(seq 1 20); do
+            rm -rf release && mkdir release
+            gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir release "${patterns[@]}" || true
+            missing=""
+            for f in "${files[@]}"; do [[ -f "release/$f" ]] || missing="$missing $f"; done
+            if [[ -z "$missing" ]]; then exit 0; fi
+            echo "Missing from $TAG:$missing (try $try of 20)"
+            sleep 30
+          done
+          echo "::error::$TAG lacks:$missing"
+          exit 1
+
+      - name: Verify the signature and the checksums
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: bash docker/verify-release.sh release "$VERSION" docker/tgoat-release.pub "$KEY_SHA256" docker/dist
+
+      - name: Check the program
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          out=$(docker/dist/linux_amd64/tgoat version)
+          echo "$out"
+          first=$(head -n 1 <<<"$out")
+          if [[ "$first" != "TGoat $VERSION" && "$first" != "TGoat $VERSION "* ]]; then
+            echo "::error::the program says \"$first\", not TGoat $VERSION"
+            exit 1
+          fi
+          grep -qx "Release key SHA-256: $KEY_SHA256" <<<"$out" || { echo "::error::the program does not carry the release key"; exit 1; }
+
+      - name: Sign in to the GitHub registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Build and push by digest
+        id: build
+        working-directory: docker
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          # moby/buildkit:buildx-stable-1
+          docker buildx create --name tgoat --driver docker-container --use --bootstrap \
+            --driver-opt image=moby/buildkit:buildx-stable-1@sha256:c5f8862f52499773af85bc07695b2379ef08e8002352b0df2c4864c91d78dabe
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --build-arg "VERSION=$VERSION" \
+            --provenance=mode=max --sbom=true \
+            --output "type=image,name=$IMAGE,push-by-digest=true,name-canonical=true,push=true" \
+            --metadata-file "$RUNNER_TEMP/metadata.json" \
+            .
+          digest=$(jq -r '."containerimage.digest"' "$RUNNER_TEMP/metadata.json")
+          if [[ "$digest" != sha256:* ]]; then echo "::error::no image digest"; exit 1; fi
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+          echo "Image: $IMAGE@$digest"
+
+  smoke:
+    name: Smoke test (${{ matrix.arch }})
+    needs: build
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    env:
+      IMAGE_REF: ghcr.io/ronnie32/tgoat@${{ needs.build.outputs.digest }}
+      VERSION: ${{ needs.build.outputs.version }}
+      COMPOSE_FILE: docker-compose.yml:smoke.yml
+    defaults:
+      run:
+        working-directory: smoke
+    steps:
+      - name: Check out the Docker files
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Sign in to the GitHub registry
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Start TGoat with the compose file
+        working-directory: .
+        run: |
+          set -euo pipefail
+          mkdir smoke
+          cp docker/docker-compose.yml smoke/
+          cd smoke
+          mkdir config data log
+          # The tested image, run as the runner's user (the owner of the folders).
+          printf 'services:\n  tgoat:\n    image: %s\n    user: "%s"\n' "$IMAGE_REF" "$(id -u):$(id -g)" > smoke.yml
+          docker compose config --quiet
+          docker compose up -d
+
+      - name: Wait for the health check
+        run: |
+          set -euo pipefail
+          for try in $(seq 1 60); do
+            status=$(docker inspect --format '{{.State.Health.Status}}' tgoat)
+            if [[ "$status" == "healthy" ]]; then exit 0; fi
+            sleep 3
+          done
+          echo "::error::TGoat is still $status after 3 minutes"
+          exit 1
+
+      - name: Check the image
+        run: |
+          set -euo pipefail
+          out=$(docker compose exec -T tgoat tgoat version)
+          echo "$out"
+          grep -q "^TGoat $VERSION" <<<"$out"
+          grep -qx "Release key SHA-256: $KEY_SHA256" <<<"$out"
+          docker compose exec -T tgoat ./tgoat health
+          docker compose logs --no-color tgoat > logs.txt
+          grep -q "TGoat runs in a container (TGOAT_CONTAINER)" logs.txt
+          grep -q "Web interface setup code: " logs.txt
+          grep -q "on http://localhost:9090/signin" logs.txt
+          # Layout: /app and the program are root's, only the folders are the user's.
+          docker create --name tgoat-layout "$IMAGE_REF" > /dev/null
+          docker export tgoat-layout | tar --numeric-owner -tvf - > layout.txt
+          docker rm tgoat-layout > /dev/null
+          owner() { awk -v n="$1" '{ name = $6; sub(/^\.\//, "", name); sub(/\/$/, "", name) } name == n { print $1, $2 }' layout.txt; }
+          [[ "$(owner app)" == d*" 0/0" ]]
+          [[ "$(owner app/tgoat)" == "-rwxr-xr-x 0/0" ]]
+          for f in config data log; do [[ "$(owner "app/$f")" == d*" 1000/1000" ]]; done
+          if grep -qE ' (\./)?app/(config|data|log)/[^ ]' layout.txt; then echo "::error::the volume folders are not empty"; exit 1; fi
+
+      - name: Check the sign-in
+        run: |
+          set -euo pipefail
+          status() { curl -s -o /dev/null -w '%{http_code}' "$@"; }
+          [[ $(status http://127.0.0.1:9091/ping) == 204 ]]
+          curl -fsS http://127.0.0.1:9090/api/auth/status > auth.json
+          jq -e '.required == true and .passwordSet == false' auth.json
+          [[ $(status http://127.0.0.1:9090/api/instances) == 401 ]]
+
+          password=$(openssl rand -hex 16)
+          printf '%s\n' "$password" | docker compose exec -T tgoat ./tgoat webui password
+          sleep 3 # a running TGoat reads secrets.json again within 2 seconds
+          jq -n --arg p "$password" '{password: $p}' > signin-body.json
+          code=$(curl -s -c jar.txt -o signin.json -w '%{http_code}' -H 'Content-Type: application/json' \
+            --data @signin-body.json http://127.0.0.1:9090/api/auth/sign-in)
+          [[ $code == 200 ]] || { cat signin.json; exit 1; }
+          jq -e '.signedIn == true' signin.json
+
+          [[ $(status -b jar.txt http://127.0.0.1:9090/api/instances) == 200 ]]
+          [[ $(status http://127.0.0.1:9090/api/instances) == 401 ]]
+
+          # Updates: announced, never installed in a container.
+          curl -fsS -b jar.txt http://127.0.0.1:9090/api/update | jq .
+          code=$(curl -s -b jar.txt -o install.json -w '%{http_code}' -X POST \
+            -H 'Origin: http://127.0.0.1:9090' http://127.0.0.1:9090/api/update/install)
+          [[ $code == 409 ]] && jq -e '.error.code == "container"' install.json
+
+      - name: Logs
+        if: always()
+        run: docker compose logs --no-color tgoat || true
+
+      - name: Stop
+        if: always()
+        run: docker compose down || true
+
+  publish:
+    name: Tag the tested image
+    needs: [build, smoke]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      packages: write
+    steps:
+      - name: Sign in to the GitHub registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Tag
+        env:
+          DIGEST: ${{ needs.build.outputs.digest }}
+          VERSION: ${{ needs.build.outputs.version }}
+          ALIASES: ${{ needs.build.outputs.aliases }}
+        run: |
+          set -euo pipefail
+          tags=(--tag "$IMAGE:$VERSION")
+          for alias in $ALIASES; do tags+=(--tag "$IMAGE:$alias"); done
+          docker buildx imagetools create "${tags[@]}" "$IMAGE@$DIGEST"
+          docker buildx imagetools inspect "$IMAGE:$VERSION"
+          echo "Tagged $IMAGE@$DIGEST as $VERSION${ALIASES:+ and $ALIASES}"

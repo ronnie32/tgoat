@@ -1,0 +1,13 @@
+# Caddy in front of TGoat (see docker-compose.yml). Replace tgoat.example.com
+# with your domain; its DNS must point to this server, ports 80 and 443 open.
+# Caddy gets the certificate and keeps the Host header TGoat checks.
+
+# Web interface.
+tgoat.example.com {
+	reverse_proxy tgoat:9090
+}
+
+# Game proxy (the OGame page): same name, port 9091, over HTTPS too.
+tgoat.example.com:9091 {
+	reverse_proxy tgoat:9091
+}

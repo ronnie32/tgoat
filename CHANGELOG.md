@@ -13,7 +13,204 @@ alphas are not guaranteed to migrate your files until the first stable
 release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
 
-## [0.1.0-alpha.1] - Unreleased
+## [0.1.0-alpha.2] - 2026-11-18
+
+### Added
+
+- `AutoFarm.DeleteReports` (on by default): turn it off to keep your
+  espionage reports. AutoFarm still reads them but deletes none.
+- Passkeys for the web interface. In Settings, section Web interface, add
+  one or more passkeys (phone, Windows Hello, password manager, security
+  key) with your password and, if it is on, the authenticator code. After
+  the password, the sign-in page then asks for a passkey instead of the
+  6-digit code; the code and the recovery codes still work. New setting
+  `WebUI.PasskeyAlone`, off by default: **Sign in with a passkey** signs in
+  without the password, with a passkey that checks it is you. Passkeys need
+  HTTPS or `localhost`, and work only on the host name where you added them.
+  `tgoat webui reset` removes them too.
+- TGoat waits while you play. When you start, cancel or speed up something
+  in a queue of the game yourself, the features that build or send fleets
+  wait until you have done nothing in the game for 10 minutes, then start
+  again one by one. The Defender keeps watching. The game's channel tells
+  TGoat, without any request. Setting `General.YieldWhenYouPlay`, on by
+  default; the Map, the Instances page, `/getmain` and `/getmainstats` say
+  why features wait (`you_play_in_game`).
+- The Brain sees a build that ends early (sped up in your browser) and picks
+  the next one after a usual reaction, instead of waiting for the planned
+  end.
+- Defender fleet-save options. `Defender.Autofleet.Departure` LastMoment
+  sends the message to the attacker when the attack is seen and the fleet
+  only at the impact minus the safety margin, minus 0 to 30 seconds.
+  `Defender.Autofleet.Speed` Cheapest flies at the slowest speed that still
+  keeps the fleet away (about 70 % less deuterium at 10 %).
+  `Defender.Autofleet.SwitchFirst` moves the fleet to the moon or planet at
+  the same position first, when no hostile fleet targets it.
+  `Defender.Autofleet.Target` and `TargetMission` set a destination tried
+  first. All off by default.
+- Sign-in to the web interface. As soon as another computer can reach TGoat
+  (an address other than `localhost`, Docker, a reverse proxy, a name in
+  `WebUI.AllowedHosts`), the interface and the game proxy ask for a password.
+  Once a password is set, it is always asked. Create it with
+  `tgoat webui password` on the server, or on the sign-in page with the
+  one-time setup code TGoat writes in its console and log file at start;
+  there is never a default password. Optional authenticator app (6-digit
+  codes, QR code drawn by TGoat) with 10 single-use recovery codes, sessions
+  of 30 days that survive a restart, **Sign out** and **Sign out
+  everywhere** (they also close live updates), and growing delays after 5
+  wrong tries. The OGame page opens the game of one account only. New settings `WebUI.SignIn` (Auto, Always, Never) and
+  `WebUI.TrustedProxies`; `tgoat webui reset` removes the password, the app
+  and every session.
+- A Docker image, `ghcr.io/ronnie32/tgoat` (linux/amd64 and linux/arm64),
+  built from the signed release archives once their signature and checksums
+  check out, and a `docker-compose.yml` to copy: ports open to this computer
+  only, `config/`, `data/` and `log/` next to the file, and an optional Caddy
+  service for HTTPS on your own domain. In the image, the web interface
+  listens on all addresses and asks for a password, and TGoat never updates
+  itself: it tells you to run `docker compose pull && docker compose up -d`.
+  Guide: Get started, Run TGoat in Docker.
+- `tgoat health` checks that a running TGoat answers on its game proxy (the
+  health check of the Docker image).
+- Behind an HTTPS reverse proxy listed in `WebUI.TrustedProxies`, the OGame
+  page now opens the game proxy over HTTPS too, chat and live updates
+  included.
+
+### Changed
+
+- AutoFarm spies like a player. The first espionage of a target uses the
+  galaxy view's spy button with the probe count set in your game options.
+  If the report hides the research of a target that has ships or defences
+  (solar satellites and crawlers count), or hides its fleet or defences, one
+  second espionage goes from the fleet page with three times that count, or
+  all the probes at home on the origin if it has fewer; it never builds
+  probes for it. If it still hides them, or if no origin has more probes at
+  home than your count, the target is left alone until its report expires
+  (reason `research_hidden`, `probes_exhausted` or `no_extra_probes`). A
+  target with no ships and no defences is attacked without its research.
+- AutoFarm reads the espionage reports when the game announces the new
+  message, no longer at the computed arrival of the probes. Without the
+  game's channel, it waits as before.
+- Expeditions and Discovery read their results in the messages only when a
+  new message came since the last read: fewer requests.
+- The recall of a saved fleet is drawn at random, so a phalanx cannot
+  predict its return. The fleet lands back only after the hostile arrivals
+  known on its planet or moon, plus the safety margin, and the moment moves
+  if a new attack comes. When no moment is safe, you get a warning.
+- `Defender.Autofleet.DelayedFleetSave.Active` is replaced by
+  `Defender.Autofleet.Departure`: true becomes Delayed, by itself, when
+  TGoat starts or imports a TBot file.
+- Sign in from another computer: when `tgoat login --to` fails or you press
+  Ctrl+C after it took the code, it tells the server. The web page then says
+  at once that the sign-in stopped (or was cancelled), instead of showing it
+  open until the code ends.
+- `tgoat login --to` sends the session token again, twice at most within
+  about 10 seconds, when the connection to the server drops while it is sent,
+  so a short SSH tunnel cut no longer loses your sign-in.
+- `X-Forwarded-Proto` and `X-Forwarded-Host` are read only from a reverse
+  proxy listed in `WebUI.TrustedProxies`, also for the `tgoat login --to`
+  command shown by the interface.
+- While a planned fleet-save waits for a fleet slot and you were already
+  told that none will be free in time, the Defender no longer reads the
+  planet's ships at every check: one game page less per check.
+- Manual mode: the log line and the guide now say that a fleet-save planned
+  before you started playing still leaves at its time, as it did before.
+
+### Removed
+
+- `AutoFarm.NumProbes`. Set the number of probes in the game's options
+  instead. A file that still has it loads, and the setting does nothing.
+
+### Fixed
+
+- On Windows, saving the settings or TGoat's data no longer fails now and
+  then with "Access is denied" when an antivirus examines the file being
+  replaced.
+- Settings help tells the truth. `Defender.Autofleet.UseJumpGate` and
+  `Defender.Autofleet.ExpeditionAsLastResort` now say "(not used yet)": they
+  change nothing. `General.ExchangeRate` says that only the production
+  settings of AutoMine use it. `Defender.DefendFromMissiles` says what it does:
+  it builds anti-ballistic missiles against a missile strike; the alert comes
+  either way. `AutoFarm.MaxDefensePoints` and `MaxFleetPoints` count resources,
+  not points, and `AutoFarm.MinimumPlayerRank` ignores players ranked lower
+  than it, not higher. The help of `Defender.UseCurrentCelestial`,
+  `RandomActivity`, `Home`, `WeakAttackRatio`, the bedtime fleet-save,
+  `AutoFarm.TargetsProbedBeforeAttack`, the bomber and reaper ratios and
+  `General.CaptchaAPIKey` is exact too. Nothing plays differently.
+- The guide's reason-code table lists every reason code, with what it means:
+  boosters, hiding resources in a build, production settings, ships for
+  expeditions and the others.
+- When the server time cannot be read, the Defender no longer times anything
+  on your computer's clock. An attack still in the event list is never taken
+  for landed, an empty planet is read again at the next check instead of
+  being dropped, a Delayed or LastMoment fleet-save leaves at once, and the
+  fleet stays away at least an hour. If the game says the fleet comes back
+  before the impact, the planet is read again then, before the impact, and the
+  fleet leaves again. The recall is set at the next check that reads the
+  server time. No hostile arrival in the list counts as past: the fleet is
+  not sent to, or moved first onto, a planet or moon that one targets.
+- An attack keeps its alert and its planned fleet-save when another row of
+  the event list starts or stops sharing its event id. Before, it was taken
+  for a new attack, and the log said that its fleet-save was cancelled.
+- A grouped attack (ACS) and a fleet attack that carry the same number are two
+  attacks: the second one is no longer skipped as "already handled".
+- A colony abandoned and founded again at the same place, or a moon formed
+  again, is defended under its new id. When the last game page and TGoat's
+  data disagree about the celestial at the attacked coordinates, TGoat reads
+  the list of celestials again before the fleet-save.
+- The Empire view gives each attack its own detection time, also two attacks
+  whose event id cannot be read.
+- Hiding resources in a build no longer keeps deuterium for a fleet-save that
+  already left. It keeps it only while a fleet-save can still leave.
+- With `Defender.Autofleet.DelayedFleetSave.SafetySeconds` under 15, hiding
+  resources is no longer refused while it waits for the last look at an empty
+  planet: the build starts at its time and leaves the planet's deuterium, for
+  a fleet that lands before that last look.
+- The web interface's OGame page says why the game does not show. When your
+  browser cannot reach the game proxy (it has its own port: forward it too in an
+  SSH tunnel or a Docker mapping), or the game has not loaded after 30 seconds,
+  it tells you instead of loading forever.
+- The game's chat and live updates (new messages, finished builds) now work in
+  the web interface's OGame page. They go through TGoat and the account's
+  proxy, like the game pages.
+- A fleet-save no longer goes to one of your planets or moons that a hostile
+  fleet targets. If no destination is left, a warning names the ones skipped.
+- The fleet-save's last resort, the move to the moon or planet at the same
+  position, now leaves `DeutToLeave` behind like any fleet-save.
+- The galaxy view in the web interface's OGame page no longer spins forever.
+  TGoat now passes on the type the game gives each answer, instead of guessing
+  it from the content.
+- AutoDiscovery: a discovery counter TGoat cannot read on the galaxy page now
+  gives a warning, instead of "the game allows no discovery right now". A
+  counter written with a thousands separator (`1.200`) is read correctly.
+- Updates: a release whose signed list or signature is far too large is now
+  reported as a release that could not be verified, with the "do not install
+  it by hand" warning. Before, TGoat only logged a failed check.
+- Updates: in Install mode, a version that keeps failing on your computer (an
+  antivirus that blocks the new program, for example) is paused after 3
+  failures in a row, or after one refused replacement of the program. TGoat
+  tries it again 24 hours later, says so in the log and the banner, and the
+  Install button still works. Failed clicks on Install do not count. Before,
+  it downloaded the version again at every check.
+- Updates: if TGoat could not put its own program back after a failed update,
+  the banner now keeps saying which file to rename, even after a check, a
+  withdrawn release or a settings change.
+- Updates: when the previous version's `.old` file is gone after two failed
+  starts, TGoat no longer refuses to install a newer version.
+- Updates: a download replaced on GitHub by a bad file and then put back is
+  installed, instead of staying rejected.
+- Updates: after **Cancel**, the banner always says that the version is
+  installed only if you ask for it.
+- Updates: the "Release notes" link is built from the checked version number,
+  and is left out when the release's tag on GitHub carries anything else
+  (`v0.2.0+something`). Before, such a tag was shown in the banner, on
+  Telegram and on Discord.
+- Add an account: a **Test the login** still running when the browser
+  sign-in's token arrives or is cancelled no longer shows its old result and
+  universes afterwards.
+- The sign-in panel says when TGoat could not be reached to stop a sign-in it
+  gave up on: its browser window or pairing code may stay open for up to 10
+  minutes.
+
+## [0.1.0-alpha.1] - 2026-11-17
 
 The first alpha: a complete OGame bot in one program, with a web interface.
 Expect bugs, and try it on a secondary account first.

@@ -1,0 +1,65 @@
+# TGoat with Docker Compose. Guide: https://ronnie32.github.io/tgoat/start.html#docker
+#
+# First start, in the folder of this file:
+#   mkdir config data log
+#   docker compose up -d
+#   docker compose exec tgoat ./tgoat webui password
+# Then open http://localhost:9090 and sign in.
+
+services:
+  tgoat:
+    # :alpha follows every version, :latest only stable ones.
+    # Or pin one, such as ghcr.io/ronnie32/tgoat:0.1.0-alpha.2
+    image: ghcr.io/ronnie32/tgoat:alpha
+    container_name: tgoat
+    restart: unless-stopped
+    # Owner of config/, data/ and log/ (id -u and id -g give yours).
+    user: "1000:1000"
+    environment:
+      # Your time zone, for the logs and the schedules.
+      TZ: Europe/Paris
+    ports:
+      # This computer only. From another computer, use an SSH tunnel
+      # (ssh -N -L 9090:127.0.0.1:9090 -L 9091:127.0.0.1:9091 you@server).
+      - "127.0.0.1:9090:9090"   # web interface
+      - "127.0.0.1:9091:9091"   # game proxy (the OGame page)
+      # Open to the network instead (keep the password, prefer HTTPS):
+      # - "9090:9090"
+      # - "9091:9091"
+    volumes:
+      - ./config:/app/config    # settings, secrets.json: back it up
+      - ./data:/app/data        # devices, cookies, sessions: back it up
+      - ./log:/app/log
+    # TGoat closes its game sessions before it stops.
+    stop_grace_period: 30s
+
+  # Optional: HTTPS for your own domain with Caddy (it gets the certificate).
+  # 1. Uncomment this service, the networks block and the caddy-data volume
+  #    below, and remove the 127.0.0.1:9091 line above (Caddy serves 9091).
+  # 2. Write your domain in Caddyfile, next to this file.
+  # 3. In TGoat, Settings, TGoat file, Web interface: Allowed host names =
+  #    your domain, Trusted reverse proxies = 172.30.57.10 (Caddy only:
+  #    never the Docker gateway, which would trust every program on this
+  #    computer). Then docker compose up -d && docker compose restart tgoat
+  # caddy:
+  #   image: caddy:2@sha256:4851e54a46b206517c574821bb5cc67f170d2156041e9fbc4c9193b45e84a75b  # caddy:2
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     - "9091:9091"   # game proxy, over HTTPS
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  #     - caddy-data:/data
+  #   networks:
+  #     default:
+  #       ipv4_address: 172.30.57.10
+
+# networks:
+#   default:
+#     ipam:
+#       config:
+#         - subnet: 172.30.57.0/24
+
+# volumes:
+#   caddy-data:

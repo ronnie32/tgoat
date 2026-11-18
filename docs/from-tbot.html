@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.2).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -102,6 +102,7 @@
   <li><strong>Reset:</strong> a value equal to TBot's old default takes TGoat's new default, with a report line. <code>AutoHarvest.MinimumResourcesOwnDF</code> is kept and flagged instead. This includes the lifeform research caps: a <code>MaxTechs31</code> to <code>MaxTechs36</code> at 0 ("never research") in TBot's template becomes TGoat's 10, like every template value. The report lists each reset. To keep a 0, set it again after the import.</li>
   <li><strong>Not reset:</strong> half of a check interval, when resetting it would leave a fixed pause, and anything in a profile.</li>
   <li><strong>Converted, Colonize:</strong> <code>AutoColonize.Abandon.MinFields</code> goes into each target zone when abandon was on. An active <code>AutoColonize.IntensiveResearch</code> becomes <code>AutoColonize.ParallelTries</code>.</li>
+  <li><strong>Converted, Defender:</strong> <code>Defender.Autofleet.DelayedFleetSave.Active</code> true becomes <code>Defender.Autofleet.Departure</code> Delayed.</li>
   <li><strong>Converted, defences:</strong> your <code>Brain.AutoDefence.DefenceToReach</code> quantities become <code>Brain.AutoDefence.Ratio</code> and stay as maxima. TBot's sample quantities give TGoat's mix.</li>
   <li><strong>Moved:</strong> account, proxy and device go to the top of the instance file. Passwords, proxy login, captcha key, Discord webhook and Telegram token go to <code>secrets.json</code>.</li>
   <li><strong>Renamed:</strong> <code>Brain.Transports.DeutToLeave</code> becomes <code>Brain.Transports.DeutToLeaveOnMoons</code>.</li>
@@ -128,7 +129,7 @@
 <h3 id="removed">Removed settings</h3>
 <p>These TBot settings no longer exist in TGoat. One left in a file does nothing: it is reported once and listed as "obsolete" on the Settings page.</p>
 <details>
-<summary>Settings removed (26)</summary>
+<summary>Settings removed (27)</summary>
 <div class="table-wrap" role="region" aria-label="Removed settings" tabindex="0">
 <table>
   <caption class="sr-only">Removed settings</caption>
@@ -140,6 +141,7 @@
     <tr><th scope="row"><code>Expeditions.SecondaryShip</code>, <code>Expeditions.MinSecondaryToSend</code>, <code>Expeditions.SecondaryToPrimaryRatio</code> (TBot only, removed)</th><td>The escort is automatic: one probe, one pathfinder and, on a large expedition, your strongest combat ship that is not slower than the main ships. Use <code>Expeditions.ManualShips</code> to choose the fleet.</td></tr>
     <tr><th scope="row"><code>AutoFarm.MaxWaitTime</code> (TBot only, removed)</th><td>AutoFarm no longer waits for a slot; targets stay pending until a fleet returns.</td></tr>
     <tr><th scope="row"><code>AutoFarm.CargoDiagnostics</code> (TBot only, removed)</th><td>Replaced by the reason shown per target.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.NumProbes</code> (removed in 0.1.0-alpha.2)</th><td>AutoFarm sends the probe count of your game options, with the galaxy view's spy button, and up to three times that count, as many as are at home, for one second espionage.</td></tr>
     <tr><th scope="row"><code>AutoFarm.CombatPlanner.DefenderTechnologyMargin</code>, <code>AutoFarm.CombatPlanner.DefenderLifeformBonus</code> (TBot only, removed)</th><td>Only bonuses read in the espionage report count.</td></tr>
     <tr><th scope="row"><code>AutoDiscovery.MaxFailures</code>, <code>AutoDiscovery.RandomizeDestination</code> (TBot only, removed)</th><td>Discovery explores nearest first. A position it explored is not tried again for 7 days while TGoat runs. A refused origin costs at most one system view a pass.</td></tr>
     <tr><th scope="row"><code>SleepMode.LogoutOnSleep</code> (TBot only, removed)</th><td>Never read in TBot. Dropped as unknown.</td></tr>
@@ -153,6 +155,7 @@
     <tr><th scope="row"><code>Expeditions.MinWaitNextRound</code>, <code>Expeditions.MaxWaitNextRound</code> (TBot only, removed)</th><td>Waves at a human pace: <code>Expeditions.MinFreeSlotsForWave</code>.</td></tr>
     <tr><th scope="row"><code>AutoColonize.Abandon.MinFields</code> (TBot only, removed)</th><td>Per zone: <code>AutoColonize.Targets[].MinFields</code>. The import copies it into each zone when abandon was on.</td></tr>
     <tr><th scope="row"><code>AutoColonize.IntensiveResearch</code> (TBot only, removed)</th><td><code>AutoColonize.ParallelTries</code>. The import keeps the number of ships when the mode was on.</td></tr>
+    <tr><th scope="row"><code>Defender.Autofleet.DelayedFleetSave.Active</code></th><td><code>Defender.Autofleet.Departure</code>: true becomes Delayed, false is Now. <code>DelaySeconds</code> and <code>SafetySeconds</code> stay.</td></tr>
   </tbody>
 </table>
 </div>
@@ -160,7 +163,7 @@
 
 <h3 id="changed">Settings that work again, or differently</h3>
 <details>
-<summary>Settings that work again or differently (27)</summary>
+<summary>Settings that work again or differently (26)</summary>
 <div class="table-wrap" role="region" aria-label="Settings that work differently" tabindex="0">
 <table>
   <caption class="sr-only">Settings that work again or differently</caption>
@@ -171,7 +174,6 @@
     <tr><th scope="row"><code>General.SlotPriorityLevel.AutoColonize</code></th><td>This key is read. TBot read <code>Colonize</code>.</td></tr>
     <tr><th scope="row"><code>General.Proxy.LoginOnly</code></th><td><strong>Now works.</strong> Default false: the proxy carries all game traffic.</td></tr>
     <tr><th scope="row"><code>AutoFarm.MinLootFuelRatio</code></th><td>One meaning: loot ≥ ratio × fuel. A value below 1 is inverted: 0.5 means 2.</td></tr>
-    <tr><th scope="row"><code>AutoFarm.NumProbes</code></th><td>A cap, not a fixed number.</td></tr>
     <tr><th scope="row"><code>AutoFarm.FleetSpeed</code></th><td>The speed cap, with or without the combat planner.</td></tr>
     <tr><th scope="row"><code>AutoFarm.Blacklist.MinimumResourcesToNotBlacklist</code></th><td>Really read. TBot always used 500,000.</td></tr>
     <tr><th scope="row"><code>Defender.WeakAttackRatio</code></th><td>Decimals work. 0 no longer crashes.</td></tr>
@@ -225,7 +227,7 @@
 <h3 id="defaults">Changed defaults</h3>
 <p>These apply when the setting is not in your file, and after the import when your file still had TBot's old default. A value you chose stays.</p>
 <details>
-<summary>Settings with a changed default (50)</summary>
+<summary>Settings with a changed default (49)</summary>
 <div class="table-wrap" role="region" aria-label="Changed defaults" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Changed defaults</caption>
@@ -233,7 +235,6 @@
   <tbody>
     <tr><th scope="row"><code>Defender.CheckIntervalMin</code>, <code>Defender.CheckIntervalMax</code></th><td class="num">1 / 22 min</td><td class="num">1 / 5 min</td><td>About 30% of attacks with a 10-minute flight landed unseen.</td></tr>
     <tr><th scope="row"><code>SleepMode.AutoFleetSave.OnlyMoons</code></th><td>true</td><td>false</td><td>Bedtime fleet-save also leaves from planets.</td></tr>
-    <tr><th scope="row"><code>AutoFarm.NumProbes</code></th><td class="num">52</td><td class="num">20</td><td>Now a cap.</td></tr>
     <tr><th scope="row"><code>AutoFarm.MinLootFuelRatio</code></th><td class="num">0.5</td><td class="num">2</td><td>Same threshold: loot ≥ 2 × fuel.</td></tr>
     <tr><th scope="row"><code>AutoFarm.MinCargosToSend</code></th><td class="num">25</td><td class="num">1</td><td>25 duplicated <code>AutoFarm.MinimumResources</code>.</td></tr>
     <tr><th scope="row"><code>AutoFarm.StopAfterFullScan</code></th><td>true</td><td>false</td><td>AutoFarm slows down instead of stopping.</td></tr>
@@ -296,7 +297,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/from-tbot.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/from-tbot.html</code> in the project. Build 0.1.0-alpha.2 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

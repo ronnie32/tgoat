@@ -1,0 +1,14 @@
+# Moves the pinned digests and SHAs under review: the Dockerfile's base and
+# frontend images, and the actions of the workflows. The BuildKit image of
+# docker.yml and the Caddy image of docker/docker-compose.yml are refreshed
+# by hand (see the header of .github/workflows/docker.yml).
+version: 2
+updates:
+  - package-ecosystem: docker
+    directory: /docker
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

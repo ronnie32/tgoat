@@ -6,7 +6,7 @@ TGoat is a bot that plays your OGame accounts. It is the successor of TBot 3.6 a
 
 **Read the guide: [ronnie32.github.io/tgoat](https://ronnie32.github.io/tgoat/)**
 
-> **Alpha: `0.1.0-alpha.1`.** Expect bugs, and back up `config/` and `data/` before each update. Using a bot breaks OGame's rules (Gameforge's terms of use): your account can be banned. Use it at your own risk, ideally on a secondary account, and start with every feature off.
+> **Alpha: `0.1.0-alpha.2`.** Expect bugs, and back up `config/` and `data/` before each update. Using a bot breaks OGame's rules (Gameforge's terms of use): your account can be banned. Use it at your own risk, ideally on a secondary account, and start with every feature off.
 
 ## What it does
 
@@ -27,6 +27,19 @@ Nearly every behaviour is a setting. A setup assistant reads your account and su
 ## Downloads
 
 Download TGoat from the [Releases](https://github.com/ronnie32/tgoat/releases) page: one archive per system (Windows, Linux, macOS; amd64 or arm64). Unpack it in a folder of its own and start `tgoat` (`tgoat.exe` on Windows); [Get started](https://ronnie32.github.io/tgoat/start.html#install) has the rest. Once it runs, TGoat tells you about new versions and can install them itself (see [Updates](https://ronnie32.github.io/tgoat/start.html#updates)). The history of each version is in [CHANGELOG.md](CHANGELOG.md).
+
+## Docker
+
+The image `ghcr.io/ronnie32/tgoat` (linux/amd64 and linux/arm64) holds the program of each release, after its signature and checksums are checked ([docker/](docker/), [workflow](.github/workflows/docker.yml)). With Docker Compose:
+
+```
+mkdir tgoat && cd tgoat && mkdir config data log
+curl -fsSLO https://raw.githubusercontent.com/ronnie32/tgoat/main/docker/docker-compose.yml
+docker compose up -d
+docker compose exec tgoat tgoat webui password
+```
+
+Then open `http://localhost:9090` and sign in. [Run TGoat in Docker](https://ronnie32.github.io/tgoat/start.html#docker) covers the game sign-in, HTTPS with Caddy and updates (`docker compose pull && docker compose up -d`).
 
 ## Signed releases
 

@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.2).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -51,11 +51,20 @@
         <li><a href="#files">Where files live</a></li>
       </ol>
     </li>
+    <li><a href="#docker">Run TGoat in Docker</a>
+      <ol>
+        <li><a href="#docker-start">First start</a></li>
+        <li><a href="#docker-login">Sign in to the game</a></li>
+        <li><a href="#docker-https">HTTPS with your own domain</a></li>
+        <li><a href="#docker-update">Updates</a></li>
+      </ol>
+    </li>
     <li><a href="#account">Add your account</a></li>
     <li><a href="#login">Log in</a>
       <ol>
         <li><a href="#browser-login">Sign in with your browser</a></li>
         <li><a href="#remote-login">TGoat on another computer (VPS)</a></li>
+        <li><a href="#webui-signin">Sign-in to the web interface</a></li>
         <li><a href="#token">Session token</a></li>
         <li><a href="#captcha">Captcha and two-factor</a></li>
         <li><a href="#login-fails">When the login fails</a></li>
@@ -84,6 +93,7 @@
   <li>TGoat is an alpha and bots break OGame's rules: try it on a secondary account, and back up <code>config/</code> and <code>data/</code> before each update.</li>
   <li>Put <code>tgoat</code> in a folder of its own and start it. Coming from TBot 3.6, put it next to your old <code>settings.json</code> first.</li>
   <li>Open <code>http://localhost:9090</code> and add your account on the Instances page.</li>
+  <li>With Docker, use the <a href="#docker">compose file</a>: it asks for a password from the start.</li>
   <li>If Gameforge asks for a captcha TGoat cannot pass, or for two-factor, <a href="#browser-login">sign in with your browser</a>: you pass the check yourself in a window TGoat opens. A <a href="#token">session token</a> pasted by hand also works.</li>
   <li>Every feature starts off. Turn them on one at a time, and watch the Logs before the next.</li>
 </ul>
@@ -99,7 +109,7 @@
   <li><strong>Bots break OGame's rules.</strong> Gameforge can ban an account that uses one. Try TGoat on a secondary account first. <a href="index.html#footprint">What TGoat does to stay discreet</a>, and what it cannot hide.</li>
   <li><strong>Its actions in the game are real.</strong> A bug can cost you ships or resources.</li>
   <li><strong>Back up <code>config/</code> and <code>data/</code> before you update.</strong> Until the first stable release, a new alpha may not convert your old files.</li>
-  <li><strong>The web interface has no password.</strong> By default, only your computer can reach it: keep it that way unless you protect it. To reach it from another computer, use an SSH tunnel (<a href="#remote-login">how</a>).</li>
+  <li><strong>Whoever reaches the web interface controls your accounts.</strong> By default only your computer can reach it. As soon as another one can, it asks for a password (<a href="#webui-signin">how</a>). An SSH tunnel (<a href="#remote-login">how</a>) keeps it on your computer only.</li>
   <li><strong>Never share <code>secrets.json</code></strong>, not even in a bug report. It holds your passwords and tokens.</li>
   <li><strong>There is no warranty.</strong> You use TGoat at your own risk.</li>
   <li><strong>Its decisions follow the author's understanding of the game.</strong> They come from my reading of the rules and of the meta. I did my best, but I cannot promise that every decision is optimal or fits every situation; the settings let you change what does not suit you.</li>
@@ -125,7 +135,7 @@
 <p><strong>Coming from TBot 3.6?</strong> Before the first start, put <code>tgoat</code> next to your old <code>settings.json</code>. TGoat <a href="from-tbot.html#import">imports it</a>, and features that were on in TBot stay on.</p>
 
 <details id="cli">
-<summary>Commands and options (23)</summary>
+<summary>Commands and options (27)</summary>
 <div class="table-wrap" role="region" aria-label="Commands and options" tabindex="0">
 <table>
   <caption class="sr-only">TGoat commands and options</caption>
@@ -136,6 +146,9 @@
     <tr><th scope="row"><code>tgoat setup</code></th><td>Add an account in the terminal.</td></tr>
     <tr><th scope="row"><code>tgoat login</code></th><td>Sign in to Gameforge in a browser window. See <a href="#browser-login">Sign in with your browser</a>.</td></tr>
     <tr><th scope="row"><code>tgoat import</code></th><td>Import TBot 3.6 settings.</td></tr>
+    <tr><th scope="row"><code>tgoat webui password</code></th><td>Set or replace the password of the web interface. See <a href="#webui-signin">Sign-in to the web interface</a>.</td></tr>
+    <tr><th scope="row"><code>tgoat webui reset</code></th><td>Remove the web interface password, authenticator app, passkeys and sessions.</td></tr>
+    <tr><th scope="row"><code>tgoat health</code></th><td>Check that the running TGoat answers on its game proxy: exit code 0 if it does, 1 if not. The health check of the Docker image.</td></tr>
     <tr><th scope="row"><code>tgoat version</code>, <code>tgoat --version</code></th><td>Print the build line.</td></tr>
     <tr><th scope="row"><code>tgoat help</code></th><td>List every option.</td></tr>
     <tr class="sub"><th colspan="2" scope="colgroup">Options</th></tr>
@@ -159,13 +172,14 @@
     <tr><th scope="row"><code>TGOAT_SECRETS</code></th><td>Another path for <code>secrets.json</code>.</td></tr>
     <tr><th scope="row"><code>NO_COLOR</code></th><td>No colours in the console.</td></tr>
     <tr><th scope="row"><code>TGOAT_SERVICE=1</code></th><td>After an update, exit with code 75 and let the service manager restart TGoat (see <a href="#update-install">Updates</a>).</td></tr>
+    <tr><th scope="row"><code>TGOAT_CONTAINER=1</code></th><td>Set by the Docker image: new versions are announced, never installed, and inside a container (<code>/.dockerenv</code>, <code>/run/.containerenv</code> or Kubernetes) the web interface listens on <code>0.0.0.0</code> when <code>WebUI.Urls</code> keeps its default. Set elsewhere, it opens nothing and TGoat warns at start (see <a href="#docker">Docker</a>).</td></tr>
   </tbody>
 </table>
 </div>
 </details>
 
 <details id="files">
-<summary>Where files live (10)</summary>
+<summary>Where files live (11)</summary>
 <div class="table-wrap" role="region" aria-label="Files and folders" tabindex="0">
 <table>
   <caption class="sr-only">Files and folders</caption>
@@ -180,12 +194,54 @@
     <tr><th scope="row"><code>config/import-report.txt</code></th><td>Report of the TBot import.</td></tr>
     <tr><th scope="row"><code>data/&lt;id&gt;/</code></th><td>Simulated device, cookies, feature state.</td></tr>
     <tr><th scope="row"><code>log/TGoat.log</code>, <code>log/TGoat.csv</code></th><td>Logs, as text and CSV.</td></tr>
+    <tr><th scope="row"><code>data/update.json</code></th><td>In Docker only: the new versions already announced.</td></tr>
     <tr><th scope="row"><code>tgoat.exe.old</code>, <code>tgoat.exe.update.json</code></th><td>Next to the program, during an <a href="#updates">update</a>: the previous version and the update's state.</td></tr>
   </tbody>
 </table>
 </div>
 <p><code>&lt;id&gt;</code> names the instance's file and data folder.</p>
 </details>
+</section>
+
+<section aria-labelledby="docker">
+<h2 id="docker">Run TGoat in Docker</h2>
+<p>The image <code>ghcr.io/ronnie32/tgoat</code> runs on Linux (amd64 or arm64) and in Docker Desktop. It holds the program of each release, taken from the signed archive once its signature and checksums check out. Its tags: a version, such as <code>0.1.0-alpha.2</code>; <code>alpha</code>, the newest version, test versions included; <code>latest</code>, the newest stable version.</p>
+
+<h3 id="docker-start">First start</h3>
+<ol>
+  <li>Make a folder with <code>config</code>, <code>data</code> and <code>log</code> in it, and put <a href="https://github.com/ronnie32/tgoat/blob/main/docker/docker-compose.yml"><code>docker-compose.yml</code></a> there:
+<pre><code>mkdir tgoat &amp;&amp; cd tgoat &amp;&amp; mkdir config data log
+curl -fsSLO https://raw.githubusercontent.com/ronnie32/tgoat/main/docker/docker-compose.yml</code></pre></li>
+  <li>In the file, set <code>user</code> to the owner of these folders (<code>id -u</code> and <code>id -g</code> give yours; often <code>1000:1000</code>) and <code>TZ</code> to your time zone.</li>
+  <li>Start TGoat: <code>docker compose up -d</code>.</li>
+  <li>Set the password of the web interface: <code>docker compose exec tgoat tgoat webui password</code>. Or find the setup code in <code>docker compose logs tgoat</code> and type it on the sign-in page.</li>
+  <li>Open <code>http://localhost:9090</code>, sign in, and <a href="#account">add your account</a>.</li>
+</ol>
+<p>The two ports are open to this computer only: 9090 for the web interface, 9091 for the game proxy of the OGame page. On a server, reach them through an SSH tunnel: <code>ssh -N -L 9090:127.0.0.1:9090 -L 9091:127.0.0.1:9091 you@your-server</code>. Inside the container, TGoat listens on all addresses, so it always asks for the password.</p>
+<p><code>config/</code>, <code>data/</code> and <code>log/</code> sit next to <code>docker-compose.yml</code>: back up the first two as usual. If you skip <code>mkdir</code>, Docker creates them for root and TGoat cannot write there: <code>sudo chown -R 1000:1000 config data log</code> (your <code>user</code>) fixes it. Coming from TBot 3.6: run <code>tgoat import</code> on your computer, then copy the <code>config/</code> and <code>data/</code> it made into this folder.</p>
+<p>Docker checks every 30 seconds that TGoat answers (<code>tgoat health</code>, which follows the options TGoat was started with): <code>docker compose ps</code> shows <code>healthy</code>. With the web interface off, there is nothing to check and it stays healthy.</p>
+
+<h3 id="docker-login">Sign in to the game</h3>
+<p>The container has no screen and no browser: <strong>Sign in with your browser</strong> says so. Use <strong>Sign in from another computer</strong> (<a href="#remote-login">how</a>): on your own computer, unpack the TGoat archive for your system (nothing to set up) and run the command the web interface shows, such as <code>tgoat login --to "http://localhost:9090" --code K7P2-9QXM</code>. On a server, open the SSH tunnel first. A <a href="#token">session token</a> works too.</p>
+<p>The command needs the port 9090 itself, published or tunnelled. A reverse proxy may not pass its sign-in tunnel: if <code>tgoat login</code> says it "does not get through", use the SSH tunnel.</p>
+
+<h3 id="docker-https">HTTPS with your own domain</h3>
+<p>The compose file has a Caddy service, commented out. Caddy gets a certificate for your domain and serves both ports over HTTPS: the web interface on 443, the game proxy on 9091.</p>
+<ol>
+  <li>Point your domain to the server, and open ports 80, 443 and 9091.</li>
+  <li>In TGoat, Settings, TGoat file, <strong>Web interface</strong>: set <strong>Allowed host names</strong> to your domain and <strong>Trusted reverse proxies</strong> to <code>172.30.57.10</code>, Caddy's address in the compose file.</li>
+  <li>Put <a href="https://github.com/ronnie32/tgoat/blob/main/docker/Caddyfile"><code>Caddyfile</code></a> next to <code>docker-compose.yml</code> and write your domain in it.</li>
+  <li>In <code>docker-compose.yml</code>, uncomment the <code>caddy</code> service, <code>networks</code> and <code>volumes</code>, and remove the <code>127.0.0.1:9091:9091</code> line: Caddy takes that port.</li>
+  <li>Run <code>docker compose up -d</code>, then <code>docker compose restart tgoat</code>.</li>
+</ol>
+<p>Trust Caddy's address only. A reverse proxy on the server itself (nginx in front of <code>127.0.0.1:9090</code>) reaches TGoat from the Docker gateway, the address every program of the server and every container goes through: putting that address in <strong>Trusted reverse proxies</strong> would let any of them pretend to be someone else. Run such a proxy in the compose network with a fixed address, as Caddy here, or leave <strong>Trusted reverse proxies</strong> empty.</p>
+<p>Open your domain in <code>https://</code>. Behind HTTPS, TGoat sends its cookies over HTTPS only, and the OGame page opens the game proxy at your domain, port 9091, over HTTPS. The interface is now on the Internet: turn on the <a href="#webui-signin">authenticator app</a>.</p>
+
+<h3 id="docker-update">Updates</h3>
+<p>The image never updates itself. TGoat still tells you about each new version, but <code>Update.Mode</code> Install works like Notify and the update banner has no Install button. Back up <code>config/</code> and <code>data/</code>, then:</p>
+<pre><code>docker compose pull
+docker compose up -d</code></pre>
+<p>If <code>image:</code> names a version, change it first. To go back, write the previous version there and run the same two commands.</p>
 </section>
 
 <section aria-labelledby="account">
@@ -227,9 +283,10 @@
   <li>The page shows a command such as <code>tgoat login --to "http://localhost:9090" --code K7P2-9QXM --instance MAIN</code>, with a <strong>Copy</strong> button. Run it on your computer, quotes included. It is the same <code>tgoat</code> program, with no setup. It uses your <code>LoginBrowser</code> setting if this computer has a TGoat folder, else <code>Auto</code>.</li>
   <li>Sign in in the window that opens. It waits about 9 minutes. The token goes to the server.</li>
 </ol>
-<p>The code lasts 10 minutes and is for one account. A new code or a new sign-in for the same account cancels the previous one. Once <code>tgoat login</code> has accepted the code, it is used up: if the sign-in then fails or you cancel, the command says "The code is now used" and you create a new one. The window closes 45 seconds before the code would end, so the token has time to arrive.</p>
+<p>The code lasts 10 minutes and is for one account. A new code or a new sign-in for the same account cancels the previous one. Once <code>tgoat login</code> has accepted the code, it is used up: if the sign-in then fails or you cancel, the command says "The code is now used" and you create a new one. It also tells the server, so the page says at once "tgoat login stopped before the sign-in finished" (or "Sign-in cancelled.") instead of waiting for the code to end. The window closes 45 seconds before the code would end, so the token has time to arrive. If the connection drops while the token is sent, <code>tgoat login</code> says "trying again" and sends it twice more within about 10 seconds.</p>
 <p>Before it takes the code, <code>tgoat login</code> checks the address and finds a browser, so a typo or a missing browser does not use the code up. A computer with no screen is refused there too.</p>
 <p>The web interface must be on (not <code>--console</code>). A reverse proxy that drops <code>CONNECT</code> requests does not work: after it accepts the code, <code>tgoat login</code> says the sign-in tunnel "does not get through" and opens no browser. Create a new code and use the SSH tunnel. An <code>http://</code> address other than <code>localhost</code> or <code>127.0.0.1</code> sends the code and the token in clear text: <code>tgoat login</code> warns and prints the SSH command to use.</p>
+<p>The OGame page needs a second port: the game proxy (by default the web interface's port plus one, <code>WebUI.GameProxyUrls</code>). Forward it too, for example with a second <code>-L 9091:127.0.0.1:9091</code>; if your browser cannot reach it, the OGame page says so.</p>
 <details id="reverse-proxy">
 <summary>Reaching TGoat by a name, or behind a reverse proxy</summary>
 <p>TGoat answers only requests for <code>localhost</code>, an IP address, a name in <code>WebUI.Urls</code> or <code>WebUI.GameProxyUrls</code>, or a name in <code>WebUI.AllowedHosts</code>. Any other name gets a 403 <code>unknown_host</code>. This stops a web page from taking over the interface.</p>
@@ -238,9 +295,23 @@
   <li><strong>If the 403 names a host you never typed, do not add it.</strong> A web page tried to use TGoat.</li>
   <li>Behind a reverse proxy, list its public name and let it keep the browser's <code>Host</code>. Caddy does by default; in nginx, set <code>proxy_set_header Host $host;</code>.</li>
   <li>nginx's default sends <code>Host: 127.0.0.1:&lt;port&gt;</code>, which TGoat always accepts, so it cannot see the browser's name. The proxy must then answer only for its own name (<code>server_name</code>, and a <code>default_server</code> that refuses other names). The same holds for a proxy that rewrites <code>Host</code> to <code>localhost</code> or an IP.</li>
-  <li>For the command to carry the public address, the proxy should send <code>X-Forwarded-Host</code> (a name TGoat accepts, such as one in <code>WebUI.AllowedHosts</code>) and <code>X-Forwarded-Proto: https</code>. Otherwise the command shows the address TGoat received.</li>
+  <li>For the command to carry the public address, the proxy should send <code>X-Forwarded-Host</code> (a name TGoat accepts, such as one in <code>WebUI.AllowedHosts</code>) and <code>X-Forwarded-Proto: https</code>, and its address must be in <code>WebUI.TrustedProxies</code>. Otherwise the command shows the address TGoat received.</li>
 </ul>
 </details>
+
+<h3 id="webui-signin">Sign-in to the web interface</h3>
+<p>Whoever reaches the web interface controls your game accounts. So as soon as another computer can reach it, TGoat asks for a password, on the interface and on the game proxy. With the default <code>WebUI.SignIn</code> (<code>Auto</code>), that is when either listens on an address other than <code>localhost</code> or <code>127.0.0.1</code> (such as <code>http://0.0.0.0:9090</code>, or in Docker), when <code>WebUI.AllowedHosts</code> or <code>WebUI.TrustedProxies</code> is set, for any request that comes through a reverse proxy, and always once a password is set (TGoat cannot tell a request from your computer from one relayed by a reverse proxy on it). On your own computer with the default addresses and no password, nothing changes. There is never a default password.</p>
+<ul>
+  <li><strong>Create the password</strong> on the computer that runs TGoat: <code>tgoat webui password</code> asks for it twice and shows nothing. A script or Docker can give it on the standard input: <code>echo "my password" | docker compose exec -T tgoat tgoat webui password</code>. A running TGoat uses it within two seconds. Or use the <strong>setup code</strong>: while no password exists, TGoat writes one in its console and its log file at each start, never on the Logs page, Telegram or Discord. The sign-in page (<strong>Create your password</strong>) or Settings asks for it; it works once, for 10 minutes.</li>
+  <li><strong>Sign in</strong>: the page asks for the password, then for the code of your authenticator app or a passkey, if you turned one on. A session lasts 30 days after your last visit and survives a restart. <strong>Sign out</strong> is in the top bar.</li>
+  <li><strong>Authenticator app</strong> (optional): in Settings, TGoat file, section <strong>Web interface</strong>, click <strong>Set up an authenticator app</strong>, scan the QR code (TGoat draws it; nothing is sent elsewhere), then type the code and your password. Save the 10 recovery codes it shows: each replaces the app's code once, and they are not shown again.</li>
+  <li><strong>Passkeys</strong> (optional): your phone, Windows Hello, a password manager or a security key, instead of the 6-digit code. In the same section, type a name, your password (and the app's code if it is on), click <strong>Add a passkey</strong> and confirm in your browser. After the password, the sign-in page then asks for the passkey; the app's code and the recovery codes still work. The first passkey added without the app gives 10 recovery codes, shown once. With <code>WebUI.PasskeyAlone</code> on, <strong>Sign in with a passkey</strong> signs in without the password, if the passkey checks it is you (PIN, fingerprint or face).</li>
+  <li><strong>Passkeys need HTTPS, or <code>localhost</code></strong>, and a host name, never an IP address. A passkey works only on the host name where you added it: one added on <code>localhost</code> does not work on <code>tgoat.example.com</code>; add one on each. Over plain http on another name, the page says why passkeys are unavailable. Without a reverse proxy, they work on <code>localhost</code> at the interface's own port. Behind an HTTPS reverse proxy, list it in <code>WebUI.TrustedProxies</code>: TGoat then takes the address from its <code>X-Forwarded-Proto</code> and <code>X-Forwarded-Host</code> (forward the port too if it is not 443). They never work on the game proxy's address.</li>
+  <li><strong>Forgot the password or lost the phone</strong>: run <code>tgoat webui reset</code> on the server. It removes the password, the authenticator app, the passkeys and every session; also delete the passkeys from your devices. A running TGoat then writes a new setup code in its console and log file. Set a new password with it, or with <code>tgoat webui password</code>.</li>
+  <li><strong>Behind a reverse proxy</strong>, put its address in <code>WebUI.TrustedProxies</code> (such as <code>127.0.0.1</code>, or <code>172.17.0.0/16</code> for Docker). Only then does TGoat read <code>X-Forwarded-For</code> (or <code>X-Real-IP</code>: the visitor's address, for the delays and the session list) and <code>X-Forwarded-Proto: https</code> (the session cookie is then sent over HTTPS only, under a <code>__Host-</code> name). Serve the game proxy on the same site as the interface: the OGame page passes it a one-time ticket, so it needs no second sign-in. That ticket opens the game of one account only.</li>
+</ul>
+<p>Tries are checked one at a time per address. After 5 wrong passwords or codes from one address, each try waits 1 second, then 2, 4… up to 5 minutes. Beyond 100 failures in 15 minutes from all addresses, new addresses must wait; a browser already signed in, or an address that signed in within 30 days, can still try. Each failure, passkeys included, is logged as a warning with the address. A passkey request works once, within 3 minutes. A passkey whose signature counter goes back may have been copied: TGoat refuses it until you remove it and add it again. <code>secrets.json</code> keeps an Argon2id hash of the password, never the password, and the sessions file in <code>data/</code> keeps only hashes of the session cookies. On Windows, both files are readable by your user only. <code>tgoat webui reset</code> also removes the section from <code>secrets.json.bak</code>; other changes leave the previous version there, as for every secret.</p>
+<p><code>WebUI.SignIn</code> <code>Always</code> asks even on <code>localhost</code> with no password. <code>Never</code> never asks: when TGoat can be reached from elsewhere (an address other than <code>localhost</code>, <code>WebUI.AllowedHosts</code> or <code>WebUI.TrustedProxies</code> set, or a request through a reverse proxy), it logs a warning and every page shows a red banner. Signing out, signing out everywhere or changing the password also closes the live updates of the browsers concerned.</p>
 
 <h3 id="token">Session token</h3>
 <p>If the browser sign-in is not possible, paste a session token by hand. It also keeps your password out of TGoat.</p>
@@ -309,10 +380,10 @@
   <li>It renames itself <code>tgoat.exe.old</code> (<code>tgoat.old</code> on Linux and macOS), puts the new version in its place and restarts with the same options.</li>
 </ol>
 <p>If no quiet moment comes for 24 hours, TGoat gives up, tells you what held it, and installs that version only when you click Install. The same goes for an install you cancel. If TGoat cannot write in its own folder (Program Files, <code>/usr/local/bin</code>), Install mode works like Notify and tells you to update by hand.</p>
-<p>If a download fails or an antivirus holds a file, Install mode tries again at the next check; after a click, click Install again. If TGoat cannot put its own program back after a failed update, it tells you which file to rename, and installs nothing more until you have renamed it and restarted TGoat.</p>
-<p>The new version is kept once it has run 2 minutes with its instances started. TGoat then deletes the <code>.old</code> file and tells you. If the new version fails to start twice in a row, the next start puts the previous one back and tells you; a start stopped by you, or by a second TGoat already using the configuration folder, does not count. If an antivirus stops that, TGoat says so and tries again at the next start; until then, it installs no update, not even from the Install button. If the new version cannot even be launched, the previous one comes back at once. TGoat then never installs that version by itself; the Install button still can.</p>
+<p>If a download fails or an antivirus holds a file, Install mode tries again at the next check. After 3 failures in a row, or as soon as an antivirus refuses to let TGoat replace its own program, Install mode pauses that version for 24 hours, then tries it once more, and so on. The log and the banner say so. <strong>Install</strong> works at any time, and a failed click does not count towards the 3 failures. In Notify mode, after a failed click, click Install again. If TGoat cannot put its own program back after a failed update, it tells you which file to rename, the banner keeps saying it, and TGoat installs nothing more until you have renamed it and restarted TGoat.</p>
+<p>The new version is kept once it has run 2 minutes with its instances started. TGoat then deletes the <code>.old</code> file and tells you. If the new version fails to start twice in a row, the next start puts the previous one back and tells you; a start stopped by you, or by a second TGoat already using the configuration folder, does not count. If an antivirus stops that, TGoat says so and tries again at the next start; until then, it installs no update, not even from the Install button. If the <code>.old</code> file is gone, there is nothing to put back: TGoat says so, keeps running, and installs updates as usual. If the new version cannot even be launched, the previous one comes back at once. TGoat then never installs that version by itself; the Install button still can.</p>
 <p>Run one TGoat per program file: a second TGoat started from the same file never updates.</p>
-<p>On Linux and macOS, TGoat restarts in the same process, so this works in a terminal, under systemd and in a container. On Windows, it starts the new version in the same console, then exits: your prompt comes back while TGoat keeps writing. If a service manager runs TGoat on Windows (NSSM, WinSW) or should do the restart itself, set the environment variable <code>TGOAT_SERVICE=1</code>: after an update, TGoat exits with code 75 and the manager must start it again. TGoat warns at start when NSSM or WinSW runs it without that variable.</p>
+<p>On Linux and macOS, TGoat restarts in the same process, so this works in a terminal, under systemd and in a container of your own (the TGoat image does not update itself: see <a href="#docker-update">Docker</a>). On Windows, it starts the new version in the same console, then exits: your prompt comes back while TGoat keeps writing. If a service manager runs TGoat on Windows (NSSM, WinSW) or should do the restart itself, set the environment variable <code>TGOAT_SERVICE=1</code>: after an update, TGoat exits with code 75 and the manager must start it again. TGoat warns at start when NSSM or WinSW runs it without that variable.</p>
 
 <h3 id="update-trust">How trust works</h3>
 <p>Each release has a <code>checksums.txt</code> file with the SHA-256 of every archive, signed with the TGoat release key. TGoat installs a version only if:</p>
@@ -349,7 +420,7 @@ sha256sum --ignore-missing -c checksums.txt</code></pre>
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/start.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/start.html</code> in the project. Build 0.1.0-alpha.2 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.2).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -94,7 +94,7 @@
   <thead><tr><th scope="col">Telegram</th><th scope="col">Discord</th><th scope="col">What it does</th></tr></thead>
   <tbody>
     <tr class="sub"><th colspan="3" scope="colgroup">Settings and profiles</th></tr>
-    <tr><th scope="row"><code>/settings get &lt;setting&gt;</code></th><td><code>/settings get</code></td><td>Read a setting by its full path, such as <code>AutoFarm.NumProbes</code>.</td></tr>
+    <tr><th scope="row"><code>/settings get &lt;setting&gt;</code></th><td><code>/settings get</code></td><td>Read a setting by its full path, such as <code>AutoFarm.MinimumResources</code>.</td></tr>
     <tr><th scope="row"><code>/settings set &lt;setting&gt; &lt;value|default&gt;</code></th><td><code>/settings set</code></td><td>Change a setting at once, even offline. <code>default</code> resets it.</td></tr>
     <tr><th scope="row"><code>/settings undo</code></th><td><code>/settings undo</code></td><td>Undo your last change.</td></tr>
     <tr><th scope="row"><code>/mode [human|rage|custom]</code></th><td><code>/mode</code></td><td>Show the play mode and what it does, or set it to Human, RAGE or Custom. It is written like a settings edit, works offline and <code>/settings undo</code> reverts it. See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
@@ -160,10 +160,16 @@
   <li><code>tgoat login [--instance &lt;name&gt;] [--browser &lt;path&gt;]</code> signs in on the computer that runs TGoat. A running TGoat picks the token up and connects. <code>--instance</code> is needed when there are several accounts. With no account yet, it tells you to run <code>tgoat setup</code>. See <a href="start.html#browser-login">Sign in with your browser</a>.</li>
   <li><code>tgoat login --to "&lt;address&gt;" --code &lt;code&gt; [--instance &lt;name&gt;]</code> signs in on this computer for a TGoat that runs elsewhere. Copy the whole command from the web interface. Ctrl+C cancels. See <a href="start.html#remote-login">TGoat on another computer</a>.</li>
 </ul>
+<h3 id="terminal-webui">tgoat webui</h3>
+<p>Run them on the computer that runs TGoat, even while it runs. See <a href="start.html#webui-signin">Sign-in to the web interface</a>.</p>
+<ul>
+  <li><code>tgoat webui password</code> sets or replaces the password of the web interface. It asks twice without showing it, or reads one line from the standard input: <code>echo "my password" | docker compose exec -T tgoat tgoat webui password</code>. At least 8 characters. Browsers signed in before must sign in again; the authenticator app stays. While no password exists, TGoat also writes a one-time setup code in its console and log file at start, for the sign-in page.</li>
+  <li><code>tgoat webui reset</code> removes the password, the authenticator app, the recovery codes and every session. Use it when you forgot the password or lost the phone, then set a new password.</li>
+</ul>
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/commands.html</code> in the project. Build 0.1.0-alpha.1 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/commands.html</code> in the project. Build 0.1.0-alpha.2 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>
