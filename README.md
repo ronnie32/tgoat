@@ -6,7 +6,7 @@ TGoat is a bot that plays your OGame accounts. It is the successor of TBot 3.6 a
 
 **Read the guide: [ronnie32.github.io/tgoat](https://ronnie32.github.io/tgoat/)**
 
-> **Alpha: `0.1.0-alpha.4`.** Expect bugs, and back up `config/` and `data/` before each update. Using a bot breaks OGame's rules (Gameforge's terms of use): your account can be banned. Use it at your own risk, ideally on a secondary account, and start with every feature off.
+> **Alpha: `0.1.0-alpha.5`.** Expect bugs, and back up `config/` and `data/` before each update. Using a bot breaks OGame's rules (Gameforge's terms of use): your account can be banned. Use it at your own risk, ideally on a secondary account, and start with every feature off.
 
 ## What it does
 

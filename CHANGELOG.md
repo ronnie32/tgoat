@@ -13,6 +13,98 @@ alphas are not guaranteed to migrate your files until the first stable
 release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
 
+## [0.1.0-alpha.5] - 2026-11-19
+
+### Added
+
+- AutoFarm blacklists an inactive target whose storages can never hold
+  enough loot. Its mines stop when a storage is full, so a raid can take at
+  most the loot share of what its storages hold (or of the stock above
+  them). When that is not above `AutoFarm.MinimumResources`, the target is
+  blacklisted (`storage_too_small`) instead of being probed again every
+  time its report expires. New setting `AutoFarm.Blacklist.StorageTooSmall`,
+  on by default; a report that hides the buildings is judged as before.
+  Lowering `AutoFarm.MinimumResources` under what a target's storages can
+  hold, or turning the setting off, takes it off the blacklist at the next
+  pass.
+
+### Changed
+
+- Settings: a number that can reach 10,000 or more now shows a small readout
+  next to its field, grouped by thousands ("10,000,000 (10 M)"), updated as
+  you type. The field and the saved value are unchanged.
+- The "Game signal learned" and "Game signal not known yet" lines are now
+  debug lines: they stay in the Logs page and `TGoat.log` but no longer
+  show in the console.
+
+### Fixed
+
+- AutoFarm with the combat planner: targets were dropped as "Report still
+  incomplete … still after three espionages, the last with 27 probes"
+  although nothing was hidden: their reports had only been read more than
+  `AutoFarm.CombatPlanner.MaxReportAgeSeconds` after the probes landed. A
+  report that is too old is now probed again with the same number of
+  probes, without counting as one of the three espionages. Those probes
+  leave after the attacks of the pass, and the next pass comes back when
+  they land, a few seconds later, to read their reports fresh. When 3 such
+  espionages in a row still bring a report too old, the target is left
+  until its report expires, with the real reason
+  (`combat_reports_too_late`).
+- AutoFarm left its fleet slots idle between rounds of espionage: once
+  every slot carried probes, the pass ended and the next one came at the
+  usual interval, often minutes later, although the probes were back after
+  about a minute. Each espionage takes a fleet slot until its probes are
+  back, so a batch larger than the free slots now goes in rounds: AutoFarm
+  waits for its first probes to come back, then sends the next espionages
+  of the same batch (`AutoFarm.TargetsProbedBeforeAttack`). Targets worth
+  an attack get the freed slots first. With the combat planner, a round
+  stops before the reports of the pass would get too old. When no slot is
+  free at all, the reports that arrived are still read.
+- The AutoFarm pass summary said "15 probes sent" for 15 espionage
+  missions. It now says "15 espionage missions sent".
+- AutoFarm page: the scanned sector showed a "GNaN" galaxy, put the targets
+  in the wrong place and squeezed everything to the left when the scan
+  covers several galaxies. It now shows one band per galaxy of
+  `AutoFarm.ScanRange`, on a 1 to 499 axis, and the map's AutoFarm layer
+  places the targets right too.
+- Jump gate: "No moon has a fleet to jump" now says why for each moon, such
+  as "its jump gate recharges until 21:40", instead of "no other moon can
+  give its ships". The Logs page and `TGoat.log` also get one detail line
+  per moon checked: what it keeps and for whom, then the ships that can jump
+  and their fleet points against the smallest jump.
+- The help of every `CheckIntervalMin` and `CheckIntervalMax` says that Rage
+  mode, or `Pace.Checks` on Frequent, waits a tenth of it (one minute at
+  least): a 31 to 33 minute pause runs about every 3 minutes there.
+- Jump gate: a moon that Expeditions, AutoFarm, AutoDiscovery or
+  AutoColonize send from never jumped, whatever
+  `MinimumAmountOfShipsToBeLeftOnMoon` kept there, so the ships the
+  expeditions brought back were never gathered. Now every moon jumps its
+  surplus. It keeps what the features that send from it use there: one
+  fleet for each expedition that can still leave from it, AutoFarm's probes,
+  cargo and combat ships, the colony ships (discovery uses no ships). It
+  also keeps the cargo ships of Brain supply flights and of its stock, and
+  `MinimumAmountOfShipsToBeLeftOnMoon`: per ship type, the largest of these
+  stays, and the rest jumps. The new setting
+  `Brain.AutoFleetJumpGate.KeepFeatureShips` (on by default) can be turned
+  off to keep only `MinimumAmountOfShipsToBeLeftOnMoon`, as in TBot.
+- Boosters proposed nothing after another feature had left the game on a
+  moon (a jump, an expedition): the inventory was read from that moon, where
+  the game refuses every booster ("You cannot activate this item on a
+  moon!"). It is now read from a planet.
+- Short amounts in the web interface lost their trailing zeros: 100,000 showed
+  as "1k", 250,000 as "25k" and 200 million as "2M". They now read "100k",
+  "250k" and "200M".
+- Game proxy: a game address typed without its `game/` folder
+  (`/game/<alias>/index.php`) showed the raw game page, whose links and chat
+  went to Gameforge directly. It now opens the game page through the proxy.
+- AutoFarm with the combat planner planned no attack when
+  `AutoFarm.CargoSurplusPercentage` was 0, or when the flight's fuel was more
+  than that margin of the loot (at best a slower attack, sometimes with a
+  much larger escort): the cargo ships are now sized for the loot and the
+  fuel. The last check before sending, which adds spare escort ships, also
+  adds the cargo ships their fuel needs, never those kept by
+  `AutoFarm.MinCargosToKeep`, instead of slowing the attack down.
+
 ## [0.1.0-alpha.4] - 2026-11-18
 
 ### Added

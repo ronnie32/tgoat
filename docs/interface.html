@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.4).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -353,6 +353,7 @@
   <figcaption>Each setting says where its value comes from. The pink edge marks a change not saved yet.</figcaption>
 </figure>
 <p>Under each setting, a note says where its value comes from, such as <em>Default value</em> or <em>Chosen in this file</em>. A pink edge marks a change not saved yet, a red edge a value refused.</p>
+<p>A number that can reach 10,000 or more, such as a resource amount, also shows a small readout next to its field with the digits grouped ("10,000,000 (10 M)"); it follows what you type and changes nothing in the field.</p>
 <details>
 <summary>Every note and edge under a setting (6)</summary>
 <div class="table-wrap" role="region" aria-label="Where a value comes from" tabindex="0">
@@ -549,7 +550,7 @@
 <p>Each pass of a feature ends with a reason code. It shows in the feature's panel and in the detail of the log line, which also names the setting that decided.</p>
 <p><code>slots_reserved</code> means fleet slots are free, but kept for higher-priority features (<code>General.SlotPriorityLevel</code>). The detail gives each feature's share. <code>no_fleet_slot</code> means no slot is free at all.</p>
 <details>
-<summary>Reason codes new or changed in the reviews (130)</summary>
+<summary>Reason codes new or changed in the reviews (133)</summary>
 <div class="table-wrap" role="region" aria-label="New reason codes" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Reason codes new or changed in November 2026</caption>
@@ -609,12 +610,14 @@
     <tr><th scope="row"><code>event_mission_unknown</code></th><td>Instance</td><td>The event list shows a mission TGoat does not know (Project Orion adds some). A hostile one aimed at your celestials is handled as an attack. Said once per mission.</td></tr>
     <tr><th scope="row"><code>galaxy_view_dispatch_failed</code></th><td>AutoFarm</td><td>The galaxy view's spy button was refused; that target's probes went through the fleet page. A warning the first time.</td></tr>
     <tr><th scope="row"><code>incomplete_report</code>, <code>research_hidden</code>, <code>probes_exhausted</code>, <code>no_extra_probes</code></th><td>AutoFarm</td><td>The report hid the fleet or defences, so a second espionage goes with three times your probe count, or every probe at home if fewer; after it, the research is still hidden on a target with ships or defences, or the fleet or defences still are; no origin had more probes at home than your count, so there was no second espionage. The target waits for its report to expire (<code>AutoFarm.KeepReportFor</code>) before it is spied again.</td></tr>
+    <tr><th scope="row"><code>combat_report_too_old</code>, <code>combat_reports_too_late</code></th><td>AutoFarm</td><td>The report was older than <code>CombatPlanner.MaxReportAgeSeconds</code> when AutoFarm came to use it: the target is probed again with the same number of probes, not counted as one of the three espionages, and the next pass reads the report when the probes land. When 3 such espionages in a row still bring a report too old, the target waits for its report to expire (<code>AutoFarm.KeepReportFor</code>).</td></tr>
+    <tr><th scope="row"><code>storage_too_small</code></th><td>AutoFarm</td><td>The loot is below <code>AutoFarm.MinimumResources</code> and the inactive player's storages, read in the report, can never hold enough: the target is blacklisted (<code>AutoFarm.Blacklist.StorageTooSmall</code>).</td></tr>
     <tr><th scope="row"><code>combat_rejected_at_confirmation</code></th><td>AutoFarm</td><td>The last check before sending refused the plan. The detail says why, such as "4 of 773 final battle simulations failed", a report too old, or ships gone.</td></tr>
     <tr><th scope="row"><code>breaker_fleet_proposed</code>, <code>breaker_fleet_ordered</code>, <code>no_breaker_fleet</code>, <code>breaker_order_failed</code></th><td>AutoFarm</td><td>A combat fleet for turned-down targets was proposed or, in Automatic mode, ordered; none pays back within <code>AutoFarm.BreakerMaxPaybackDays</code> or the Brain's reserves cannot pay it (the detail says which); the game refused the order (a warning).</td></tr>
     <tr><th scope="row"><code>mode_at_start</code>, <code>mode_changed</code></th><td>Instance</td><td>The play mode at start-up, or its change, with what it does.</td></tr>
     <tr><th scope="row"><code>break_started</code>, <code>break_ended</code>, <code>break_resumed</code></th><td>Instance</td><td>A break began, ended, or goes on after a new connection (<code>SleepMode.Breaks.Active</code>).</td></tr>
     <tr><th scope="row"><code>you_play_in_game</code>, <code>you_stopped_playing</code></th><td>Instance</td><td>You acted in a queue of the game: the features that build or send fleets wait; or the quiet time is over and they start again (<code>General.YieldWhenYouPlay</code>).</td></tr>
-    <tr><th scope="row"><code>game_signal_action_learned</code>, <code>game_signal_unknown_action</code></th><td>Game</td><td>A kind of queue change was learned from TGoat's own order; or one not seen yet came, written once and not counted as you playing.</td></tr>
+    <tr><th scope="row"><code>game_signal_action_learned</code>, <code>game_signal_unknown_action</code></th><td>Game</td><td>A kind of queue change was learned from TGoat's own order; or one not seen yet came, written once and not counted as you playing. Debug lines: the Logs page shows them when Debug is on, the console does not.</td></tr>
     <tr><th scope="row"><code>construction_ended_early</code></th><td>Brain</td><td>The game says a build ended before its known end: the queue is read again and the next build chosen after a usual reaction.</td></tr>
     <tr><th scope="row"><code>report_announced</code></th><td>AutoFarm</td><td>The game announced a new message once the last probe had arrived: the espionage reports are read a few seconds later.</td></tr>
     <tr><th scope="row"><code>relogin_limit_notified</code></th><td>Instance</td><td>The game session was lost too often: automatic logins wait, and you got one notification with the time of the next try.</td></tr>
@@ -636,7 +639,7 @@
 <p>Changed meaning: <code>max_level_reached</code> and <code>return_too_slow</code> no longer stop a planet; it is checked again in 11 to 13 hours. For lifeform research, <code>max_level_reached</code> stops it only once all 18 research slots are open. <code>more_expensive_than_mine</code> compares paybacks in days. <code>energy_deficit</code> also covers energy built ahead of a mine.</p>
 </details>
 <details>
-<summary>Every other reason code (283)</summary>
+<summary>Every other reason code (282)</summary>
 <div class="table-wrap" role="region" aria-label="Other reason codes" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Every other reason code, by feature</caption>
@@ -733,7 +736,7 @@
     <tr><th scope="row"><code>defended</code>, <code>defense_limit_exceeded</code></th><td>AutoFarm</td><td>Defences, and <code>AttackDefendedTargets</code> is off; or defences worth more than <code>MaxDefensePoints</code>.</td></tr>
     <tr><th scope="row"><code>fleet_present</code>, <code>fleet_limit_exceeded</code></th><td>AutoFarm</td><td>Ships on site, and <code>AttackTargetsWithFleet</code> is off; or a fleet worth more than <code>MaxFleetPoints</code>.</td></tr>
     <tr><th scope="row"><code>manual_review_defense</code>, <code>report_already_consumed</code></th><td>AutoFarm</td><td>The report is left in the inbox for a manual attack (<code>KeepReportsWithDefense</code>); or it was already used for an attack.</td></tr>
-    <tr><th scope="row"><code>combat_technologies_missing</code>, <code>combat_report_too_old</code></th><td>AutoFarm</td><td>The report lacks the combat technologies, or is too old for the combat planner: probed again.</td></tr>
+    <tr><th scope="row"><code>combat_technologies_missing</code></th><td>AutoFarm</td><td>The report lacks the combat technologies: probed again.</td></tr>
     <tr><th scope="row"><code>cargo_minimum_from_settings</code>, <code>cargo_reserved_by_settings</code></th><td>AutoFarm</td><td>Held back by <code>MinCargosToSend</code>; or the cargo ships are kept by <code>MinCargosToKeep</code>.</td></tr>
     <tr><th scope="row"><code>not_enough_cargo_ships</code>, <code>not_enough_escort_ships</code>, <code>not_enough_fuel</code></th><td>AutoFarm</td><td>The origin has too few cargo ships, too few bombers or reapers, or too little deuterium.</td></tr>
     <tr><th scope="row"><code>flight_too_long</code>, <code>not_worth_fuel</code></th><td>AutoFarm</td><td>The flight is longer than <code>MaxFlightTime</code>; or the loot is worth less than <code>MinLootFuelRatio</code> times the fuel at every allowed speed.</td></tr>
@@ -994,7 +997,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/interface.html</code> in the project. Build 0.1.0-alpha.4 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/interface.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.4).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -84,7 +84,7 @@
 <h2 id="every">Every change from TBot 3.6</h2>
 <aside class="in-short" aria-label="In short">
 <ul>
-  <li>Every difference between TBot 3.6 and TGoat that a player can notice: 351 rows in 29 features.</li>
+  <li>Every difference between TBot 3.6 and TGoat that a player can notice: 352 rows in 29 features.</li>
   <li>Each row gives a topic, what TBot did and what TGoat does now.</li>
   <li>Type a few words in the filter to keep only the rows that contain them.</li>
   <li>For the short version, read <a href="from-tbot.html">What changes for you</a>.</li>
@@ -96,7 +96,7 @@
   <label for="change-filter-input" style="display:block;font-weight:600;margin-bottom:.35rem">Filter the rows</label>
   <input id="change-filter-input" type="search" autocomplete="off" spellcheck="false" placeholder="for example: deuterium, fleet-save, MinFields" aria-describedby="change-filter-status" style="box-sizing:border-box;width:100%;max-width:30rem;font:inherit;padding:.5rem .7rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)">
   <button type="button" id="change-filter-all" style="font:inherit;margin:.5rem 0 0;padding:.4rem .8rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer">Open all</button>
-  <p id="change-filter-status" aria-live="polite" style="margin:.5rem 0 0;color:var(--muted)">Showing all 351 rows. Every word you type must appear in a row.</p>
+  <p id="change-filter-status" aria-live="polite" style="margin:.5rem 0 0;color:var(--muted)">Showing all 352 rows. Every word you type must appear in a row.</p>
 </div>
 <p>"Before" is what TBot 3.6 did. "Now" is what TGoat does. A dash means the behaviour did not exist.</p>
 
@@ -209,7 +209,7 @@
 <p>AutoFarm needs far fewer requests too: one per probe through the galaxy view (a 30-probe pass: 309 requests → 40), one per inbox page to delete read reports (15 reports: 47 requests → 19), and every page of espionage messages is read. See <a href="#autofarm">AutoFarm</a>.</p>
 </details>
 <details class="feature" id="fbf-autofarm">
-<summary id="autofarm">AutoFarm (42)</summary>
+<summary id="autofarm">AutoFarm (43)</summary>
 <div class="table-wrap" role="region" aria-label="AutoFarm, before and now" tabindex="0">
 <table class="bn">
   <caption class="sr-only">AutoFarm: TBot 3.6 compared with TGoat</caption>
@@ -222,6 +222,7 @@
     <tr><th scope="row">Galaxy cache</th><td>7 days, the only inactivity guarantee.</td><td>2 days, only to save requests.</td></tr>
     <tr><th scope="row">Attack order</th><td>Gross loot, highest first.</td><td>Profit net of fuel per hour of slot (round trip).</td></tr>
     <tr><th scope="row">Blacklist</th><td>Compared the total; 1,000,000 threshold (almost everything listed); 20 h, no effect against the 24 h of <code>KeepReportFor</code>.</td><td>Same figure as the verdict; 250,000 threshold; 72 h.</td></tr>
+    <tr><th scope="row">Storages too small for <code>MinimumResources</code></th><td>Loot below <code>MinimumResources</code> but above the blacklist threshold: probed again each time its report expired, even when its storages could never hold enough.</td><td>An inactive's mines stop when a storage is full, so a raid takes at most the loot share of its storage capacity, or of the stock above it, read from the report. Below <code>MinimumResources</code>: blacklisted (<code>storage_too_small</code>, <code>Blacklist.StorageTooSmall</code>, on by default).</td></tr>
     <tr><th scope="row">Targets never seen again</th><td>Kept forever.</td><td>Forgotten after 14 days.</td></tr>
     <tr><th scope="row">Target too far or not profitable from every origin</th><td>Pending, retried every pass.</td><td>Dropped until <code>KeepReportFor</code> has passed.</td></tr>
     <tr><th scope="row">Position exclusions (<code>AutoFarm.Exclude</code>)</th><td>Excluded the whole system.</td><td>Excludes the position; position 0 excludes the system.</td></tr>
@@ -259,7 +260,7 @@
     <tr><th scope="row">Other planets of a player who destroyed a fleet</th><td>Attacked on their old report.</td><td>Probed again before any attack (<code>player_destroyed_a_fleet</code>), without blacklisting.</td></tr>
     <tr class="sub"><th colspan="3" scope="colgroup">Pace and slots</th></tr>
     <tr><th scope="row">Pauses between dispatches</th><td>0 to 5 s between probes, none between attacks.</td><td>Variable pauses with occasional longer breaks; variable batch size. Probe building: 10 minutes at most.</td></tr>
-    <tr><th scope="row">Delay between passes</th><td>Uniform, 30 to 60 min.</td><td>Follows game events; with nothing to do, ×2 then ×4 (<code>nothing_to_do</code>).</td></tr>
+    <tr><th scope="row">Delay between passes</th><td>Uniform, 30 to 60 min.</td><td>Follows game events: the arrival of its probes, and their return when every fleet slot carries probes, to go on with the batch; with nothing to do, ×2 then ×4 (<code>nothing_to_do</code>).</td></tr>
     <tr><th scope="row">End of scan</th><td><code>StopAfterFullScan</code> true: stopped after one cycle.</td><td>False by default: AutoFarm slows down instead of stopping.</td></tr>
     <tr><th scope="row">Slot counting</th><td>By mission: every attack counted for AutoFarm, its probes nowhere; <code>MaxSlots</code> reserved even when idle.</td><td>By sending feature; an idle AutoFarm reserves only its fleets in flight.</td></tr>
   </tbody>
@@ -402,7 +403,7 @@
     <tr><th scope="row">Threshold (<code>MinimumAmountOfShipPointsToTeleport</code>)</th><td>500,000 "resources", compared in points, so 500 M of ships: the gate never jumped.</td><td>1,000 points by default (about 1 M resources of ships), shown in points.</td></tr>
     <tr><th scope="row">After a jump</th><td>Retried every 5 to 10 min, as a warning.</td><td>Waits for the recharge read on the gate, plus 2 to 5 min. A destination missing from the list counts as a recharging gate, without a warning. A jump recharges both gates, and both are recorded.</td></tr>
     <tr><th scope="row">Moon under attack</th><td>Not checked.</td><td>No jump to a moon an attack is heading for, nor from it. Without the Defender, the event list is read; if it is unreadable, no jump.</td></tr>
-    <tr><th scope="row">Ships kept</th><td>Everything that flies left.</td><td>Each moon keeps the cargo ships of its stock. A moon that is the origin of Expeditions, AutoFarm, Discovery or Colonize is never a departure; Brain transports keep their cargo ships.</td></tr>
+    <tr><th scope="row">Ships kept</th><td>Everything that flies left.</td><td>Each moon jumps only its surplus. It keeps what the features that send from it use there (Expeditions: one fleet for each expedition that can still leave; AutoFarm: its probes, cargo and combat ships; Colonize: its colony ships), the cargo ships of Brain transports and of its stock, and the ships of <code>MinimumAmountOfShipsToBeLeftOnMoon</code>: per ship type, the largest of these. With <code>KeepFeatureShips</code> off, only the last.</td></tr>
     <tr><th scope="row">Reads</th><td>More than 1,000 requests a day with five moons, a pass every 5 to 10 min.</td><td>Gate level read once a day, ships after a fleet arrives, a pass every 15 to 30 min. The attack list is read only when a jump is possible.</td></tr>
   </tbody>
 </table>
@@ -669,7 +670,7 @@
     <tr><th scope="row">Deploy and Switch</th><td>Announced success even when it failed.</td><td>Report the real result.</td></tr>
     <tr><th scope="row"><code>/build</code></th><td>Did not work for defences.</td><td>Works for defences.</td></tr>
     <tr><th scope="row"><code>/wakeup</code> on an awake instance, <code>/cancelghostsleep</code> with nothing to cancel</th><td>An error.</td><td>A plain answer.</td></tr>
-    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-alpha.4". The regular sign of life also gives the version.</td></tr>
+    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-alpha.5". The regular sign of life also gives the version.</td></tr>
     <tr><th scope="row">Discord webhook (<code>DiscordWebhook.Active</code>)</th><td>—</td><td>Posts as "TGoat" unless you set <code>DiscordWebhook.Username</code>.</td></tr>
     <tr><th scope="row">Discord bot</th><td>None.</td><td>Every Telegram command. See <a href="discord.html#discord">Discord bot</a>.</td></tr>
   </tbody>
@@ -822,7 +823,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-alpha.4 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

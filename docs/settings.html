@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.4).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -106,7 +106,7 @@
 </div>
 </details>
 <details>
-<summary>All new settings (92)</summary>
+<summary>All new settings (93)</summary>
 <div class="table-wrap" role="region" aria-label="New settings" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Settings added by the November 2026 reviews</caption>
@@ -114,7 +114,7 @@
   <tbody>
     <tr><th scope="row"><code>Brain.ReserveHours</code></th><td class="num">6 h</td><td>A celestial keeps the resources of its next Brain build when it pays it within this time. While its queue is busy, the time counts from the end of the running build.</td></tr>
     <tr><th scope="row"><code>Mode</code></th><td>Human</td><td>How fast TGoat plays: Human, RAGE or Custom. See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
-    <tr><th scope="row"><code>Pace.Reaction</code>, <code>Pace.Pauses</code>, <code>Pace.Waves</code>, <code>Pace.Checks</code>, <code>Pace.Requests</code></th><td>Human, Human, false, Human, Human</td><td>The fine settings of Custom mode: reactions (Human, Quick, Instant), pauses (Human, Short), waves, checks (Human, Frequent), requests (Human, Fast). Used in Custom mode only, except <code>Pace.Waves</code>, which applies in Human mode too; the defaults play like Human.</td></tr>
+    <tr><th scope="row"><code>Pace.Reaction</code>, <code>Pace.Pauses</code>, <code>Pace.Waves</code>, <code>Pace.Checks</code>, <code>Pace.Requests</code></th><td>Human, Human, false, Human, Human</td><td>The fine settings of Custom mode: reactions (Human, Quick, Instant), pauses (Human, Short), waves, checks (Human, Frequent: every feature's <code>CheckIntervalMin</code> and <code>Max</code> are divided by ten, one minute at least, as in Rage), requests (Human, Fast). Used in Custom mode only, except <code>Pace.Waves</code>, which applies in Human mode too; the defaults play like Human.</td></tr>
     <tr><th scope="row"><code>Directives.Active</code>, <code>Directives.Missions.*</code></th><td>false</td><td>See the options above.</td></tr>
     <tr><th scope="row"><code>Directives.CheckIntervalMin</code>, <code>Directives.CheckIntervalMax</code></th><td class="num">120 and 360 min</td><td>Time between two looks at the Directives menu.</td></tr>
     <tr><th scope="row"><code>Directives.Notify</code></th><td>DarkMatterOnly</td><td>When a Directives collect sends a notice naming the missions: EveryReward, DarkMatterOnly or Never.</td></tr>
@@ -122,6 +122,7 @@
     <tr><th scope="row"><code>Brain.ReserveLetsSmallBuildsThrough</code></th><td class="num">15 min</td><td>A build that waits only for resources kept for a build ranked before it goes at once if it takes at most this much of the planet's production from them. The kept build is delayed by at most this long, all such builds together; 0: they wait.</td></tr>
     <tr><th scope="row"><code>Brain.Transports.MinHoursSaved</code></th><td class="num">1 h</td><td>A supply flight leaves only if it saves this much, or a quarter of the wait.</td></tr>
     <tr><th scope="row"><code>Brain.Transports.MultipleOrigins.MinimumShipment</code></th><td class="num">0</td><td>Smallest load of a flight from several origins; 0: none.</td></tr>
+    <tr><th scope="row"><code>Brain.AutoFleetJumpGate.KeepFeatureShips</code></th><td>true</td><td>The jump gate moves only the surplus of a moon. A moon that Expeditions, AutoFarm or AutoColonize send from (their <code>Origin</code> lists it) keeps what they use there: one expedition fleet for each expedition that can still leave from it (<code>MaxExpeditionsPerOrigin</code>, or the expedition slots shared between the origins, minus those in flight), all AutoFarm probes, cargo ships and the combat ships it may send, all colony ships. Brain supply flights keep their cargo ships, and each moon keeps the cargo ships its stock needs. Per ship type, the larger of this and <code>MinimumAmountOfShipsToBeLeftOnMoon</code> stays, not both added. Off: only <code>MinimumAmountOfShipsToBeLeftOnMoon</code> stays, as in TBot.</td></tr>
     <tr><th scope="row"><code>Brain.AutoMine.SatelliteRiskFactor</code></th><td class="num">2</td><td>Multiplies the satellite price when energy sources are compared.</td></tr>
     <tr><th scope="row"><code>Brain.AutoMine.MaxSolarSatellites</code></th><td class="num">0</td><td>Most solar satellites per planet; 0: no limit.</td></tr>
     <tr><th scope="row"><code>Brain.AutoMine.SpendStockUnderAttack</code></th><td>false</td><td>See the options above.</td></tr>
@@ -178,6 +179,7 @@
     <tr><th scope="row"><code>AutoFarm.BuildBreakers</code></th><td>Suggest</td><td>Combat ships for targets AutoFarm turns down for their defences or ships: Off, Suggest (TGoat proposes the cheapest fleet that pays back, with its cost, loot per day, payback and risk) or Automatic (builds it within the Brain's reserves, one order per pass, only if your AutoFarm settings would raid with it). See <a href="changes.html#breakers">Combat ships for defended targets</a>.</td></tr>
     <tr><th scope="row"><code>AutoFarm.BreakerMaxPaybackDays</code></th><td class="num">3 days</td><td>Longest payback of a combat fleet; above it, nothing is proposed or built.</td></tr>
     <tr><th scope="row"><code>AutoFarm.DeleteReports</code></th><td>true</td><td>Deletes the espionage reports AutoFarm has used. Off, they all stay in your inbox; AutoFarm still reads only the new ones and stops at the first one it already knows.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.Blacklist.StorageTooSmall</code></th><td>true</td><td>With the blacklist on, also blacklists an inactive target refused for its small loot when its storages can never hold enough: its mines stop when a storage is full, so a raid takes at most your loot share of each storage's capacity, or of the stock above it, read from the storage levels in its report. Below <code>AutoFarm.MinimumResources</code>, it is blacklisted for <code>Blacklist.ResetAfterHours</code> (<code>storage_too_small</code>) instead of being probed again each time its report expires. A report that hides the buildings is judged as before.</td></tr>
     <tr><th scope="row"><code>General.YieldWhenYouPlay.Active</code>, <code>General.YieldWhenYouPlay.QuietMinutes</code></th><td>true and 10 min</td><td>When you start, cancel or speed up something in a queue of the game yourself, the features that build or send fleets wait until you have done nothing in the game for this many minutes (1 to 120), then start again one by one. The Defender keeps watching. Off: they carry on. See <a href="interface.html#ui-you-play">While you play</a>.</td></tr>
     <tr><th scope="row"><code>Notifications.Level</code></th><td>Everything</td><td>What an instance sends to Telegram and Discord: Attacks (attacks only), Important (attacks, warnings, errors, sleep mode and proposals) or Everything. The web interface still shows everything. The <a href="interface.html#ui-assistant">setup assistant</a> asks this question.</td></tr>
     <tr><th scope="row"><code>Notifications.OrionReward</code></th><td>true</td><td>One notification when the game shows an Orion reward waiting to be claimed (claim it within the hour). The mark TGoat reads comes from the game's script and has not yet been seen on a real Orion page. TGoat sees it only when it loads a full game page, so not at night with <code>Defender.NightWatch</code> on <code>OnAlert</code>. TGoat never claims it.</td></tr>
@@ -283,7 +285,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/settings.html</code> in the project. Build 0.1.0-alpha.4 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/settings.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>
