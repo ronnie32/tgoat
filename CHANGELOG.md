@@ -17,7 +17,7 @@ release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/in
 
 ### Added
 
-- Telegram without hunting the chat ID: paste the token from @BotFather, click
+- Telegram without hunting the chat ID: paste the token from `@BotFather`, click
   **Link Telegram** (first run, or the Telegram group of the TGoat settings),
   then open the link or scan its QR code and tap Start. TGoat saves the chat.
   The link works once, for 10 minutes. The token alone now starts the bot,
