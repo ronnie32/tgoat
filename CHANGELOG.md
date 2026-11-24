@@ -153,8 +153,6 @@ release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/in
 
 ### Fixed
 
-- The `/phalanx` command scans again: on OGame 13.1 the game refused its
-  request.
 - Espionage reports of OGame 13.1 now give the target player's class and
   alliance class. Every report read "no class": the combat planner and the
   breakers refused every defended target ("does not show the defender's
