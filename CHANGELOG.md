@@ -13,6 +13,238 @@ alphas are not guaranteed to migrate your files until the first stable
 release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
 
+## [0.1.0-alpha.6] - 2026-11-24
+
+### Added
+
+- Telegram without hunting the chat ID: paste the token from @BotFather, click
+  **Link Telegram** (first run, or the Telegram group of the TGoat settings),
+  then open the link or scan its QR code and tap Start. TGoat saves the chat.
+  The link works once, for 10 minutes. The token alone now starts the bot,
+  which waits for its link; typing the chat ID still works. The guide has a
+  new [Telegram section](https://ronnie32.github.io/tgoat/discord.html#telegram-bot).
+- At login TGoat logs the OGame version the server runs ("Game server runs
+  OGame 13.1.1"), with a warning at each login when the server runs a newer
+  OGame than the one TGoat was checked against.
+- `Expeditions.NightRoundReturn` (AfterWake): the night round of expeditions
+  comes back 5 to 30 minutes after the wake-up, as before, or with BeforeWake
+  5 to 30 minutes before it. A fleet that lands on a planet before the wake-up
+  sits there while you sleep and can be raided; from a moon it is safe.
+  BeforeWake needs `SleepMode.PreventIfThereAreFleets` off, or the bedtime
+  would wait for the fleet.
+- Offer of the day: when the game offers another container right after the
+  first, TGoat buys it too, under the same rules (`MaxPriceHours`, one
+  celestial's surplus). Each one is reported and notified.
+- `Brain.BuyOfferOfTheDay.Honour` (off) and `KeepHonour` (0): honour points
+  pay the offer of the day first, at the rate the trader page gives (100 units
+  of metal per point); one celestial's surplus pays the rest. The report says
+  how many honour points were spent and how many are left.
+- The Defender checks for attacks sooner when a galaxy view shows your
+  selected planet or moon under attack. The game says it in every galaxy view
+  TGoat reads anyway; it is one more early check, never instead of the
+  Defender's own.
+- A warning when the galaxy view marks your account as an outlaw: for up to
+  7 days every player can attack it.
+- `General.AllowOutlawAttacks` (off): lets attacks, espionage and moon
+  destructions on a much stronger player leave anyway, for players who attack
+  stronger players on purpose. Each one logs a warning: your account then has
+  no attack protection for up to 7 days.
+- With `AutoFarm.ProcessAllReports`, a target that a fresh galaxy view shows
+  with an espionage report AutoFarm does not know yet is judged on that
+  report instead of being probed again.
+- Boosters that expire: TGoat now reads when an inventory item expires, or
+  when its event ends. `Brain.Boosters` uses the copy that expires first, and
+  activates an expiring booster before its date instead of keeping it for
+  later, even on a planet whose storage is full in its last 12 hours. When no
+  planet can take it in time, you get one warning saying why. The Boosters
+  report shows the date of every item that expires.
+- `Notifications.OfficerEnding` (48 hours): one notification when a hired
+  officer may end within that many hours, so you can extend it. The game only
+  shows whole days left; TGoat narrows the end down from the pages it loads
+  anyway, with no extra request. At login, TGoat lists your officers and when
+  they end.
+
+### Changed
+
+- Removed the request shapes kept for game servers older than OGame 13.1;
+  every server runs 13.1.
+- AutoFarm takes the fleet slots in use and the selected planet's probes
+  from the galaxy views it reads anyway: fewer ship reads before probing,
+  and it stops before the game refuses a send for lack of a slot.
+- AutoFarm also targets inactive players marked as outlaws (o), even under
+  the newbie protection: the game removes all protection from outlaws. A
+  much stronger player (s) is still never probed or attacked, and the log
+  now gives the real reason: it would make your account an outlaw for 7 days.
+- `/fleet spycrash` without a target never picks a buddy or a member of your
+  alliance.
+- `Brain.LifeformAutoMine.BuildNonEconomic` (off by default) now builds
+  everything without a return up to its Max: buildings 6 to 12 that produce
+  nothing, then housing and food beyond what the population needs (they cost
+  metal and crystal, no deuterium). Food always stays ahead: a housing level
+  goes up only once the food feeds its living space, so the population never
+  starves; with housing at its Max, food goes on up to its own. Paid by the
+  planet, never with a supply flight. The line says so ("BuildNonEconomic is
+  on (target 74)"). Off, the Max levels are ceilings: TGoat builds only what
+  pays back or is needed, and a planet with nothing to build suggests the
+  option, naming what it would build first.
+- `Brain.AutoMine.KeepLastField` (on): the last free field of a planet waits
+  for the Terraformer, the last free field of a moon for the Lunar Base. Before,
+  when the Terraformer could not be built yet (Energy Technology 12, a Nanite
+  Factory, or its Max level), a mine or a storage took the field, and the
+  planet could never get a Terraformer again: it needs a free field. The
+  report (`last_field_kept`) says what is missing. Off: the field goes to the
+  next building, as in TBot.
+- A build the game does not offer is no longer ordered. TGoat reads the item
+  on the build page it opens anyway for the order: when the page greys it
+  out, nothing is sent, and the log line (`build_not_offered`) gives the
+  game's own reason, such as "Not enough resources!" or "Requirements are not
+  met". One request instead of two, and no order that no player could click.
+  Facilities are now ordered from the Facilities page, where a player builds
+  them.
+- The night round of expeditions (`Expeditions.NightRound`) slows the fleet
+  down instead of holding it longer: it holds 1 hour at the slowest speed that
+  brings it back on time, and adds whole hours only when even the slowest
+  speed is too short. Player guides say a delay event grows with the holding
+  time and a longer holding finds nothing more, and holding burns deuterium
+  every hour. Each night send names its speed, holding, departure, return and
+  why; a slot that cannot be timed says what blocks it.
+- The jump gate now keeps on AutoFarm's departure moons only what AutoFarm
+  had away from them at once in the last 24 hours, not every combat ship.
+  All probes still stay, and a moon AutoFarm has not attacked from in that
+  time keeps all its cargo ships. Set
+  `Brain.AutoFleetJumpGate.MinimumAmountOfShipsToBeLeftOnMoon` for what you
+  always want ready there.
+- AutoFarm's systems to scan are kept sorted by galaxy and system when you save them.
+- AutoFarm sends attacks much faster: it reloads only the departure moon
+  before each send instead of every moon, the research and the fleets.
+- AutoFarm reads each espionage report as its probes land and attacks right
+  away, instead of waiting for the farthest probe.
+- When a feature has nothing to spend on a planet, TGoat now says why: either
+  it is still learning what the Brain plans to build (first 15 minutes after
+  connecting), or which build holds which resources, and which
+  Brain.SpendingPriority rank to change.
+- Flight times, fuel and cargo use the ship values the game shows on the
+  fleet dispatch page (research, class and lifeform bonuses included).
+  TGoat opens that page before every send, so from a planet's first send on
+  its numbers are the game's. Its own formulas only fill in before that, or
+  after a drive research, a class change or new lifeform bonuses, until the
+  page is read again. Once per login, a ship whose formula differs from the
+  game is logged as a warning.
+- When the account's fleet dispatch page offers 5% speed steps (the game
+  gives them to a General), TGoat uses them: AutoFarm, the night round of
+  expeditions, the Defender's fleet-save, and the deploy and switch commands
+  (0.5 to 9.5). `AutoFarm.FleetSpeed` keeps its 10 to 100 format; a value
+  between two of the account's steps uses the step below and says so.
+- After the last offer of the day it buys, TGoat follows what the game says:
+  the wait in its text, or, when the game says there is no further offer
+  today, a look after the server's midnight at a random time, instead of
+  24 hours later.
+- The number of useful crawlers on a planet is the one the game's resource
+  settings page shows ("Crawler (Number: 0/648)"), every bonus included,
+  once that page has been read; after a mine goes up it grows by the same
+  amount per level. Before, a formula guessed it.
+- Class bonuses come from the lifeform bonuses page, lifeform boost
+  included: a Collector's production, energy and crawler bonuses, a
+  Discoverer's shorter research and extra expeditions. Mines, crawlers,
+  energy sources and research times are judged with them. A server that does
+  not show them keeps the fixed values.
+- A booster's gain uses each mine's production as the resource settings page
+  shows it, when the page was read at the mine's current level.
+
+### Fixed
+
+- The `/phalanx` command scans again: on OGame 13.1 the game refused its
+  request.
+- Espionage reports of OGame 13.1 now give the target player's class and
+  alliance class. Every report read "no class": the combat planner and the
+  breakers refused every defended target ("does not show the defender's
+  player and alliance classes"), and a General's 2 extra combat levels were
+  missed wherever a report shows a combat technology at 0 (AutoFarm). The
+  loot share of a report no longer depends on the game's language.
+- **Sign in with your browser** works when TGoat runs as administrator: Chrome
+  and Edge closed at once ("the browser stopped before opening its sign-in
+  window") while `tgoat login` worked. When the browser still stops, the
+  message now gives its exit code, its last error lines and the likely
+  cause: a launcher instead of the browser program (set `LoginBrowser`), or
+  TGoat running as a Windows service without a desktop, said before any
+  browser starts.
+- AutoMine, LifeformAutoMine and LifeformAutoResearch now show their next
+  build, on the nearest planet ("Buildings, Home" in 22 s), in the feature
+  list and on the timeline. They showed their next check of the planet list
+  instead ("next pass in 9 min" while a build started sooner). In the log
+  that line now reads "Next check of the celestials of AutoMine in …".
+- The timeline shows when a feature you turned off or on for a while goes
+  back to its setting ("Directives back on"), and when the features resume
+  after you played in the game.
+- A brand-new account stayed stuck on the game's intro page: TGoat skipped it
+  without the page token, the game ignored it and served the intro instead
+  of every page. TGoat now sends the intro form as the page does.
+- Lifeform buildings no longer stop a planet with "maximum levels reached"
+  while housing or food is below its Max but not needed. The line names each
+  building with its numbers, what would build more, and checks again at the
+  interval.
+- A brand-new player, not ranked yet, could not start: TGoat took the missing
+  ranking line of the overview for an error. It now starts and says the
+  player is not ranked yet.
+- Messages to players (Defender.MessageAttacker, the player-message command)
+  use the chat request of OGame 13.1. A refused message now says what the
+  game answered.
+- Fleet sends, target checks and recalls are sent with exactly the fields the
+  game's own page sends on OGame 13.1 (loot order metal, crystal, deuterium,
+  then food: never two priorities at 1). When the game refuses a recall,
+  TGoat reads the fleet list again, and an error says plainly the fleet was
+  not recalled.
+- A booster's value (Brain.Boosters) counted the planet's whole production
+  instead of the mine's base production, so it was overstated on accounts
+  with production bonuses. Brain.Boosters now also puts a booster where the
+  mine itself produces the most.
+- With the combat planner on, targets with no fleet and no defence were held
+  to the planner's report-age and profit checks: they are raided the
+  ordinary way again.
+- A manual auction bid is sent only once: after a network or server error
+  TGoat no longer sends it again (bids add up and are never refunded).
+- Flight times and fuel for the Anomaly Encounter mission (Project Orion)
+  used the universe's peaceful fleet speed; the game flies it at the war
+  speed, like an attack. TGoat sends no fleet to anomalies yet.
+- The game's attack limit (bash limit) was ignored. When the game says a
+  target has had too many attacks in 24 hours, TGoat no longer sends the
+  attack and says why; it never confirms an attack past the limit. AutoFarm
+  sets that position aside for 24 hours (`bash_limit_reached`), even with
+  `AutoFarm.Blacklist.Active` off.
+- The game's warning before an attack or espionage on a much stronger player
+  ("You are about to attack a stronger player") was ignored: such a send
+  made your account an outlaw for up to 7 days, open to attacks from every
+  player. TGoat now refuses it and says why, whatever feature or command
+  sends it. AutoFarm sets the position aside for 24 hours (`outlaw_risk`),
+  and a command answers with the reason. A Defender fleet-save to a fixed
+  destination on such a player tries every other way first and goes there
+  only as a last resort.
+- AutoFarm's battle simulations counted a General or Warrior defender's
+  class bonus twice: such targets looked stronger than they are. Your own
+  General bonus now also grows with your lifeform class boost, as in the game.
+- Population and food were read from the tooltip rows by position: on a
+  tooltip without the T2/T3 rows (OGame 13.1.1) "Hungry" took the value of
+  "Bunker Space", so a planet could be seen as starving when it was not.
+  They now come from the game's own numbers.
+- A population that had just reached the limit of its food counted as
+  starving, so its food building skipped the Brain reserve. The game only
+  starves whole inhabitants above that limit; TGoat now does the same, and
+  the line names how many are hungry and how many the food feeds.
+- A planet with a full storage was seen as producing nothing: repatriation,
+  booster value, the defence budget and wait times were wrong. The mines'
+  real rate is now used, as the Empire view already gave it.
+- Tier 2/3 lifeform buildings are no longer built when the game does not
+  show the tier 2/3 population; it is then taken from the lifeform research
+  page once read.
+- Speed, fuel and cargo of a General's or Collector's ships left out the
+  lifeform boost of their class bonus. They now come from the game.
+- Lifeform buildings and research whose bonus the game marks as already
+  maxed out (the game asks a player to confirm such a level) were still
+  paid for, for nothing. LifeformAutoMine and LifeformAutoResearch now skip
+  them, and the report names each one and its bonus; a building is still
+  raised when another building needs it. When only such research is left,
+  the reason is `lifeform_bonus_maxed`.
+
 ## [0.1.0-alpha.5] - 2026-11-19
 
 ### Added

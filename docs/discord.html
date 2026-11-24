@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Discord bot · TGoat</title>
+<title>Discord and Telegram · TGoat</title>
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -24,7 +24,7 @@
       <li><a href="start.html">Get started</a></li>
       <li><a href="interface.html">Web interface</a></li>
       <li><a href="settings.html">Settings</a></li>
-      <li><a href="discord.html" aria-current="page">Discord</a></li>
+      <li><a href="discord.html" aria-current="page">Discord &amp; Telegram</a></li>
       <li><a href="commands.html">Commands</a></li>
       <li><a href="from-tbot.html">From TBot 3.6</a></li>
       <li><a href="changes.html">Every change</a></li>
@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.6).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -49,12 +49,18 @@
     <li><a href="#discord-logs">Logs and auto-ping</a></li>
     <li><a href="#discord-webhook">Bot or webhook</a></li>
     <li><a href="#discord-settings">Its settings</a></li>
+    <li><a href="#telegram-bot">Telegram bot</a></li>
+    <li><a href="#telegram-setup">Setting up Telegram</a></li>
+    <li><a href="#telegram-rights">Who may command it</a></li>
+    <li><a href="#telegram-notes">Telegram notifications</a></li>
+    <li><a href="#telegram-settings">Telegram settings</a></li>
+    <li><a href="#telegram-trouble">When Telegram does not answer</a></li>
   </ol>
 </nav>
 
 <main id="main">
 
-<h1 class="sr-only">Discord bot</h1>
+<h1 class="sr-only">Discord and Telegram bots</h1>
 
 <section aria-labelledby="discord">
 <h2 id="discord">Discord bot</h2>
@@ -63,7 +69,7 @@
   <li>The bot runs inside TGoat: nothing to install or host, no public address needed. One bot serves all your instances, on one server.</li>
   <li>To set it up, create a Discord application, copy its token, untick Public Bot, paste the token on the Instances page, then invite the bot (<a href="#discord-setup">steps</a>).</li>
   <li>Pick its channels with <code>/tgoat channel</code>. Without one, it notifies nothing.</li>
-  <li>Only you, your Discord team and the users you list can command it. Seven costly commands ask you to confirm.</li>
+  <li>Only you, your Discord team and the users you list can command it. Costly commands ask you to confirm.</li>
   <li>Attack alerts ring your phone. If an instance also has a Discord webhook, turn it off or you get everything twice.</li>
 </ul>
 </aside>
@@ -128,7 +134,7 @@
 <p>Each Discord user has their own current instance (<code>/instance main</code>) and celestial (<code>/celestial select</code>). The optional <code>instance</code> option of instance commands, with suggestions, targets another instance once.</p>
 
 <h3 id="discord-confirm">Buttons and confirmation</h3>
-<p>Seven costly or irreversible commands ask first, with <strong>Confirm</strong> and <strong>Cancel</strong> buttons: <code>/build</code>, <code>/auction bid</code>, <code>/resources collect-all</code>, <code>/attacks message</code>, <code>/fleet phalanx</code>, <code>/fleet spycrash</code> and <code>/instance disable</code>, which also stops that instance's Defender.</p>
+<p>These costly or irreversible commands ask first, with <strong>Confirm</strong> and <strong>Cancel</strong> buttons: <code>/build</code>, <code>/auction bid</code>, <code>/resources collect-all</code>, <code>/attacks message</code>, <code>/fleet phalanx</code>, <code>/fleet spycrash</code> and <code>/instance disable</code>, which also stops that instance's Defender.</p>
 <ul>
   <li>The question shows the command, its options, the instance and, for <code>/fleet spycrash</code>, the starting celestial.</li>
   <li><strong>Confirm</strong> runs exactly that, even if you switched account or celestial meanwhile. Nothing runs if the instance was removed or renamed.</li>
@@ -151,17 +157,19 @@
 </ul>
 <p>A button clicked twice or too late gets a plain answer, such as "The bot is already awake."</p>
 <details>
-<summary>New notifications: the reviews, a session lost too often, and Project Orion (6)</summary>
-<p>Three notifications come from the November 2026 reviews, and three more are described below them:</p>
+<summary>New notifications: the reviews, a session lost too often, Project Orion, officers and boosters (8)</summary>
+<p>Three notifications come from the November 2026 reviews, and five more are described below them:</p>
 <ul>
   <li><strong>Expedition lost</strong> (orange): a fleet disappeared before its planned return. "Probably lost" when you may have recalled it yourself in the game.</li>
   <li><strong>Colonize</strong>, once per pass: a new colony (green; choose its lifeform), a colony abandoned, or a zone's try limit reached (orange, with the draws).</li>
-  <li><strong>Offer of the day bought</strong> (green): the item and its rarity. It waits in your inventory, not activated.</li>
+  <li><strong>Offer of the day bought</strong> (green): the item and its rarity, and how it was paid. It waits in your inventory, not activated. Another container the game offers right after gets its own message.</li>
 </ul>
 <p><strong>Session lost too often</strong> (orange, from TGoat itself): after three automatic logins in 30 minutes, TGoat stops logging in until the oldest one is 30 minutes old, and says until when: "The game session was lost 4 times in 30 minutes; TGoat waits until 21:45 before logging in again." It comes once, not for every failed request, and not again for 30 minutes.</p>
 <p>If it repeats, open the account in a browser: someone, or another program, may be using it.</p>
 <p><strong>Orion reward waiting</strong> (orange, from TGoat itself): "An Orion reward is waiting: claim it in the game within the hour." TGoat looks for the mark the game puts on the Orion entry of its menu when a reward can be claimed, on the pages it loads anyway. That mark comes from the game's own script and has not yet been seen on a real Orion page: if TGoat never warns you, check for rewards in the game. It comes once, and again only after the reward has been claimed and a new one waits. TGoat sees it only when it loads a full page, so not at night with <code>Defender.NightWatch</code> on <code>OnAlert</code>, when nothing is loaded. TGoat never claims the reward. <code>Notifications.OrionReward</code> (on by default) turns it off.</p>
 <p><strong>Hostile fleet heading for your fleet</strong> (red, from the Defender): it gives where the hostile fleet goes and when it arrives, and says "TGoat only protects fleets on your planets and moons." It comes once per event when a hostile fleet aims at something that is none of your planets or moons, such as your fleet at an Orion anomaly: no fleet-save, no alarm. As an attack notice, it mentions you like one.</p>
+<p><strong>Officer ending</strong> (orange, from TGoat itself): "Your Geologist ends between 23 Nov 14:00 and 24 Nov 14:00. Extend it in the game to keep its bonus." It comes once, when a hired officer may end within <code>Notifications.OfficerEnding</code> hours (48 by default, 0 turns it off), and again after you extend it. The game only shows whole days left, so the end is a range at first and narrows to minutes as the count drops.</p>
+<p><strong>Booster about to be lost</strong> (orange, from the Boosters): a booster you let TGoat use expires within 12 hours and no planet can take it before then, for example because each one already runs a booster of that kind. It names what holds each planet. It comes once per copy.</p>
 <p>Colonize has its own switches: <code>AutoColonize.DiscordWebhook.Active</code> (on by default) and <code>AutoColonize.TelegramMessenger.Active</code>.</p>
 </details>
 <p>Each feature's <strong>Notify on Discord</strong> switch (such as <code>Defender.DiscordWebhook.Active</code>, on by default) covers both the bot and the instance's webhook.</p>
@@ -176,7 +184,7 @@
 <p><code>DiscordBot.Logging</code> (on by default) forwards warnings and errors to the logs channel, batched every few seconds with repeats grouped, as on Telegram. An attack the Defender logs is skipped when the bot already posts that alert itself, in its alerts or notifications channel.</p>
 <p><code>/logs level</code> shows the Discord level (Warning by default), and <code>/logs set-level</code> changes it until TGoat restarts. Telegram's level is set with <code>/setloglevel</code>.</p>
 <p><code>DiscordBot.AutoPing.Active</code> posts a sign of life in the notifications channel every <code>DiscordBot.AutoPing.EveryHours</code> hours (1 by default), on the hour, like Telegram's: version, uptime and each instance's state. <code>/tgoat autoping</code> and <code>/tgoat autoping-stop</code> start and stop it until the next restart.</p>
-<p><code>/tgoat ping</code> answers "Pong, TGoat 0.1.0-alpha.5", so you see the bot is alive and which build runs.</p>
+<p><code>/tgoat ping</code> answers "Pong, TGoat 0.1.0-alpha.6", so you see the bot is alive and which build runs.</p>
 
 <h3 id="discord-webhook">Bot or webhook</h3>
 <p>Each instance can still post to its own Discord webhook (<code>DiscordWebhook.Url</code>, in <code>secrets.json</code>), copied from a channel's integration settings. A webhook only posts notifications; the bot covers every instance, with commands, buttons, topic channels and logs.</p>
@@ -209,8 +217,77 @@
 </details>
 </section>
 
+<section aria-labelledby="telegram-bot">
+<h2 id="telegram-bot">Telegram bot</h2>
+<aside class="in-short" aria-label="In short">
+<ul>
+  <li>Create a bot with <strong>@BotFather</strong> in Telegram and paste its token into TGoat.</li>
+  <li>Click <strong>Link Telegram</strong>, open the link (or scan the code) and tap <strong>Start</strong>. You never type a chat ID.</li>
+  <li>Only the linked chat can command TGoat. A link works once, for 10 minutes.</li>
+  <li>The same commands as Discord: see <a href="commands.html#telegram">Commands</a>.</li>
+</ul>
+</aside>
+<p>A Telegram bot of your own lets you follow and command TGoat from your phone. It runs inside TGoat: nothing to install or host.</p>
+
+<h3 id="telegram-setup">Setting up Telegram</h3>
+<ol>
+  <li><strong>Create the bot.</strong> In Telegram, open <strong>@BotFather</strong> (the official one, with a blue tick). Its mini app has a button to create a bot. You can also send <code>/newbot</code>: give a name, such as TGoat, then a username that ends in <code>bot</code>, such as <code>my_tgoat_bot</code>.</li>
+  <li><strong>Copy the token</strong> BotFather gives, like <code>123456789:AAH…</code>. <strong>It is the bot's password: never share it.</strong></li>
+  <li><strong>Give TGoat the token.</strong>
+    <ul>
+      <li><strong>First run:</strong> in <strong>Telegram (optional)</strong> on the <a href="interface.html#ui-first-run">Instances page</a>, paste it in <strong>Bot token</strong> and click <strong>Save the token</strong>.</li>
+      <li><strong>Later:</strong> in the TGoat settings, group <strong>Telegram</strong>, turn on <strong>Use Telegram</strong>, paste the token in <strong>Bot token</strong> and save.</li>
+      <li><strong>Terminal:</strong> <code>tgoat setup</code> asks for it. Press <kbd>Enter</kbd> at the chat question.</li>
+    </ul>
+    <p>The token is kept in <code>secrets.json</code> and never shown again, nor in logs.</p></li>
+  <li><strong>Click Link Telegram.</strong> It is under the token on the first run, and under <strong>Chat ID</strong> in the settings. TGoat shows an <strong>Open in Telegram</strong> button and a QR code for your phone.</li>
+  <li><strong>Tap Start</strong> in the chat with your bot that opens. The bot answers "TGoat is linked to this chat. Send /help to see the commands." and TGoat fills in <code>TelegramMessenger.ChatId</code> for you.</li>
+  <li><strong>Send <code>/help</code></strong> to see every command.</li>
+</ol>
+<p>Until a chat is linked, the bot sends nothing and only waits for its link. A new link replaces the previous one; it expires after 10 minutes, unused or not.</p>
+<p>The link opens your private chat with the bot. For a group, add the bot to it and type the group's ID in <code>TelegramMessenger.ChatId</code> yourself. You can always type the chat ID by hand, or an <code>@name</code> for a public channel.</p>
+
+<h3 id="telegram-rights">Who may command it</h3>
+<ul>
+  <li><strong>Only the linked chat</strong>, the one in <code>TelegramMessenger.ChatId</code>, gets answers and notifications.</li>
+  <li><strong>Any other chat</strong> is ignored. TGoat logs a warning with that chat's ID and how to link it.</li>
+  <li><strong>Changing chat</strong> needs a new link from the web interface. The old chat keeps everything until you tap Start in the new one.</li>
+</ul>
+<p>Anyone who has your link in its 10 minutes can link their own chat, so open it yourself and don't pass it on. Only someone signed in to the web interface can make one.</p>
+<p>Telegram runs costly commands at once; it does not ask you to confirm like Discord.</p>
+
+<h3 id="telegram-notes">Telegram notifications</h3>
+<p>Each notification starts with the instance, then, when a feature sends it, the feature's name in bold. Each feature has a <strong>Notify on Telegram</strong> switch, such as <code>Defender.TelegramMessenger.Active</code>.</p>
+<p><code>TelegramMessenger.Logging</code> (on by default) also forwards warnings and errors of the log; <code>/setloglevel</code> changes the level until TGoat restarts. <code>TelegramMessenger.TelegramAutoPing.Active</code> sends a sign of life every few hours.</p>
+
+<h3 id="telegram-settings">Telegram settings</h3>
+<p>They are in the <strong>Telegram</strong> group of the TGoat settings (<code>tgoat.json</code>). A new token or chat restarts the bot by itself.</p>
+<div class="table-wrap" role="region" aria-label="Telegram settings" tabindex="0">
+<table class="wide">
+  <caption class="sr-only">Settings of the Telegram bot</caption>
+  <thead><tr><th scope="col">Setting</th><th scope="col">Default</th><th scope="col">What it does</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><code>TelegramMessenger.Active</code></th><td>false</td><td>Use the bot.</td></tr>
+    <tr><th scope="row"><code>TelegramMessenger.API</code></th><td>empty</td><td>Its token, in <code>secrets.json</code>.</td></tr>
+    <tr><th scope="row"><code>TelegramMessenger.ChatId</code></th><td>empty</td><td>The chat it serves. Filled in by Link Telegram.</td></tr>
+    <tr><th scope="row"><code>TelegramMessenger.Logging</code></th><td>true</td><td>Forward warnings and errors.</td></tr>
+    <tr><th scope="row"><code>TelegramMessenger.TelegramAutoPing.Active</code></th><td>false</td><td>Send a sign of life.</td></tr>
+    <tr><th scope="row"><code>TelegramMessenger.TelegramAutoPing.EveryHours</code></th><td class="num">1</td><td>Hours between pings; 0 takes the default.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="telegram-trouble">When Telegram does not answer</h3>
+<ul>
+  <li><strong>"Telegram refused the bot token"</strong>: the token is wrong or was revoked. Copy it again from @BotFather (its mini app shows it, or send <code>/token</code>), paste it and save.</li>
+  <li><strong>"This link is no longer valid"</strong>: the link expired, was already used, or a newer one replaced it. Click <strong>New link</strong> or <strong>Link Telegram</strong> and tap Start again.</li>
+  <li><strong>The bot answers nothing</strong>: you are in another chat than the linked one. The log says "Telegram message from chat N ignored". Link this chat from the web interface.</li>
+  <li><strong>"Telegram Messenger is off"</strong> next to Link Telegram: turn on <strong>Use Telegram</strong> and save the token first.</li>
+</ul>
+</section>
+
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/discord.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/discord.html</code> in the project. Build 0.1.0-alpha.6 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

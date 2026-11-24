@@ -24,7 +24,7 @@
       <li><a href="start.html">Get started</a></li>
       <li><a href="interface.html">Web interface</a></li>
       <li><a href="settings.html">Settings</a></li>
-      <li><a href="discord.html">Discord</a></li>
+      <li><a href="discord.html">Discord &amp; Telegram</a></li>
       <li><a href="commands.html" aria-current="page">Commands</a></li>
       <li><a href="from-tbot.html">From TBot 3.6</a></li>
       <li><a href="changes.html">Every change</a></li>
@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.6).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -48,16 +48,16 @@
   <li>Telegram and Discord share one list of commands. Each row below gives both names.</li>
   <li>Most commands act on the current instance (<code>/setmain</code>, <code>/instance main</code>); fleet commands act on the current planet or moon (<code>/celestial</code>).</li>
   <li><code>/help</code> on Telegram and <code>/tgoat help</code> on Discord list every command with its syntax.</li>
-  <li>On Discord, seven costly commands ask you to confirm. Telegram runs them at once, and answers only the configured chat.</li>
+  <li>On Discord, eight costly commands ask you to confirm. Telegram runs them at once, and answers only the configured chat.</li>
 </ul>
 </aside>
 <p>Telegram and Discord share one list, so a command does the same on both. On Telegram, type the command in the configured chat. On Discord, type <code>/</code>, pick the command and fill in its options; Discord suggests values as you type. <code>/help</code> (Telegram) and <code>/tgoat help</code> (Discord) list every command with its syntax.</p>
 <p>Most commands act on the <strong>current instance</strong>. Change it with <code>/setmain</code> or <code>/instance main</code>. On Discord, these commands also take an optional <code>instance</code> option, to act on another instance once.</p>
 <p>Fleet commands act on the <strong>current celestial</strong>, the planet or moon you pick with <code>/celestial</code> (Telegram) or <code>/celestial select</code> (Discord).</p>
-<p>On Discord, seven commands ask you to confirm before they run. The tables mark them "Confirm on Discord". Telegram runs them at once. See <a href="discord.html#discord-confirm">Buttons and confirmation</a>.</p>
+<p>On Discord, eight commands ask you to confirm before they run. The tables mark them "Confirm on Discord". Telegram runs them at once. See <a href="discord.html#discord-confirm">Buttons and confirmation</a>.</p>
 
 <h3 id="telegram">Telegram</h3>
-<p>Set up the bot in the web interface, with <code>tgoat setup</code>, or in <code>config/tgoat.json</code>: <code>TelegramMessenger.Active</code>, <code>TelegramMessenger.ChatId</code> and the token <code>TelegramMessenger.API</code> (kept in <code>secrets.json</code>). Only the configured chat can send commands. For Discord, see <a href="discord.html#discord">Discord bot</a>.</p>
+<p>Create the bot with @BotFather, paste its token into TGoat and click <strong>Link Telegram</strong>: <a href="discord.html#telegram-setup">Setting up Telegram</a> gives the steps. Only the linked chat can send commands. For Discord, see <a href="discord.html#discord">Discord bot</a>.</p>
 <p>Notifications start with the instance, then, when a feature sends them, its name in bold, such as <strong>Directives</strong> or <strong>AutoMine</strong>. When the game session is lost too often, one notification says when TGoat will log in again (see <a href="discord.html#discord-notes">Notifications</a>).</p>
 <p>When <code>TelegramMessenger.TelegramAutoPing.Active</code> is on, the sign of life repeats every <code>TelegramMessenger.TelegramAutoPing.EveryHours</code> hours (1 by default).</p>
 
@@ -98,7 +98,7 @@
     <tr><th scope="row"><code>/settings set &lt;setting&gt; &lt;value|default&gt;</code></th><td><code>/settings set</code></td><td>Change a setting at once, even offline. <code>default</code> resets it.</td></tr>
     <tr><th scope="row"><code>/settings undo</code></th><td><code>/settings undo</code></td><td>Undo your last change.</td></tr>
     <tr><th scope="row"><code>/mode [human|rage|custom]</code></th><td><code>/mode</code></td><td>Show the play mode and what it does, or set it to Human, RAGE or Custom. It is written like a settings edit, works offline and <code>/settings undo</code> reverts it. See <a href="interface.html#ui-mode">Play mode</a>.</td></tr>
-    <tr><th scope="row"><code>/proposals</code></th><td><code>/proposals list</code></td><td>Show what TGoat proposes and waits for your answer to do: features set to Suggest, such as Brain.Boosters, the AutoMine production settings Expeditions.BuildFleet and AutoFarm.BuildBreakers. See <a href="interface.html#ui-proposals">Proposals</a>.</td></tr>
+    <tr><th scope="row"><code>/proposals</code></th><td><code>/proposals list</code></td><td>Show what TGoat proposes and waits for your answer to do: features set to Suggest, such as Brain.Boosters, the AutoMine production settings, Expeditions.BuildFleet and AutoFarm.BuildBreakers. See <a href="interface.html#ui-proposals">Proposals</a>.</td></tr>
     <tr><th scope="row"><code>/accept [number]</code></th><td><code>/proposals accept</code></td><td>Do a proposal, or every proposal without a number. TGoat first checks that its reason still holds; if not, it refuses and says why.</td></tr>
     <tr><th scope="row"><code>/recall true|false</code></th><td><code>/settings recall</code></td><td>Turn the recall of fleet-saved fleets on or off.</td></tr>
     <tr><th scope="row"><code>/minexpecargo &lt;number&gt;</code></th><td><code>/settings min-expedition-cargo</code></td><td>Set <code>Expeditions.MinPrimaryToSend</code>.</td></tr>
@@ -123,8 +123,8 @@
     <tr><th scope="row"><code>/getfleets</code></th><td><code>/fleet list</code></td><td>List the outgoing fleets.</td></tr>
     <tr><th scope="row"><code>/cancel &lt;fleet id&gt;</code></th><td><code>/fleet recall</code></td><td>Recall one fleet.</td></tr>
     <tr><th scope="row"><code>/cancelmission &lt;mission&gt;</code></th><td><code>/fleet recall-mission</code></td><td>Recall every fleet on a mission (Deploy, Harvest…).</td></tr>
-    <tr><th scope="row"><code>/switch &lt;speed 1-10&gt;</code></th><td><code>/fleet switch</code></td><td>Send everything from the current celestial to its moon or planet.</td></tr>
-    <tr><th scope="row"><code>/deploy 2:45:8 planet|moon &lt;speed 1-10&gt;</code></th><td><code>/fleet deploy</code></td><td>Deploy ships and resources of the current celestial.</td></tr>
+    <tr><th scope="row"><code>/switch &lt;speed 1-10&gt;</code></th><td><code>/fleet switch</code></td><td>Send everything from the current celestial to its moon or planet. Speed 1 to 10 for 10% to 100%; 0.5 to 9.5 too when the account has 5% steps.</td></tr>
+    <tr><th scope="row"><code>/deploy 2:45:8 planet|moon &lt;speed 1-10&gt;</code></th><td><code>/fleet deploy</code></td><td>Deploy ships and resources of the current celestial, at the same speeds as <code>/switch</code>.</td></tr>
     <tr><th scope="row"><code>/jumpgate 2:45:8 auto|full</code></th><td><code>/fleet jumpgate</code></td><td>Jump the ships of the current moon; <code>auto</code> keeps the cargo needed.</td></tr>
     <tr><th scope="row"><code>/fleetjumpgate</code></th><td><code>/fleet jumpgate-all</code></td><td>Run the jump gate feature now.</td></tr>
     <tr><th scope="row"><code>/phalanx &lt;moon&gt; &lt;target&gt;</code></th><td><code>/fleet phalanx</code></td><td>Scan with a moon's phalanx. Confirm on Discord.</td></tr>
@@ -147,7 +147,7 @@
     <tr><th scope="row"><code>/build &lt;ship|defence&gt; [quantity]</code></th><td><code>/build</code></td><td>Build on every planet, as many as affordable. Confirm on Discord.</td></tr>
     <tr class="sub"><th colspan="3" scope="colgroup">Auctions</th></tr>
     <tr><th scope="row"><code>/getcurrentauction</code></th><td><code>/auction show</code></td><td>Show the current auction.</td></tr>
-    <tr><th scope="row"><code>/bidauction [&lt;celestial id&gt; m:1000 c:1000 d:1000]</code></th><td><code>/auction bid</code></td><td>Bid; the minimum winning bid by default. Confirm on Discord.</td></tr>
+    <tr><th scope="row"><code>/bidauction [&lt;celestial id&gt; m:1000 c:1000 d:1000]</code></th><td><code>/auction bid</code></td><td>Bid now; the minimum winning bid by default. Sent once, never again after an error. Confirm on Discord.</td></tr>
     <tr><th scope="row"><code>/subscribeauction</code></th><td><code>/auction subscribe</code></td><td>Get notified when the next auction starts.</td></tr>
   </tbody>
 </table>
@@ -170,7 +170,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/commands.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/commands.html</code> in the project. Build 0.1.0-alpha.6 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

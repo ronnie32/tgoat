@@ -24,7 +24,7 @@
       <li><a href="start.html" aria-current="page">Get started</a></li>
       <li><a href="interface.html">Web interface</a></li>
       <li><a href="settings.html">Settings</a></li>
-      <li><a href="discord.html">Discord</a></li>
+      <li><a href="discord.html">Discord &amp; Telegram</a></li>
       <li><a href="commands.html">Commands</a></li>
       <li><a href="from-tbot.html">From TBot 3.6</a></li>
       <li><a href="changes.html">Every change</a></li>
@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.6).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -273,6 +273,7 @@ docker compose up -d</code></pre>
 <p>On a running instance, Settings asks before it starts: the new token logs the instance out and in again, which Gameforge sees as a new login.</p>
 <p>The window goes through the account's proxy, if it has one. The sign-in is tied to that proxy and to the lobby. In <strong>Add an account</strong>, the lobby and proxy fields are locked while a sign-in runs or its token is held: cancel it to change them. In Settings, if either changes before you finish, nothing is stored and you sign in again.</p>
 <p><code>LoginBrowser</code> (see <a href="settings.html#settings-new">the new settings</a>) picks the browser. With <code>Auto</code>, it is your default browser when that is Chrome, Edge, Brave, Chromium or Opera, else the first of them installed. TGoat uses Firefox (version 128 or later) only when none is installed, and warns you: Firefox tells the page it is remote-controlled, so Gameforge may treat the sign-in as automated.</p>
+<p>If the browser closes before its window opens, the message gives its exit code, the last lines it wrote and the likely cause. "Exited at once without an error" means <code>LoginBrowser</code> points to a launcher: set it to the browser program itself, such as <code>chrome.exe</code>. "TGoat runs without a desktop" means it runs as a Windows service or a task with no one signed in: no window can open there. Otherwise, use <strong>Sign in from another computer</strong> or a <a href="#token">session token</a>.</p>
 <p>The window opens on the computer that runs TGoat, which needs a screen. While you sign in, another user logged in to that computer could read the session token: use it on a computer only you use. On a server, see below.</p>
 
 <h3 id="remote-login">TGoat on another computer (VPS)</h3>
@@ -420,7 +421,7 @@ sha256sum --ignore-missing -c checksums.txt</code></pre>
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/start.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/start.html</code> in the project. Build 0.1.0-alpha.6 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

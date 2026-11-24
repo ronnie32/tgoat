@@ -579,13 +579,31 @@
     return opened;
   }
 
+  // unreleased says whether el sits in a part of the guide about a paid
+  // feature this release does not ship (data-paid): the published guide has
+  // no such part, so the index does not count it.
+  function unreleased(el) {
+    var idx = root.TGOAT_SEARCH_INDEX;
+    var released = (idx && idx.released) || [];
+    for (var n = el; n; n = n.parentElement) {
+      var f = n.getAttribute ? n.getAttribute('data-paid') : null;
+      if (f && released.indexOf(f) < 0) return true;
+    }
+    return false;
+  }
+
   // findTarget finds the element a search result points to: the exact
   // element when the result left a hint (a table row has no id of its own),
   // otherwise the element of the anchor.
   function findTarget(doc, hash, hint) {
     if (hint && hint.anchor === hash && hint.loc) {
       var p = hint.loc.split(':');
-      var el = doc.querySelectorAll('main ' + p[0])[Number(p[1])];
+      var all = doc.querySelectorAll('main ' + p[0]);
+      var el = null;
+      for (var i = 0, k = Number(p[1]); i < all.length; i++) {
+        if (unreleased(all[i])) continue;
+        if (k-- === 0) { el = all[i]; break; }
+      }
       if (el) return el;
     }
     return hash ? doc.getElementById(hash) : null;

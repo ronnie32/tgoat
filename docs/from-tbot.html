@@ -24,7 +24,7 @@
       <li><a href="start.html">Get started</a></li>
       <li><a href="interface.html">Web interface</a></li>
       <li><a href="settings.html">Settings</a></li>
-      <li><a href="discord.html">Discord</a></li>
+      <li><a href="discord.html">Discord &amp; Telegram</a></li>
       <li><a href="commands.html">Commands</a></li>
       <li><a href="from-tbot.html" aria-current="page">From TBot 3.6</a></li>
       <li><a href="changes.html">Every change</a></li>
@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.6).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -174,7 +174,7 @@
     <tr><th scope="row"><code>General.SlotPriorityLevel.AutoColonize</code></th><td>This key is read. TBot read <code>Colonize</code>.</td></tr>
     <tr><th scope="row"><code>General.Proxy.LoginOnly</code></th><td><strong>Now works.</strong> Default false: the proxy carries all game traffic.</td></tr>
     <tr><th scope="row"><code>AutoFarm.MinLootFuelRatio</code></th><td>One meaning: loot ≥ ratio × fuel. A value below 1 is inverted: 0.5 means 2.</td></tr>
-    <tr><th scope="row"><code>AutoFarm.FleetSpeed</code></th><td>The speed cap, with or without the combat planner.</td></tr>
+    <tr><th scope="row"><code>AutoFarm.FleetSpeed</code></th><td>The speed cap, with or without the combat planner. A value between two of the account's speed steps (10%, or 5% for a General) uses the step below.</td></tr>
     <tr><th scope="row"><code>AutoFarm.Blacklist.MinimumResourcesToNotBlacklist</code></th><td>Really read. TBot always used 500,000.</td></tr>
     <tr><th scope="row"><code>Defender.WeakAttackRatio</code></th><td>Decimals work. 0 no longer crashes.</td></tr>
     <tr><th scope="row"><code>Defender.Autofleet.DelayedFleetSave.DelaySeconds</code>, <code>Defender.Autofleet.DelayedFleetSave.SafetySeconds</code></th><td>An invalid value gives an immediate fleet-save.</td></tr>
@@ -278,15 +278,15 @@
   <li><a href="changes.html#requests"><strong>Game requests</strong></a>. 1.5 to 8 seconds between requests, with a short break every 30 to 70, so the logs look slower. The Defender and your own pages go first. Far fewer requests overall: starting the Brain, 104 reads become 47.</li>
   <li><a href="changes.html#autofarm"><strong>AutoFarm</strong></a>. Never attacks a player back from inactivity, attacks on a report at most 2 hours old, and ranks targets by profit per hour. It sends the fewest probes that show research (20 at most), simulates the battle against any defended target, and counts the real loot and losses. It can propose combat ships for targets it turns down.</li>
   <li><a href="changes.html#brain"><strong>Brain: buildings and research</strong></a>. Mines by payback over 60 days, energy from the cheapest source, facilities only when they serve, research by its value to the account. A build waiting for resources keeps them from repatriation.</li>
-  <li><a href="changes.html#fbf-brain-lifeforms"><strong>Brain: lifeforms</strong></a>. Buildings and research chosen by payback, with no start level. When a research slot opens, TGoat chooses its technology, the guaranteed one by default.</li>
-  <li><a href="changes.html#fbf-brain-repatriation-cargo-ships-defences-offer"><strong>Repatriation, cargo ships, defences, offer</strong></a>. Repatriation ships only the surplus, once it reaches a threshold, and leaves the fleet-save fuel. Defences come from a budget of 24 hours of production, split by a ratio. The offer of the day is bought once, under a price.</li>
+  <li><a href="changes.html#fbf-brain-lifeforms"><strong>Brain: lifeforms</strong></a>. Buildings and research chosen by payback, with no start level. Housing and food go up only as the population needs them, or to their Max with <code>BuildNonEconomic</code> (off by default), which also builds the buildings that produce nothing. When a research slot opens, TGoat chooses its technology, the guaranteed one by default.</li>
+  <li><a href="changes.html#fbf-brain-repatriation-cargo-ships-defences-offer"><strong>Repatriation, cargo ships, defences, offer</strong></a>. Repatriation ships only the surplus, once it reaches a threshold, and leaves the fleet-save fuel. Defences come from a budget of 24 hours of production, split by a ratio. The offer of the day is bought once a day under a price, and so is another container the game offers right after; honour points can pay it if you allow them.</li>
   <li><a href="changes.html#fbf-jump-gate"><strong>Jump gate</strong></a>. It jumps now (threshold 1,000 points), moves only what each moon's features do not need, waits for the recharge, and never jumps to or from a moon under attack.</li>
   <li><a href="changes.html#expeditions"><strong>Expeditions</strong></a>. No limit per origin, each free slot refilled at a human pace (waves are an option), cargo for 75% of the largest find, results read from the game's messages. TGoat can propose the ships your expeditions lack.</li>
   <li><a href="changes.html#harvest"><strong>Harvest</strong></a>. A field whose fuel costs more than 10% of what it brings is left. Your fields are read 20 to 90 seconds after an attack, and position 16 where your expeditions went.</li>
   <li><a href="changes.html#colonize"><strong>Colonization</strong></a>. One fields threshold per zone, zones filled in list order, at most 10 failed colonies per zone, and an abandon 3 to 20 minutes after the colony is seen. With session-token login, abandon counts as off.</li>
   <li><a href="changes.html#fbf-discovery"><strong>Discovery</strong></a>. Explores nearest first, within 5% of the account's production a day, paid from surpluses. It can settle a lifeform on each planet that has none (off by default).</li>
   <li><a href="changes.html#fbf-directives"><strong>Directives</strong></a>. TGoat can collect the rewards of finished missions and chapters (off by default). TBot never did.</li>
-  <li><a href="changes.html#fleet-sends"><strong>Fleet sends and slots</strong></a>. No fleet lands on one of your celestials just before an attack hits it. Each send leaves the deuterium for a slow fleet-save. A higher slot rank keeps only what its next pass sends.</li>
+  <li><a href="changes.html#fleet-sends"><strong>Fleet sends and slots</strong></a>. No fleet lands on one of your celestials just before an attack hits it. Each send leaves the deuterium for a slow fleet-save. No attack or espionage on a much stronger player leaves unless you allow it: the game would make your account an outlaw. A higher slot rank keeps only what its next pass sends.</li>
   <li><a href="changes.html#calc"><strong>Calculations</strong></a>. Fuel, cargo, production and costs now match the game, so the Brain and AutoFarm choose differently. See also <a href="changes.html#fbf-flight-calculations">Flight calculations</a>.</li>
   <li><a href="changes.html#fbf-settings-reload-and-notifications"><strong>Settings, start and stop</strong></a>. A settings change restarts only the features concerned. <code>/stopX</code> and <code>/startX</code> hold until you choose "Follow the setting". A crash in one feature no longer stops the instance.</li>
   <li><a href="changes.html#messaging"><strong>Telegram and Discord</strong></a>. Only your own chat commands the bot. Notifications name their feature and never hold a feature up. You can run a Discord bot of your own.</li>
@@ -297,7 +297,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/from-tbot.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/from-tbot.html</code> in the project. Build 0.1.0-alpha.6 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

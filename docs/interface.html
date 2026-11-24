@@ -24,7 +24,7 @@
       <li><a href="start.html">Get started</a></li>
       <li><a href="interface.html" aria-current="page">Web interface</a></li>
       <li><a href="settings.html">Settings</a></li>
-      <li><a href="discord.html">Discord</a></li>
+      <li><a href="discord.html">Discord &amp; Telegram</a></li>
       <li><a href="commands.html">Commands</a></li>
       <li><a href="from-tbot.html">From TBot 3.6</a></li>
       <li><a href="changes.html">Every change</a></li>
@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.6).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -96,7 +96,7 @@
   <figcaption>The test worked: pick the universe, then create the instance.</figcaption>
 </figure>
 <p>When the test fails, TGoat says why. Fix the details and test again, or click <strong>save it without testing</strong> and type the universe yourself. An account with no player needs one first: create it from your browser.</p>
-<p>A <strong>Telegram (optional)</strong> section then asks for your bot's <strong>Bot token</strong> and your <strong>Chat ID</strong>. Click <strong>Save and connect Telegram</strong>, or <strong>Skip</strong>.</p>
+<p>A <strong>Telegram (optional)</strong> section then asks for the <strong>Bot token</strong> that @BotFather gave you. Click <strong>Save the token</strong>, then <strong>Link Telegram</strong>: open the link or scan the code, and tap <strong>Start</strong> in Telegram. No chat ID to find. Or click <strong>Skip</strong>. The steps are in <a href="discord.html#telegram-setup">Setting up Telegram</a>.</p>
 <p>Next, open <a href="#ui-settings">Settings</a> and turn on features one section at a time. Each feature's switch sits in its section title.</p>
 <p>If you come from TBot 3.6, your accounts are already there, with an <strong>Import report</strong>. If the import was blocked, a red banner shows the report and no instance starts until you fix the old files.</p>
 
@@ -244,12 +244,14 @@
 <p>Every game page shows how many rewards wait. TGoat reads that number from the pages it already loads, and when it goes up it collects sooner, but not more than once every 30 to 60 minutes. The reason codes are in the <a href="#ui-reasons">table below</a>.</p>
 </details>
 
+
+
 <h4>The timeline</h4>
 <figure>
   <img src="img/map-timeline.jpg" width="800" height="112" alt="The timeline: three lanes named Fleets, Works and Bot; now on the left; time marks every 15 minutes; events with a coloured mark, a label and a countdown; on the right the scales 20 min, 2 h and 12 h.">
   <figcaption>The timeline. "now" stays on the left; the scale buttons are on the right.</figcaption>
 </figure>
-<p>Three lanes: <strong>Fleets</strong> (arrivals, returns, attack impacts in red), <strong>Works</strong> (buildings, lifeform buildings and research, shipyard, research) and <strong>Bot</strong> (next passes, sleep and wake-up). Crowded events shrink to their mark: hover to read one, click to show it on the map. <strong>20 min</strong>, <strong>2 h</strong>, <strong>12 h</strong> or the mouse wheel change the scale.</p>
+<p>Three lanes: <strong>Fleets</strong> (arrivals, returns, attack impacts in red), <strong>Works</strong> (buildings, lifeform buildings and research, shipyard, research) and <strong>Bot</strong> (next passes, the end of a feature you turned off or on for a while, the end of the wait while you play, sleep and wake-up). For AutoMine and the lifeform features, the next pass is the next build, with its planet. Crowded events shrink to their mark: hover to read one, click to show it on the map. <strong>20 min</strong>, <strong>2 h</strong>, <strong>12 h</strong> or the mouse wheel change the scale.</p>
 
 <h4>Moving around</h4>
 <ul>
@@ -336,6 +338,7 @@
 </table>
 </div>
 <p><strong>Attacks sent</strong> gives each attack's net gain once the fleet is seen coming back, or its expected loot, marked "~", before that. A fleet destroyed in battle shows in red. <strong>What AutoFarm logged</strong> shows its latest log lines.</p>
+
 
 <h3 id="ui-settings">Settings</h3>
 <p>The Settings page edits every setting of TGoat, of an instance or of a profile, with help for each one.</p>
@@ -479,7 +482,7 @@
   <li><strong>Show the N settings</strong>: each setting with its current value, the proposed one and a short reason;</li>
   <li><strong>Apply</strong> and <strong>Skip</strong>.</li>
 </ul>
-<p>At the bottom, <strong>Apply N themes</strong> applies every theme you did not skip. The numbers in the plan come from the same calculations the features use. The assistant does not propose colonisation zones or temperatures: for Expansion it only turns Colonize on or off and says how many slots are free.</p>
+<p>At the bottom, <strong>Apply N themes</strong> applies every theme you did not skip. The numbers in the plan come from the same calculations the features use. The assistant does not propose colonisation zones or temperatures: for Expansion it only turns Colonize on or off and says how many slots are free. A theme with nothing to propose can say why under <strong>Nothing to set</strong>.</p>
 
 <h4>What it never changes</h4>
 <p>A value you set yourself, a setting an active profile decides, or a profile file. You can still tick a value of yours to change it.</p>
@@ -550,7 +553,7 @@
 <p>Each pass of a feature ends with a reason code. It shows in the feature's panel and in the detail of the log line, which also names the setting that decided.</p>
 <p><code>slots_reserved</code> means fleet slots are free, but kept for higher-priority features (<code>General.SlotPriorityLevel</code>). The detail gives each feature's share. <code>no_fleet_slot</code> means no slot is free at all.</p>
 <details>
-<summary>Reason codes new or changed in the reviews (133)</summary>
+<summary>Reason codes new or changed in the reviews (139)</summary>
 <div class="table-wrap" role="region" aria-label="New reason codes" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Reason codes new or changed in November 2026</caption>
@@ -565,7 +568,8 @@
     <tr><th scope="row"><code>supply_not_worth_it</code></th><td>Brain</td><td>No supply flight for a purchase that neither pays back nor unlocks anything.</td></tr>
     <tr><th scope="row"><code>event_list_unreadable</code></th><td>Brain</td><td>No supply flight while the event list cannot be read. Tried again after the next read, 1 to 2 minutes later.</td></tr>
     <tr><th scope="row"><code>attack_incoming</code></th><td>Brain</td><td>No supply flight, satellite or crawler while an attack is coming. Tried again after the impact.</td></tr>
-    <tr><th scope="row"><code>reserved_for_builds</code></th><td>Brain</td><td>The stock is kept for the Brain's next builds.</td></tr>
+    <tr><th scope="row"><code>reserved_for_builds</code></th><td>Brain</td><td>The stock is kept for the Brain's next builds or as fleet-save fuel. The detail names each build, what it keeps, and the <code>Brain.SpendingPriority</code> rank that would let the feature spend it.</td></tr>
+    <tr><th scope="row"><code>reserves_not_known_yet</code></th><td>Discovery, AutoCargo, AutoDefence, Offer of the day</td><td>Nothing spent because TGoat does not know yet what the Brain plans to build on that celestial: it learns it within 15 minutes of connecting, and the detail gives the time. Not a lack of resources.</td></tr>
     <tr><th scope="row"><code>research_lab_waiting</code></th><td>AutoResearch</td><td>A lab level is wanted and the building queue is busy. It is built when the queue frees.</td></tr>
     <tr><th scope="row"><code>no_research_lab</code></th><td>AutoResearch</td><td>"No research lab yet" on this planet. On a new account, AutoMine's opening order asks for lab 1 after metal mine 5 and crystal mine 3.</td></tr>
     <tr><th scope="row"><code>queue_page_stale</code></th><td>Brain</td><td>A build still shows as in progress after its end, 3 checks in a row: the game page seems stale, or your computer's clock is ahead of the server. Said once; the next checks wait the usual delay.</td></tr>
@@ -588,16 +592,19 @@
     <tr><th scope="row"><code>waiting_for_wave</code></th><td>Expeditions</td><td>Too few slots are free yet: <code>MinFreeSlotsForWave</code>, or a third of the slots with <code>Pace.Waves</code>.</td></tr>
     <tr><th scope="row"><code>waiting_for_night_round</code>, <code>night_round_sent</code></th><td>Expeditions</td><td>The next expedition would return during sleep; the night round left.</td></tr>
     <tr><th scope="row"><code>harvest_not_worth_fuel</code></th><td>Harvest</td><td>Every field costs more than 10% of its value in fuel.</td></tr>
-    <tr><th scope="row"><code>origin_refused</code>, <code>no_origin_surplus</code>, <code>daily_budget_spent</code></th><td>Discovery</td><td>The game refused the origins (its text is quoted); no origin has the surplus; the day's budget is spent. They replace <code>no_ships</code>.</td></tr>
+    <tr><th scope="row"><code>origin_refused</code>, <code>no_origin_surplus</code>, <code>daily_budget_spent</code></th><td>Discovery</td><td>The game refused the origins (its text is quoted); no origin has the surplus (the detail names what holds the largest one); the day's budget is spent. They replace <code>no_ships</code>.</td></tr>
     <tr><th scope="row"><code>lifeform_settled</code>, <code>lifeform_refused</code>, <code>lifeforms_unreadable</code>, <code>planets_without_lifeform</code></th><td>Discovery</td><td>A lifeform settled on a planet; refused by the game (tried again 30 to 60 minutes later); the Lifeforms page could not be read; planets left without a lifeform (<code>AutoDiscovery.SettleLifeforms</code>).</td></tr>
     <tr><th scope="row"><code>colony_ships_for_astrophysics</code></th><td>Colonize</td><td>Colony ships built during an Astrophysics research that opens a planet.</td></tr>
+    <tr><th scope="row"><code>lifeform_not_needed</code></th><td>Lifeforms</td><td>Nothing to build, but not because of the Max levels: the buildings below their Max are not needed now (living space beyond the 1.55 million of the tier-1 research slots, food that already feeds the whole living space, a building without return while <code>BuildNonEconomic</code> is off…). The line names each building with its numbers and what would build more, such as turning on <code>BuildNonEconomic</code>, with the building it would start first (housing and food below their Max included). With that option on, housing that would outgrow food at its Max says so. Checked again at the interval.</td></tr>
     <tr><th scope="row"><code>lifeform_research_building_needed</code></th><td>Lifeforms</td><td>The planet's research building (the Research Centre for Humans), or a requirement on the way to its level&nbsp;1. No lifeform research starts without it. Only while lifeform research is on for the planet.</td></tr>
+    <tr><th scope="row"><code>lifeform_bonus_maxed</code></th><td>Lifeforms</td><td>The only lifeform research left below its Max is research whose bonus the game marks as already maxed out: another level would cost and add nothing. The line names each one and its bonus. Checked again at the interval. A building marked the same way is no longer built for itself (still as a requirement), and the line of each pass names it.</td></tr>
     <tr><th scope="row"><code>directives_collected</code>, <code>directives_missions_done</code></th><td>Directives</td><td>Rewards collected, each named with its chapter; or a mission done, its reward comes with a next check.</td></tr>
     <tr><th scope="row"><code>directives_nothing_ready</code>, <code>directives_held</code></th><td>Directives</td><td>Nothing waits; or sleep, a break or manual mode: nothing is read.</td></tr>
     <tr><th scope="row"><code>directives_unreadable</code>, <code>directives_refused</code></th><td>Directives</td><td>The menu or a chapter could not be read, or the game refused a collect. Tried again within the hour.</td></tr>
     <tr><th scope="row"><code>directives_disabled</code></th><td>Directives</td><td>The feature was turned off while it ran.</td></tr>
     <tr><th scope="row"><code>directives_menu_seen</code></th><td>Directives</td><td>A game page showed more rewards waiting: the next collect comes sooner, never less than 30 to 60 minutes after the previous one.</td></tr>
     <tr><th scope="row"><code>attack_alert_seen</code></th><td>Defender</td><td>A game page showed the attack alert: the Defender checks the event list 5 to 15 seconds later.</td></tr>
+    <tr><th scope="row"><code>galaxy_attack_seen</code></th><td>Defender</td><td>A galaxy view showed your selected planet or moon under attack: the Defender checks the event list 5 to 15 seconds later, once per celestial seen under attack.</td></tr>
     <tr><th scope="row"><code>game_message_alert</code>, <code>game_channel_listening</code></th><td>Defender</td><td>During sleep: a new game message arrived, the Defender checks 1 to 3 minutes later (and 8 to 15 minutes after it if nothing was seen); or the game's channel listens again, one check soon.</td></tr>
     <tr><th scope="row"><code>waiting_for_message</code>, <code>night_watch_off</code></th><td>Defender</td><td>During sleep: it waits on alert with no request; or <code>Defender.NightWatch</code> is Never.</td></tr>
     <tr><th scope="row"><code>night_watch_unavailable</code></th><td>Defender</td><td>The game's channel cannot open, stays down, stops answering, or your proxy blocks its port: a warning, then a check every 4 to 8 minutes until the wake-up.</td></tr>
@@ -609,8 +616,9 @@
     <tr><th scope="row"><code>hostile_fleet_not_on_celestial</code></th><td>Defender</td><td>A hostile fleet is heading for something that is none of your planets or moons, after the celestial list was read again. No fleet-save, no alarm; one notice per event.</td></tr>
     <tr><th scope="row"><code>event_mission_unknown</code></th><td>Instance</td><td>The event list shows a mission TGoat does not know (Project Orion adds some). A hostile one aimed at your celestials is handled as an attack. Said once per mission.</td></tr>
     <tr><th scope="row"><code>galaxy_view_dispatch_failed</code></th><td>AutoFarm</td><td>The galaxy view's spy button was refused; that target's probes went through the fleet page. A warning the first time.</td></tr>
+    <tr><th scope="row"><code>galaxy_report_used</code></th><td>AutoFarm</td><td>With <code>AutoFarm.ProcessAllReports</code>, a target was judged on the espionage report a galaxy view showed on it, read and deleted instead of probing the target again.</td></tr>
     <tr><th scope="row"><code>incomplete_report</code>, <code>research_hidden</code>, <code>probes_exhausted</code>, <code>no_extra_probes</code></th><td>AutoFarm</td><td>The report hid the fleet or defences, so a second espionage goes with three times your probe count, or every probe at home if fewer; after it, the research is still hidden on a target with ships or defences, or the fleet or defences still are; no origin had more probes at home than your count, so there was no second espionage. The target waits for its report to expire (<code>AutoFarm.KeepReportFor</code>) before it is spied again.</td></tr>
-    <tr><th scope="row"><code>combat_report_too_old</code>, <code>combat_reports_too_late</code></th><td>AutoFarm</td><td>The report was older than <code>CombatPlanner.MaxReportAgeSeconds</code> when AutoFarm came to use it: the target is probed again with the same number of probes, not counted as one of the three espionages, and the next pass reads the report when the probes land. When 3 such espionages in a row still bring a report too old, the target waits for its report to expire (<code>AutoFarm.KeepReportFor</code>).</td></tr>
+    <tr><th scope="row"><code>combat_report_too_old</code>, <code>combat_reports_too_late</code></th><td>AutoFarm</td><td>The report of a target with ships or defences was older than <code>CombatPlanner.MaxReportAgeSeconds</code> when AutoFarm came to use it: the target is probed again with the same number of probes, not counted as one of the three espionages, and the next pass reads the report when the probes land. When 3 such espionages in a row still bring a report too old, the target waits for its report to expire (<code>AutoFarm.KeepReportFor</code>).</td></tr>
     <tr><th scope="row"><code>storage_too_small</code></th><td>AutoFarm</td><td>The loot is below <code>AutoFarm.MinimumResources</code> and the inactive player's storages, read in the report, can never hold enough: the target is blacklisted (<code>AutoFarm.Blacklist.StorageTooSmall</code>).</td></tr>
     <tr><th scope="row"><code>combat_rejected_at_confirmation</code></th><td>AutoFarm</td><td>The last check before sending refused the plan. The detail says why, such as "4 of 773 final battle simulations failed", a report too old, or ships gone.</td></tr>
     <tr><th scope="row"><code>breaker_fleet_proposed</code>, <code>breaker_fleet_ordered</code>, <code>no_breaker_fleet</code>, <code>breaker_order_failed</code></th><td>AutoFarm</td><td>A combat fleet for turned-down targets was proposed or, in Automatic mode, ordered; none pays back within <code>AutoFarm.BreakerMaxPaybackDays</code> or the Brain's reserves cannot pay it (the detail says which); the game refused the order (a warning).</td></tr>
@@ -619,7 +627,7 @@
     <tr><th scope="row"><code>you_play_in_game</code>, <code>you_stopped_playing</code></th><td>Instance</td><td>You acted in a queue of the game: the features that build or send fleets wait; or the quiet time is over and they start again (<code>General.YieldWhenYouPlay</code>).</td></tr>
     <tr><th scope="row"><code>game_signal_action_learned</code>, <code>game_signal_unknown_action</code></th><td>Game</td><td>A kind of queue change was learned from TGoat's own order; or one not seen yet came, written once and not counted as you playing. Debug lines: the Logs page shows them when Debug is on, the console does not.</td></tr>
     <tr><th scope="row"><code>construction_ended_early</code></th><td>Brain</td><td>The game says a build ended before its known end: the queue is read again and the next build chosen after a usual reaction.</td></tr>
-    <tr><th scope="row"><code>report_announced</code></th><td>AutoFarm</td><td>The game announced a new message once the last probe had arrived: the espionage reports are read a few seconds later.</td></tr>
+    <tr><th scope="row"><code>report_announced</code></th><td>AutoFarm</td><td>The game announced a new message once the awaited probe had arrived: the espionage reports are read a few seconds later.</td></tr>
     <tr><th scope="row"><code>relogin_limit_notified</code></th><td>Instance</td><td>The game session was lost too often: automatic logins wait, and you got one notification with the time of the next try.</td></tr>
     <tr><th scope="row"><code>web_signin</code>, <code>web_signin_failed</code>, <code>web_signin_after_failures</code>, <code>web_signin_delayed</code></th><td>WebUI</td><td>A sign-in to the web interface, from the address in the line; a refusal (a warning, with the failures in a row); a sign-in after failures (a warning: check it was you); a try refused while it must wait (Debug).</td></tr>
     <tr><th scope="row"><code>web_password_set</code>, <code>web_signed_out_everywhere</code></th><td>WebUI</td><td>The web interface password was created or changed (every other session is signed out); Sign out everywhere.</td></tr>
@@ -633,13 +641,14 @@
     <tr><th scope="row"><code>passkey_already_added</code>, <code>too_many_passkeys</code>, <code>invalid_passkey_name</code></th><td>WebUI sign-in</td><td>Settings, Sign-in: this passkey is already in TGoat; TGoat keeps 20 passkeys at most; a name is plain text of 64 characters at most.</td></tr>
     <tr><th scope="row"><code>web_recovery_code_used</code>, <code>web_recovery_codes_new</code></th><td>WebUI</td><td>A recovery code signed in (a warning, with the codes left); new recovery codes replaced the old ones.</td></tr>
     <tr><th scope="row"><code>orion_reward_waiting</code></th><td>Instance</td><td>A game page showed an Orion reward waiting to be claimed: you got one notification.</td></tr>
+    <tr><th scope="row"><code>officer_ending</code></th><td>Instance</td><td>A hired officer may end within <code>Notifications.OfficerEnding</code> hours: you got one notification, with when it ends.</td></tr>
   </tbody>
 </table>
 </div>
 <p>Changed meaning: <code>max_level_reached</code> and <code>return_too_slow</code> no longer stop a planet; it is checked again in 11 to 13 hours. For lifeform research, <code>max_level_reached</code> stops it only once all 18 research slots are open. <code>more_expensive_than_mine</code> compares paybacks in days. <code>energy_deficit</code> also covers energy built ahead of a mine.</p>
 </details>
 <details>
-<summary>Every other reason code (282)</summary>
+<summary>Every other reason code (295)</summary>
 <div class="table-wrap" role="region" aria-label="Other reason codes" tabindex="0">
 <table class="wide">
   <caption class="sr-only">Every other reason code, by feature</caption>
@@ -655,6 +664,7 @@
     <tr><th scope="row"><code>celestials_planned</code>, <code>watching</code>, <code>no_celestial</code></th><td>Brain</td><td>The workers of each celestial started, in the order shown; they are in place and no celestial is new; no celestial to work on.</td></tr>
     <tr><th scope="row"><code>construction_started</code></th><td>Brain</td><td>A building, research, crawler or satellite order started.</td></tr>
     <tr><th scope="row"><code>build_failed</code></th><td>Brain</td><td>The game refused a build order (a warning). Tried again at the interval.</td></tr>
+    <tr><th scope="row"><code>build_not_offered</code></th><td>Brain</td><td>The build page shows no build button for the item, so no order was sent (a warning). The line gives the game's own reason, such as "Not enough resources!" or "Requirements are not met". Tried again at the interval.</td></tr>
     <tr><th scope="row"><code>building_in_progress</code>, <code>research_in_progress</code>, <code>shipyard_busy</code></th><td>Brain</td><td>The queue is busy. The next look comes when it ends.</td></tr>
     <tr><th scope="row"><code>waiting_for_production</code></th><td>Brain</td><td>The celestial waits for its own production to pay the next build.</td></tr>
     <tr><th scope="row"><code>transport_sent</code>, <code>transport_incoming</code></th><td>Brain</td><td>A supply flight left for the build; or one is already on its way.</td></tr>
@@ -663,7 +673,8 @@
     <tr><th scope="row"><code>planet_to_abandon</code></th><td>Brain</td><td>Nothing built: the colony misses the criteria of its Colonize zone and waits to be abandoned.</td></tr>
     <tr><th scope="row"><code>celestial_gone</code></th><td>Brain</td><td>The celestial is no longer yours: its worker stops.</td></tr>
     <tr><th scope="row"><code>not_a_planet</code>, <code>no_lifeform</code>, <code>no_free_field</code></th><td>Brain</td><td>Nothing to build: a moon has no lifeform buildings; the planet has no lifeform; no field is free.</td></tr>
-    <tr><th scope="row"><code>max_level_reached</code></th><td>Brain</td><td>Every level the Max settings allow is reached. Checked again in 11 to 13 hours; for lifeform research, a stop only once all 18 slots are open.</td></tr>
+    <tr><th scope="row"><code>max_level_reached</code></th><td>Brain</td><td>Every level the Max settings allow is reached. Checked again in 11 to 13 hours; for lifeform research, a stop only once all 18 slots are open; for lifeform buildings, a stop once every building is at its Max or blocked by a requirement above its Max, and the line names them.</td></tr>
+    <tr><th scope="row"><code>last_field_kept</code></th><td>AutoMine</td><td>One free field is left and it waits for the Terraformer (planet) or the Lunar Base (moon), which cannot be built yet: the line says what is missing (Energy Technology 12, a Nanite Factory) or which Max setting blocks it. Checked again in 11 to 13 hours, sooner after a research. <code>Brain.AutoMine.KeepLastField</code> off lets another building take the field.</td></tr>
     <tr><th scope="row"><code>return_too_slow</code></th><td>AutoMine</td><td>The next level pays back slower than <code>Brain.AutoMine.MaxDaysOfInvestmentReturn</code>. Checked again in 11 to 13 hours.</td></tr>
     <tr><th scope="row"><code>more_expensive_than_mine</code></th><td>Lifeforms</td><td>A lifeform building pays back slower, in days, than the next mine (<code>PreventIfMoreExpensiveThanNextMine</code>).</td></tr>
     <tr><th scope="row"><code>requirements_not_met</code></th><td>Brain</td><td>Only items with missing requirements are left, such as a building or research the next level needs.</td></tr>
@@ -682,6 +693,7 @@
     <tr><th scope="row"><code>boosters_nothing_to_do</code>, <code>boosters_listed</code></th><td>Boosters</td><td>No booster to activate now, the detail says why; or <code>Brain.Boosters.Mode</code> is Off and the report lists the inventory.</td></tr>
     <tr><th scope="row"><code>boosters_not_read</code>, <code>boosters_held</code></th><td>Boosters</td><td>The inventory or the production could not be read, so nothing is decided; or sleep, a break or vacation mode holds them.</td></tr>
     <tr><th scope="row"><code>booster_not_activated</code></th><td>Boosters</td><td>The game refused an activation, or its reason no longer held. A warning.</td></tr>
+    <tr><th scope="row"><code>booster_expiring_unused</code></th><td>Boosters</td><td>A booster you let TGoat use expires within 12 hours and no planet can take it before then (the line says what holds each planet): one warning and one notification per copy. Activate it yourself if you see a use for it.</td></tr>
     <tr><th scope="row"><code>no_attack</code></th><td>Defender</td><td>No attack in progress.</td></tr>
     <tr><th scope="row"><code>attack_detected</code>, <code>missile_attack_detected</code></th><td>Defender</td><td>An attack, or a missile strike, was seen: who, where, when, and with what.</td></tr>
     <tr><th scope="row"><code>attacks_unreadable</code>, <code>attacks_readable_again</code></th><td>Defender</td><td>The event list could not be read, so an attack is not seen until it is; or it is readable again.</td></tr>
@@ -741,11 +753,13 @@
     <tr><th scope="row"><code>not_enough_cargo_ships</code>, <code>not_enough_escort_ships</code>, <code>not_enough_fuel</code></th><td>AutoFarm</td><td>The origin has too few cargo ships, too few bombers or reapers, or too little deuterium.</td></tr>
     <tr><th scope="row"><code>flight_too_long</code>, <code>not_worth_fuel</code></th><td>AutoFarm</td><td>The flight is longer than <code>MaxFlightTime</code>; or the loot is worth less than <code>MinLootFuelRatio</code> times the fuel at every allowed speed.</td></tr>
     <tr><th scope="row"><code>dispatch_failed</code></th><td>AutoFarm</td><td>The game refused the attack.</td></tr>
+    <tr><th scope="row"><code>bash_limit_reached</code></th><td>AutoFarm</td><td>The game says the target has had too many attacks in 24 hours (the bash limit; how many depends on the universe, inactive players are exempt by the rules). Nothing was sent, TGoat never attacks past the limit, and the position (planet and moon) is neither probed nor attacked for 24 hours, even with <code>AutoFarm.Blacklist.Active</code> off.</td></tr>
+    <tr><th scope="row"><code>outlaw_risk</code></th><td>AutoFarm, fleet sends</td><td>The game warns that this attack, espionage or moon destruction targets a much stronger player (s) and would make your account an outlaw: no attack protection for up to 7 days, and every player can attack it. With <code>General.AllowOutlawAttacks</code> off, nothing was sent: AutoFarm sets the position aside for 24 hours, even with <code>AutoFarm.Blacklist.Active</code> off. With it on, the send left and this warning says so. A Defender fleet-save goes to such a fixed destination only when nothing else saves the fleet, with this warning.</td></tr>
     <tr><th scope="row"><code>attack_split</code>, <code>attack_split_partial</code></th><td>AutoFarm</td><td>The loot needed fleets from several origins (<code>SplitAcrossOrigins</code>); or only part of them left.</td></tr>
     <tr><th scope="row"><code>split_target_defended</code>, <code>split_max_origins</code>, <code>split_not_enough_slots</code></th><td>AutoFarm</td><td>Not split: the target has defences or ships; <code>MaxOrigins</code> is reached; too few fleet slots.</td></tr>
     <tr><th scope="row"><code>combat_no_safe_plan</code>, <code>combat_planning_failed</code></th><td>AutoFarm</td><td>The combat planner found no fleet that is safe and pays; or the planning failed.</td></tr>
     <tr><th scope="row"><code>combat_unsupported_special_shot</code>, <code>combat_defender_data_missing</code>, <code>combat_unsupported_cargo_type</code></th><td>AutoFarm</td><td>The combat planner cannot judge: the General's special shot; the report lacks the defender's combat data; the cargo type is not supported.</td></tr>
-    <tr><th scope="row"><code>observation_only</code></th><td>AutoFarm</td><td><code>CombatPlanner.ObservationOnly</code>: the plan is recorded, nothing is sent.</td></tr>
+    <tr><th scope="row"><code>observation_only</code></th><td>AutoFarm</td><td><code>CombatPlanner.ObservationOnly</code>: nothing is sent. The combat planner's plan is recorded; a target with no ships and no defences just waits.</td></tr>
     <tr><th scope="row"><code>classic_fleet_not_safe</code></th><td>AutoFarm</td><td>Without the combat planner, the fleet does not win every battle simulation without loss: no attack.</td></tr>
     <tr><th scope="row"><code>invalid_settings</code>, <code>no_scan_range</code></th><td>AutoFarm</td><td>A setting stops AutoFarm, such as a cargo type without cargo room; or <code>AutoFarm.ScanRange</code> is empty.</td></tr>
     <tr><th scope="row"><code>no_targets</code>, <code>nothing_to_do</code></th><td>AutoFarm</td><td>No target to attack; or a full cycle with nothing to do: AutoFarm checks less often.</td></tr>
@@ -764,6 +778,9 @@
     <tr><th scope="row"><code>session_lost_again</code>, <code>session_check_failed</code></th><td>Game</td><td>The session was lost right after a new login; or the session check on the overview failed. The request is given up.</td></tr>
     <tr><th scope="row"><code>server_errors</code></th><td>Game</td><td>The game answered a page with server errors several times: it is not retried further.</td></tr>
     <tr><th scope="row"><code>galaxy_entry_unknown</code>, <code>galaxy_new_field</code>, <code>galaxy_mostly_unknown</code></th><td>Game</td><td>The galaxy view shows a position TGoat cannot read, never targeted; a new field TGoat ignores; or mostly unknown positions, the page may have changed.</td></tr>
+    <tr><th scope="row"><code>account_outlaw</code></th><td>Game</td><td>The galaxy view marks your account as an outlaw (o): for up to 7 days every player can attack it. Said once while it lasts, and once when it ends.</td></tr>
+    <tr><th scope="row"><code>server_version_unknown</code></th><td>Game</td><td>The game pages do not say which OGame version the server runs: TGoat reads them as OGame 13.1.1, the version it was checked against. Said once; report it if something looks wrong.</td></tr>
+    <tr><th scope="row"><code>server_version_newer</code></th><td>Game</td><td>The server runs a newer OGame than 13.1.1, the version TGoat was checked against: some pages may be misread. Said once per version at login: a warning for a new major or minor version (14.0, 13.2), an information line for a new patch (13.1.2). Report it if something looks wrong.</td></tr>
     <tr><th scope="row"><code>unknown_building_icon</code></th><td>Game</td><td>A build queue shows a building TGoat cannot read: the queue counts as busy.</td></tr>
     <tr><th scope="row"><code>no_token</code>, <code>start_failed</code></th><td>Discord bot</td><td><code>DiscordBot.Token</code> is empty; or the bot could not start.</td></tr>
     <tr><th scope="row"><code>token_rejected</code></th><td>Discord bot</td><td>Discord refused the token, at start-up or later: copy it again from the developer portal.</td></tr>
@@ -772,6 +789,10 @@
     <tr><th scope="row"><code>guild_not_saved</code></th><td>Discord bot</td><td>The chosen server could not be written to <code>DiscordBot.GuildID</code>.</td></tr>
     <tr><th scope="row"><code>commands_refused</code></th><td>Discord bot</td><td>Discord refused the slash commands on the server: invite the bot again with the invite link.</td></tr>
     <tr><th scope="row"><code>command_not_acknowledged</code>, <code>reply_lost</code>, <code>buttons_dropped</code>, <code>interaction_crashed</code></th><td>Discord bot</td><td>A command got no answer; its reply was refused in the channel and in private; buttons were dropped; or an interaction crashed.</td></tr>
+    <tr><th scope="row"><code>telegram_linked</code></th><td>Telegram</td><td>A chat tapped Start on a Link Telegram link: it is saved in <code>TelegramMessenger.ChatId</code> and gets the commands and notifications.</td></tr>
+    <tr><th scope="row"><code>telegram_link_refused</code>, <code>telegram_link_unsaved</code></th><td>Telegram</td><td>A link was wrong, expired or already used, and the chat was told to open a new one; or the chat could not be saved, so it is not linked.</td></tr>
+    <tr><th scope="row"><code>telegram_not_linked</code></th><td>Telegram</td><td>A message came while no chat is linked: it is ignored. Said once per chat, with its ID.</td></tr>
+    <tr><th scope="row"><code>telegram_token_refused</code></th><td>Telegram</td><td>Telegram refused the bot token in <code>TelegramMessenger.API</code>: copy it again from @BotFather.</td></tr>
     <tr><th scope="row"><code>note_channel_unknown</code>, <code>note_access_denied</code>, <code>note_refused</code></th><td>Discord bot</td><td>A notification was not posted: the channel does not exist, the bot may not write there, or Discord refused it.</td></tr>
     <tr><th scope="row"><code>note_no_owner</code>, <code>note_button_unknown</code></th><td>Discord bot</td><td>An alert goes without a mention, since the owner is unknown; or a notification button names a command that does not exist.</td></tr>
     <tr><th scope="row"><code>update_available</code>, <code>update_check_failed</code></th><td>Updates</td><td>A new signed version is out; or the check failed, tried again at the next one.</td></tr>
@@ -997,7 +1018,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/interface.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/interface.html</code> in the project. Build 0.1.0-alpha.6 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

@@ -25,7 +25,7 @@
       <li><a href="start.html">Get started</a></li>
       <li><a href="interface.html">Web interface</a></li>
       <li><a href="settings.html">Settings</a></li>
-      <li><a href="discord.html">Discord</a></li>
+      <li><a href="discord.html">Discord &amp; Telegram</a></li>
       <li><a href="commands.html">Commands</a></li>
       <li><a href="from-tbot.html">From TBot 3.6</a></li>
       <li><a href="changes.html">Every change</a></li>
@@ -33,7 +33,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Alpha software (0.1.0-alpha.5).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Alpha software (0.1.0-alpha.6).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -68,7 +68,7 @@
 <main id="main">
 
 <header class="hero">
-  <p class="eyebrow">OGame bot · successor of TBot 3.6 and ogamed · <span class="alpha-badge">alpha · 0.1.0-alpha.5</span></p>
+  <p class="eyebrow">OGame bot · successor of TBot 3.6 and ogamed · <span class="alpha-badge">alpha · 0.1.0-alpha.6</span></p>
   <h1>TGoat</h1>
   <p class="lead">TGoat is a bot that plays your OGame accounts. You follow and command it from a web page on your computer, from Telegram or from Discord.</p>
   <aside class="in-short" aria-label="In short">
@@ -211,6 +211,10 @@
 <p>AutoFarm spies with the galaxy view's spy button, as a player does, with the probe count of your game options: one request per target instead of a trip through the fleet pages. A 30-probe pass on a simulated game went from 309 requests to 40.</p>
 </div>
 <div class="hl">
+<h4>Attacks from what AutoFarm already knows</h4>
+<p>AutoFarm reads its departure moons, its fleets and your research once per pass, then keeps them up to date from its own sends. Before each attack it reads only the departure moon's stock again, then goes through the fleet pages as a player does. It reads each espionage report as its probes land and attacks a good target right away.</p>
+</div>
+<div class="hl">
 <h4>The whole empire in one view</h4>
 <p>The Empire view shows the stock, production, buildings, ships and defences of every planet in one page, and of every moon in another. AutoMine and the lifeform buildings start from it, and the boosters and the setup assistant reuse it, instead of opening each planet. Starting the Brain on a simulated game of 8 planets and 4 moons takes 47 reads instead of 104.</p>
 </div>
@@ -264,7 +268,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/index.html</code> in the project. Build 0.1.0-alpha.5 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/index.html</code> in the project. Build 0.1.0-alpha.6 (alpha). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>
