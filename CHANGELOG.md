@@ -5,13 +5,37 @@ format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 TGoat uses [Semantic Versioning](https://semver.org/) with a pre-release tag:
 `0.1.0-alpha.1` is the first alpha of version 0.1.0. Every build handed out
-bumps the alpha number (`alpha.2`, `alpha.3`, and so on).
+bumps that number (`alpha.2`, `alpha.3`, and so on). The alphas added
+features; the betas (`0.1.0-beta.1` onwards) only fix what is there, then
+release candidates (`rc`) lead to 0.1.0.
 
-**Alpha builds may change settings and files between versions.** Back up the
+**Test builds may change settings and files between versions.** Back up the
 `config/` and `data/` folders before replacing the program. Upgrades between
-alphas are not guaranteed to migrate your files until the first stable
+test builds are not guaranteed to migrate your files until the first stable
 release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
+
+## [0.1.0-beta.1] - 2026-11-26
+
+First beta: from now on, only fixes until 0.1.0.
+
+### Changed
+
+- The settings page and the guide explain Discovery's daily budget
+  (`AutoDiscovery.MaxShareOfProduction`): the share of a day's production of
+  all your planets, counted in deuterium, that discovery missions may cost in
+  any 24 hours, with the price of one mission and an example.
+- The web interface and the start of the log name the kind of test build you
+  run (alpha, beta or release candidate), not only an alpha.
+
+### Fixed
+
+- The game channel opens again on OGame 13.2.0 servers. Since 13.2.0 the game
+  answers the channel's sign-in with your player number after the "yes", and
+  TGoat read that answer as a refusal: the log said "Game channel refused",
+  the Game tab could not connect its chat, and the Defender's OnAlert night
+  watch fell back to regular checks. TGoat now reads the answer the way the
+  game's own page does.
 
 ## [0.1.0-alpha.6] - 2026-11-24
 
