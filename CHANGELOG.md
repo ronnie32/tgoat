@@ -15,6 +15,20 @@ test builds are not guaranteed to migrate your files until the first stable
 release. The full guide is [docs/index.html](https://ronnie32.github.io/tgoat/index.html), and its
 [Known limits](https://ronnie32.github.io/tgoat/limits.html#limits) section lists what is missing.
 
+## [0.1.0-beta.2] - 2026-11-28
+
+### Fixed
+
+- A Discoverer whose lifeform research raises the class's expedition bonus
+  sent expeditions too small for the largest find: TGoat took the bonus as a
+  fixed 150%. It now uses the boosted value the lifeform bonuses page shows
+  (Expedition Bonus), as it already did for the other class bonuses.
+- Game tab: the game's chat and live updates sometimes failed to load
+  ("Game channel request … not relayed … unexpected EOF" in the log). The
+  game's channel server closes idle connections after 5 seconds, and TGoat
+  reused them for 30. TGoat now drops a connection when the server says it
+  will, and retries a failed request on a new one.
+
 ## [0.1.0-beta.1] - 2026-11-26
 
 First beta: from now on, only fixes until 0.1.0.

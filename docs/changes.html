@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Beta software (0.1.0-beta.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Beta software (0.1.0-beta.2).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -300,7 +300,7 @@
     <tr><th scope="row">Build finished early (sped up in the browser)</th><td>The queue waited for the build's planned end.</td><td>The game announces the end on its channel: the Brain reads that celestial's queues again and picks the next build after a usual reaction (about 3 min), without any request before.</td></tr>
     <tr><th scope="row">Crawlers</th><td>Hundreds at once, energy ignored: a planet at about 22% production.</td><td>50 energy each, counted in their payback. In batches the stock pays (8 at least), the batch's energy first.</td></tr>
     <tr><th scope="row">Crawler limit</th><td>A formula: 8 per mine level, 10% more for a Collector with a Geologist.</td><td>The limit the game's resource settings page shows, every bonus included, once that page has been read; after a mine goes up, the same number per level. The formula only until then (2026-11-21).</td></tr>
-    <tr><th scope="row">Class bonuses</th><td>Fixed: Collector +25% production, +10% energy, +50% per crawler; Discoverer −25% research time, 2 more expeditions. Lifeform research that raises them was ignored.</td><td>As the lifeform bonuses page gives them, lifeform boost included; the fixed values only on a server that does not show them (2026-11-21).</td></tr>
+    <tr><th scope="row">Class bonuses</th><td>Fixed: Collector +25% production, +10% energy, +50% per crawler; Discoverer −25% research time, 2 more expeditions, +50% expedition finds. Lifeform research that raises them was ignored.</td><td>As the lifeform bonuses page gives them, lifeform boost included; the fixed values only on a server that does not show them (2026-11-21, expedition finds 2026-11-28).</td></tr>
     <tr><th scope="row">Facilities</th><td>Any facility cheaper than the next mine, the dock first.</td><td>By use: shipyard at the level its builds need (crawlers once they pay back within the longest payback accepted, AutoCargo, the defences the AutoDefence budget buys), one level when it costs less than the next mine; robotics up to 10, nanites when a queue is the bottleneck, a lab only with AutoResearch on (research planet, or a colony that counts in the network). A new colony builds its mines first. Without supply flights, never a facility the planet cannot pay (deuterium it does not produce). Dock and phalanx 0 by default.</td></tr>
     <tr><th scope="row">Jump gate</th><td>Built on every moon.</td><td>Only on the jump gate target, or with at least two moons.</td></tr>
     <tr><th scope="row">An AutoMine pass</th><td>About 10 requests, even during a build; retried every 10 to 20 min.</td><td>Busy queue: one request. Waits for production or an event, 1 to 3 h at most. Interval 30 to 60 min.</td></tr>
@@ -705,7 +705,7 @@
     <tr><th scope="row">Deploy and Switch</th><td>Announced success even when it failed.</td><td>Report the real result.</td></tr>
     <tr><th scope="row"><code>/build</code></th><td>Did not work for defences.</td><td>Works for defences.</td></tr>
     <tr><th scope="row"><code>/wakeup</code> on an awake instance, <code>/cancelghostsleep</code> with nothing to cancel</th><td>An error.</td><td>A plain answer.</td></tr>
-    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-beta.1". The regular sign of life also gives the version.</td></tr>
+    <tr><th scope="row"><code>/ping</code></th><td>No version.</td><td>Answers "Pong, TGoat 0.1.0-beta.2". The regular sign of life also gives the version.</td></tr>
     <tr><th scope="row">Discord webhook (<code>DiscordWebhook.Active</code>)</th><td>—</td><td>Posts as "TGoat" unless you set <code>DiscordWebhook.Username</code>.</td></tr>
     <tr><th scope="row">Discord bot</th><td>None.</td><td>Every Telegram command. See <a href="discord.html#discord">Discord bot</a>.</td></tr>
   </tbody>
@@ -875,7 +875,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-beta.1 (beta). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/changes.html</code> in the project. Build 0.1.0-beta.2 (beta). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>

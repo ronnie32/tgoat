@@ -32,7 +32,7 @@
     </ul>
   </nav>
   <aside class="alpha-banner" role="note" aria-label="Alpha warning">
-    <p><strong>Beta software (0.1.0-beta.1).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
+    <p><strong>Beta software (0.1.0-beta.2).</strong> Expect bugs. Using a bot breaks OGame's rules and can get your account banned. Start with every feature off and try it on a secondary account first. Back up <code>config/</code> and <code>data/</code> before each update. <a href="start.html#alpha">Read the warnings before you start.</a></p>
   </aside>
 </div>
 
@@ -184,7 +184,7 @@
 <p><code>DiscordBot.Logging</code> (on by default) forwards warnings and errors to the logs channel, batched every few seconds with repeats grouped, as on Telegram. An attack the Defender logs is skipped when the bot already posts that alert itself, in its alerts or notifications channel.</p>
 <p><code>/logs level</code> shows the Discord level (Warning by default), and <code>/logs set-level</code> changes it until TGoat restarts. Telegram's level is set with <code>/setloglevel</code>.</p>
 <p><code>DiscordBot.AutoPing.Active</code> posts a sign of life in the notifications channel every <code>DiscordBot.AutoPing.EveryHours</code> hours (1 by default), on the hour, like Telegram's: version, uptime and each instance's state. <code>/tgoat autoping</code> and <code>/tgoat autoping-stop</code> start and stop it until the next restart.</p>
-<p><code>/tgoat ping</code> answers "Pong, TGoat 0.1.0-beta.1", so you see the bot is alive and which build runs.</p>
+<p><code>/tgoat ping</code> answers "Pong, TGoat 0.1.0-beta.2", so you see the bot is alive and which build runs.</p>
 
 <h3 id="discord-webhook">Bot or webhook</h3>
 <p>Each instance can still post to its own Discord webhook (<code>DiscordWebhook.Url</code>, in <code>secrets.json</code>), copied from a channel's integration settings. A webhook only posts notifications; the bot covers every instance, with commands, buttons, topic channels and logs.</p>
@@ -287,7 +287,7 @@
 </section>
 
 <footer>
-  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/discord.html</code> in the project. Build 0.1.0-beta.1 (beta). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
+  <p>TGoat, the successor of TBot 3.6 (C#) and ogamed. Made by Zeus (<code>zeus8000</code> on Discord). This page is <code>docs/discord.html</code> in the project. Build 0.1.0-beta.2 (beta). <a href="https://github.com/ronnie32/tgoat/blob/main/CHANGELOG.md">Changelog</a>.</p>
 </footer>
 
 </main>
